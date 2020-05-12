@@ -1,6 +1,8 @@
-## SE-WEF
-
-请参考[代码贡献指南](CONTRIBUTING.md).
+## 关于SE-CWAWU
+南京大学CWAWU小组：
+梁欣悦 王吟迟 王月涵 蔡悦 李颖
+助教：
+王乙飞
 
 ## 框架介绍
 
@@ -9,3 +11,4 @@
 ## Example
 
 请参考[TemplateChecker](tests/TemplateChecker/README.md)
+
