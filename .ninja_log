@@ -1,0 +1,27 @@
+# ninja log v5
+22056	26859	1589286227	tools/TemplateChecker/TemplateChecker	7582594fd9ff8030
+940	191026	1589275434	lib/framework/CMakeFiles/framework.dir/ASTManager.cpp.o	aae2eb64ab64fc8a
+950	186770	1589275429	tools/TemplateChecker/CMakeFiles/TemplateChecker.dir/main.cpp.o	30ac64382597e6e8
+46	23346	1588148401	lib/framework/CMakeFiles/framework.dir/Common.cpp.o	6cb6eac672319862
+49	2617	1588148380	lib/framework/CMakeFiles/framework.dir/Config.cpp.o	d6881501a4b0da86
+1013	8736	1589275655	lib/framework/libframework.a	cee44b0aef58d851
+21592	22055	1589286222	lib/checkers/libcheckers.a	7cd31aa3f704113
+1	21592	1589286222	lib/checkers/CMakeFiles/checkers.dir/TemplateChecker.cpp.o	78b734785b51193e
+3	13756	1589286315	lib/checkers/CMakeFiles/checkers.dir/TemplateChecker.cpp.o	78b734785b51193e
+13756	13897	1589286315	lib/checkers/libcheckers.a	7cd31aa3f704113
+13897	18387	1589286319	tools/TemplateChecker/TemplateChecker	7582594fd9ff8030
+4	19662	1589286477	lib/checkers/CMakeFiles/checkers.dir/TemplateChecker.cpp.o	78b734785b51193e
+19662	19955	1589286477	lib/checkers/libcheckers.a	7cd31aa3f704113
+19956	25677	1589286483	tools/TemplateChecker/TemplateChecker	7582594fd9ff8030
+5	27098	1589286709	lib/checkers/CMakeFiles/checkers.dir/TemplateChecker.cpp.o	78b734785b51193e
+27098	27489	1589286709	lib/checkers/libcheckers.a	7cd31aa3f704113
+27489	38034	1589286720	tools/TemplateChecker/TemplateChecker	7582594fd9ff8030
+3	34150	1589288744	lib/checkers/CMakeFiles/checkers.dir/TemplateChecker.cpp.o	78b734785b51193e
+34150	34401	1589288744	lib/checkers/libcheckers.a	7cd31aa3f704113
+34401	42213	1589288752	tools/TemplateChecker/TemplateChecker	7582594fd9ff8030
+4	33128	1589291760	lib/checkers/CMakeFiles/checkers.dir/TemplateChecker.cpp.o	78b734785b51193e
+33128	33390	1589291760	lib/checkers/libcheckers.a	7cd31aa3f704113
+33390	41474	1589291768	tools/TemplateChecker/TemplateChecker	7582594fd9ff8030
+3	18897	1589292641	lib/checkers/CMakeFiles/checkers.dir/TemplateChecker.cpp.o	78b734785b51193e
+18897	19543	1589292642	lib/checkers/libcheckers.a	7cd31aa3f704113
+19545	24620	1589292647	tools/TemplateChecker/TemplateChecker	7582594fd9ff8030
