@@ -2,9 +2,9 @@
 #define V_U_H
 #include"Detector.h"
 
-
-void TraverseDecl(Decl *anydecl, int count, SourceManager *scm);
-void TraverseStmt(Stmt * anystmt, int count, SourceManager *scm);
+class Var_Uninitialized{
+//void TraverseDecl(Decl *anydecl, int count, SourceManager *scm);
+//void TraverseStmt(Stmt * anystmt, int count, SourceManager *scm);
 defuse_node all_node;
 bool definition = true;
 bool integ = true;
@@ -335,7 +335,7 @@ void TraverseStmt(Stmt * anystmt, int count, SourceManager *scm) {
 		}
 	}
 }
-
+public:
 void VU_Entry1(std::unordered_map<std::string, ASTResource>::iterator astr_iter)
 {
 
@@ -429,4 +429,6 @@ void VU_Detect()
 		}
 	}
 }
+
+};
 #endif

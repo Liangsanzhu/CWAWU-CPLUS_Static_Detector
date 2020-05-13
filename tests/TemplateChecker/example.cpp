@@ -1,5 +1,6 @@
 #include<iostream>
 #include<string.h>
+#include<stdio.h>
 using namespace std;
 //数组越界
 int str1[4]={1,2,3,4};
@@ -7,7 +8,15 @@ int str2[3];
 void f1(void){
     str2[3]=str1[2];
 }
-
+void copyingdata()
+{
+  char sample[10]="a";
+  int n=10;
+  int x=2, y;
+  char argv[2];
+  bcopy(argv, sample, n);
+  printf("%s", sample);
+}
 //空指针解引用 
 int Fault() {
   int* a;

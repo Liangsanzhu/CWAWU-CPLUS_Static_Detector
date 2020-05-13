@@ -1,7 +1,7 @@
 #ifndef N_P_D_H
 #define N_P_D_H
 #include"Detector.h"
-
+class Null_Pointer_Detector{
 struct NPDSave{
     const char * className;       //className
     int line;
@@ -14,48 +14,6 @@ struct NPDSave{
 };
 vector <NPDSave> myRecord;
 
-void NPD_Detect(){
-    //cout<<endl;
-    //printf("\033[33m%s\n\033[0m","Detect NPD in the Function");
-    int col0 = -1, line0=-1, col=-1,line=-1;
-    string file0, file;
-    for (int re=0; re<myRecord.size();re++){
-       
-        if(strcmp(myRecord[re].className,"DeclRefExpr")==0 && '*'==(myRecord[re].varType[myRecord[re].varType.length()-1])){     //a pointer
-           // //cout<<"There is a pointer!\n";
-            bool flag = false;
-            if(strcmp(myRecord[re+1].className,"GNUNullExpr")==0){//has been set to null
-               // //cout<<"The pointer was null!\n";
-                flag = true;
-                col0 = myRecord[re].col;
-                line0 = myRecord[re].line;
-                file0 = myRecord[re].fileName;
-            }  
-                
-            for (int i = re+1;i<myRecord.size();i++){
-                if (strcmp(myRecord[i].className,"UnaryOperator")==0){
-                    if (myRecord[i].opr=="*"){
-                        if (flag ==true)
-                            {
-                            col=myRecord[i].col;
-                            line = myRecord[i].line;
-                            file = myRecord[i].fileName;
-                             //(line0,col0,line,col,file0,file);
-                              error_info*loc_set_null=new_error_info(NULL,file0,line0,col0,TYPE_NOTE,NPD_ERROR_TYPE_SET_NULL);
-                            error_info* loc_dereference=new_error_info(loc_set_null,file,line,col,TYPE_ERROR,NPD_ERROR_TYPE_DEREFERENCE);
-                           
-                            result.push(loc_dereference);
-                            }
-                    }
-                    if (myRecord[i].opr=="&")
-                        flag = false;
-                }
-            }
-        }
-
-           
-    }
-}
 
 
 void ReportNPD(int LineNull,int ColNull,int LineDe,int ColDe,string FileNull,string FileDe){
@@ -500,6 +458,7 @@ void TraverseStruct(Stmt * my_stmt, SourceManager *SrcMgr) {
     delete npdSave;
   }
 }
+public:
 void NPD_Entry(clang::FunctionDecl* fd)
 {
     SourceManager *SrcMgr = &(fd->getASTContext().getSourceManager());
@@ -507,4 +466,45 @@ void NPD_Entry(clang::FunctionDecl* fd)
     TraverseRecord();
     //NPD_Detect();
 }
+void NPD_Detect(){
+    //cout<<endl;
+    //printf("\033[33m%s\n\033[0m","Detect NPD in the Function");
+    int col0 = -1, line0=-1, col=-1,line=-1;
+    string file0, file;
+    for (int re=0; re<myRecord.size();re++){
+       
+        if(strcmp(myRecord[re].className,"DeclRefExpr")==0 && '*'==(myRecord[re].varType[myRecord[re].varType.length()-1])){     //a pointer
+           // //cout<<"There is a pointer!\n";
+            bool flag = false;
+            if(strcmp(myRecord[re+1].className,"GNUNullExpr")==0){//has been set to null
+               // //cout<<"The pointer was null!\n";
+                flag = true;
+                col0 = myRecord[re].col;
+                line0 = myRecord[re].line;
+                file0 = myRecord[re].fileName;
+            }  
+                
+            for (int i = re+1;i<myRecord.size();i++){
+                if (strcmp(myRecord[i].className,"UnaryOperator")==0){
+                    if (myRecord[i].opr=="*"){
+                        if (flag ==true)
+                            {
+                            col=myRecord[i].col;
+                            line = myRecord[i].line;
+                            file = myRecord[i].fileName;
+                             //(line0,col0,line,col,file0,file);
+                              error_info*loc_set_null=new_error_info(NULL,file0,line0,col0,TYPE_NOTE,NPD_ERROR_TYPE_SET_NULL);
+                            error_info* loc_dereference=new_error_info(loc_set_null,file,line,col,TYPE_ERROR,NPD_ERROR_TYPE_DEREFERENCE);
+                           
+                            result.push(loc_dereference);
+                            }
+                    }
+                    if (myRecord[i].opr=="&")
+                        flag = false;
+                }
+            }
+        }
+    }
+ }
+};
 #endif

@@ -2,6 +2,7 @@
 #define O_I_H
 #include "Detector.h"
 
+class Out_Index{
 map<std::string, int> ArrayUse;//数组名->访问下标
   map<std::string,SourceLocation> ArrayLocation;//数组名->位置
   map<std::string, int> ArrayDefn;//数组名->数组长度
@@ -53,7 +54,7 @@ Stmt* Order(Stmt* node){
 
 
 
-
+public:
 void OI_Entry(std::unordered_map<std::__cxx11::string, ASTResource>::iterator astr_iter)
 {
      auto fds = astr_iter->second.GetFunctionDecls();
@@ -98,6 +99,7 @@ void OI_Dectect()
             result.push(e);
         }
      }
-}
+  }
+};
 #endif
 

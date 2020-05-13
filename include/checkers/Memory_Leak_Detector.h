@@ -2,7 +2,7 @@
 #define M_L_D_H
 #include"Detector.h"
 
-
+class Memory_Leak_Detector{
 
 struct variable
 {
@@ -361,6 +361,7 @@ void detect()
   }
  
 }
+public:
 void ML_Entry(clang::FunctionDecl*fd)
 {
   auto fd_cfg = common::buildCFG(fd);
@@ -399,4 +400,5 @@ void ML_Detect()
 {
   detect();
 }
+};
 #endif // M_L_D_H
