@@ -8,12 +8,15 @@
 #include <llvm/Support/CommandLine.h>
 
 #include "checkers/TemplateChecker.h"
+#include "checkers/All_Detector.h"
 #include "framework/Common.h"
 #include "framework/Config.h"
 
 using namespace clang;
 using namespace llvm;
 using namespace clang::tooling;
+
+
 
 int main(int argc, const char *argv[]) {
   LLVMInitializeNativeTarget();
@@ -27,6 +30,10 @@ int main(int argc, const char *argv[]) {
 
   TemplateChecker *tc = new TemplateChecker(ASTs, configure);
   tc->check();
+
+  Detector *dt;
+  //std::cout<<"mimi\n";
+  dt->detector();
 
   return 0;
 }

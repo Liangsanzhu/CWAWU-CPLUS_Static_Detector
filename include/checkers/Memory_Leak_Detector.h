@@ -1,7 +1,15 @@
 #ifndef M_L_D_H
 #define M_L_D_H
 #include"Detector.h"
-
+#include "llvm/ADT/Optional.h"
+ #include "llvm/ADT/STLExtras.h"
+ #include "llvm/ADT/Statistic.h"
+ #include "llvm/Support/Casting.h"
+ #include "llvm/Support/ErrorHandling.h"
+ #include <algorithm>
+ #include <cassert>
+ #include <memory>
+ #include <utility>
 class Memory_Leak_Detector{
 
 struct variable
@@ -38,10 +46,13 @@ map<int,variable*>sym;//变量id->变量
 string FIELD;
 int COL;
 int LINE;
+int index;
+defuse_node*all_node;
 
 void getmem(const Stmt*S,get_memory*&g)
 {
   
+ 
   for(auto bt=S->child_begin();bt!=S->child_end();bt++)
     {
           getmem(*bt,g);
@@ -306,9 +317,9 @@ else if(strcmp(S->getStmtClassName(),"CXXDeleteExpr")==0)
      }
      else
      {
-       error_info* e=new_error_info(NULL,g->field,g->lineno,g->colno,TYPE_NOTE,ML_ERROR_TYPE_LOCATION);
+       error_info* e=new_error_info(NULL,g->field,g->lineno,g->colno,TYPE_NOTE,ML_ERROR_TYPE_LOCATION,index);
         //result.push(e);
-        error_info* te=new_error_info(e,FIELD,LINE,COL,TYPE_ERROR,ML_ERROR_TYPE_NOTMATCH);
+        error_info* te=new_error_info(e,FIELD,LINE,COL,TYPE_ERROR,ML_ERROR_TYPE_NOTMATCH,index);
         result.push(te);
      }
      
@@ -343,8 +354,8 @@ void detect()
         add_result(g->field,g->lineno,g->colno,TYPE_NOTE,ML_ERROR_TYPE_LOCATION);
         
         cout<<"  Name:"<<var->name<<endl;*/
-        error_info*e=new_error_info(NULL,g->field,g->lineno,g->colno,TYPE_NOTE,ML_ERROR_TYPE_LOCATION);
-        error_info* te=new_error_info(e,var->field,var->lineno,var->colno,TYPE_ERROR,ML_ERROR_TYPE_MISS);
+        error_info*e=new_error_info(NULL,g->field,g->lineno,g->colno,TYPE_NOTE,ML_ERROR_TYPE_LOCATION,index);
+        error_info* te=new_error_info(e,var->field,var->lineno,var->colno,TYPE_ERROR,ML_ERROR_TYPE_MISS,index);
         result.push(te);
       }
       //<<" I'm allocated at "<<g->field<<"< Line "<<g->lineno<<" , "<<"Col "<<g->colno<<" >"<<endl;
@@ -355,49 +366,38 @@ void detect()
     get_memory*g=it->second;
     if(g->isreleased==false)
     {
-       error_info* e=new_error_info(NULL,g->field,g->lineno,g->colno,TYPE_ERROR,ML_ERROR_TYPE_MISS);
+       error_info* e=new_error_info(NULL,g->field,g->lineno,g->colno,TYPE_ERROR,ML_ERROR_TYPE_MISS,index);
        result.push(e);
     }
   }
  
 }
 public:
-void ML_Entry(clang::FunctionDecl*fd)
+void ML_Entry(SourceManager&SrcMgr,Stmt*S,int idx,defuse_node*ano)
 {
-  auto fd_cfg = common::buildCFG(fd);
-  clang::SourceManager&srcMgr(fd->getASTContext().getSourceManager());
-
-       for(CFG::iterator it=fd_cfg->begin();it!=fd_cfg->end();it++)
-      {
-      for(CFGBlock::iterator at=(*it)->begin();at!=(*it)->end();at++)
-      {
-        //cout<<at->getgetmemnd()<<endl;
+ 
+        all_node=ano;
         
-         if (Optional<CFGStmt> CS = at->getAs<CFGStmt>()) {
-
-          const Stmt *S = CS->getStmt();
-          //S->dump();
-          vector<string>t;
-          string a=srcMgr.getFilename(S->getBeginLoc()).str();
+        vector<string>t;
+         index=idx;
+          string a=SrcMgr.getFilename(S->getBeginLoc()).str();
           string s2="/";
           split(a,s2,&t);
           FIELD=t[t.size()-1];
           t.clear();
           //S->getBeginLoc().dump(srcMgr);
-          COL=srcMgr.getSpellingColumnNumber(S->getBeginLoc());
-          LINE=srcMgr.getSpellingLineNumber(S->getBeginLoc());
-          SourceCode;
+          COL=SrcMgr.getSpellingColumnNumber(S->getBeginLoc());
+          LINE=SrcMgr.getSpellingLineNumber(S->getBeginLoc());
           
           //cout<<S->getStmtClassName()<<"***"<<endl;
           TraverseCfg(S,1);
          // bool k=false;
          
-         }
-      }
-      }
+        
 }
 void ML_Detect()
 {
+  //cout<<"ddede\n";
   detect();
 }
 };

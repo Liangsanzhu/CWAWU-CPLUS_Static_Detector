@@ -2,11 +2,12 @@
 #define D_T_H
 #include<iostream>
 using namespace std;
+
 #include <vector>
 #include<map>
 #include<queue>
 #include<stack>
-#include"Def_Use.h"
+//#include"Def_Use.h"
 #include <iomanip>
 #include "string.h"
 #include "framework/ASTManager.h"
@@ -61,11 +62,14 @@ struct error_info
   string filename;
   int type;
   error_info*next;
+  int index;
  bool operator<(const error_info& a) const
     {
-        if(lineno<a.lineno)
+        if(index<a.index)
         return true;
-        if(lineno==a.lineno&&colno<a.colno)
+        if(index==a.index&&lineno<a.lineno)
+        return true;
+        if(index==a.index&&lineno==a.lineno&&colno<a.colno)
         return true;
         return false;
     }
@@ -80,7 +84,7 @@ struct cmp //重写仿函数
 
 priority_queue<error_info*,vector<error_info*>,cmp >result;//
 //string FILED;uanma 
-error_info* new_error_info(error_info*g,string filename,int line,int col,int type,string info)
+error_info* new_error_info(error_info*g,string filename,int line,int col,int type,string info,int index)
 {
   error_info*e=new error_info;
   vector<string>t;
@@ -93,29 +97,39 @@ error_info* new_error_info(error_info*g,string filename,int line,int col,int typ
   e->type=type;//Error/Note/Warning这种类型
   e->info=info;//Error/Note/Warning:后面跟着的一些文字
   e->next=g;//需要关联报错的下一个指针，需要先创建好
+  e->index=index;
   return e;
  
 }
-void Get_SourceCode(clang::FunctionDecl*fd)
+void Get_SourceCode(SourceManager&SMgr)
 {
      if(SourceCode.empty())
       {
-         clang::SourceManager&srcMgr(fd->getASTContext().getSourceManager());
-        FILENAME=srcMgr.getFilename(srcMgr.getLocForStartOfFile(srcMgr.getMainFileID()));
-        const char*sourcecode=srcMgr.getBuffer(srcMgr.getMainFileID())->getBufferStart();
-        int size=srcMgr.getBuffer(srcMgr.getMainFileID())->getBufferSize();
+        FILENAME=SMgr.getFilename(SMgr.getLocForStartOfFile(SMgr.getMainFileID()));
+       
+        const char*sourcecode=SMgr.getBuffer(SMgr.getMainFileID())->getBufferStart();
+        int size=SMgr.getBuffer(SMgr.getMainFileID())->getBufferSize();
         string p=sourcecode;
         string s2="\n";
         split(p,s2,&SourceCode);
         
       }
 }
+int last=-1;
 void print_error(error_info*e)
 {
  // LIGHT
   //WHITE
   if(e==NULL)
   return;
+  if(e->index!=last)
+  {
+  LIGHT
+  YELLOW
+  cout<<"[B"<<e->index<<"]\n";
+  CLOSE
+  last=e->index;
+  }
   LIGHT
   cout<<e->filename<<":"<<e->lineno<<":"<<e->colno<<":";
   switch(e->type)
@@ -148,10 +162,11 @@ void print_error(error_info*e)
   print_error(e->next);
 
 }
+
 void print_result()
 {
     //for(auto it:SourceCode)
-    //cout<<it<<endl;
+    cout<<"Detecting……"<<endl;
     int count=result.size();
  while(!result.empty())
   {

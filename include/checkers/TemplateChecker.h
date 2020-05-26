@@ -2,6 +2,7 @@
 #define TEMPLATECHECKER_H
 
 #include "framework/ASTManager.h"
+#include "checkers/def_use.h"
 
 class TemplateChecker : public ASTManager {
 public:
