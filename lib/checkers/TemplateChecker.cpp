@@ -650,7 +650,7 @@ void TemplateChecker::check() {
       CFGBlock *tmp;
       CFGBlock *next;
       while ((stack_path.empty() == false)) {
-        //std::cout << stack_path.top()->succ_size() << "\n";
+        std::cout << stack_path.top()->succ_size() << "\n";
         if (stack_path.top()->succ_size() > 1) {
           tmp = stack_path.top();
           //find next successor of block tmp
@@ -660,14 +660,54 @@ void TemplateChecker::check() {
               break;
             }
           }
-          //if (next->getBlockID() == exit->getBlockID())
-            //break;
         }
         //the last child
-        if ((stack_path.top()->succ_size() <= 1) || (next == tmp->succ_end()->getReachableBlock()) || (next->getBlockID() == exit->getBlockID())) {
+        if (stack_path.top()->succ_size() <= 1 || next == tmp->succ_end()->getReachableBlock() || next->getBlockID() == exit->getBlockID()) {
+          std::cout << "in first if.\n";
+          if (stack_path.top()->succ_size() > 1 && (next != tmp->succ_end()->getReachableBlock()) && (next->getBlockID() == exit->getBlockID())) {
+            std::cout << "in second if.\n";
+            ++idx;
+            //add path
+            std::vector<int> all_id;
+            std::map<int, def_use> e = all_node.get_node();
+            for (auto i = e.begin(); i != e.end(); ++i)
+              all_id.push_back((*i).first);
+            //join entry
+            path_tree[cur_fd][idx].push_back(path_tree[cur_fd][1][0]);
+            int path_idx = 1;
+            for (auto b = ++(reverse_path.begin()); b != reverse_path.end(); ++b) {
+              int bk = (*b);
+              path_tree[cur_fd][idx].push_back(path_tree[cur_fd][idx-1][path_idx]);
+              ++path_idx;
+              //std::cout << bk << "\n";
+              //output_deftmp();
+              for (auto m = all_id.begin(); m != all_id.end(); ++m) {
+                int id = (*m);
+                //std::cout << id << "\n";
+                std::map<std::pair<int, SourceLocation>, element> n = all_node.get_defuse(id).get_du();
+                for (auto f = n.begin(); f != n.end(); ++f) {
+                  element e = (*f).second;
+                  //std::cout << e.get_blockid() << "\n";
+                  if (((*f).first.first == 1) && (e.get_blockid() == bk)) {
+                    //std::cout << "in if.\n";
+                    SourceLocation sl = (*f).first.second;
+                    //std::cout << e.get_defuse_ln().first << " " << e.get_defuse_ln().second << "\n";
+                    //sl.printToString(fd->getASTContext().getSourceManager());
+                    all_node.add_defuse_ln(id, idx, sl, e.get_defuse_ln().first, e.get_defuse_ln().second);
+                    all_node.add_funcname(id, idx, sl, e.get_funcname());
+                    all_node.add_defuse_stmt(id, idx, sl, e.get_defuse_stmt().first, e.get_defuse_stmt().second);
+                    all_node.add_blockid(id, idx, sl, bk);
+                  }
+                }
+              }
+            }
+            std::cout << "out second if.\n";
+          }
+          std::cout << "out first if.\n";
           current = stack_path.top();
           stack_path.pop();
           reverse_path.pop_back();
+          std::cout << "rest size: " << stack_path.size() << "\n";
         }
         else {
           ++idx;
@@ -715,23 +755,26 @@ void TemplateChecker::check() {
               next = t;
               //std::cout << next->getBlockID() << "\n";
             }
-            stack_path.push(next);
-            //CFGBlock *cb_1 = convert(*next, fd_cfg->getBumpVectorContext(), next->getParent());
-            path_tree[cur_fd][idx].push_back(next);
-            block_id = next->getBlockID();
-            reverse_path.push_back(block_id);
-            for (auto I = next->begin(); I != next->end(); ++I) {
-              if (Optional<CFGStmt> CS = (*I).getAs<CFGStmt>()) {
-                Stmt *S = const_cast<Stmt *>(CS->getStmt());
-                assert(S != nullptr && "Expecting non-null Stmt");
-                //std::cout <<"1.\n"<<std::endl;
-                cur_stmt = S;
-                TraverseStmt(S, 0, &fd->getASTContext().getSourceManager());
-              }  
+            if (next->getBlockID() != exit->getBlockID()) {
+              stack_path.push(next);
+              //CFGBlock *cb_1 = convert(*next, fd_cfg->getBumpVectorContext(), next->getParent());
+              path_tree[cur_fd][idx].push_back(next);
+              block_id = next->getBlockID();
+              reverse_path.push_back(block_id);
+              for (auto I = next->begin(); I != next->end(); ++I) {
+                if (Optional<CFGStmt> CS = (*I).getAs<CFGStmt>()) {
+                  Stmt *S = const_cast<Stmt *>(CS->getStmt());
+                  assert(S != nullptr && "Expecting non-null Stmt");
+                  //std::cout <<"1.\n"<<std::endl;
+                  cur_stmt = S;
+                  TraverseStmt(S, 0, &fd->getASTContext().getSourceManager());
+                }  
+              }
+              next = next->succ_begin()->getReachableBlock();
             }
-            next = next->succ_begin()->getReachableBlock();
           }
         }
+        std::cout << "a while end.\n";
       }
       //output_tree();
       all_node.output_node(&fd->getASTContext().getSourceManager());
