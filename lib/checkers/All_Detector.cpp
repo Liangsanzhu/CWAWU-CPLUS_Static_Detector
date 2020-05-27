@@ -1,8 +1,8 @@
 #include "checkers/All_Detector.h"
 #include "checkers/Memory_Leak_Detector.h"
 #include "checkers/Detector.h"
-//include your files
-/*step1:添加.h*/
+/*step0:建立自己的.h，在自己的.h里面加入Detector.h的报错*/
+/*step1:添加自己的.h*/
 
 
 SourceManager*srcMgr=NULL;
@@ -23,7 +23,9 @@ void Detector::detector() {
     std::cout << "FunctionName: " << (*fd).first->getQualifiedNameAsString() << "\n";
     for (auto idx = (*fd).second.begin(); idx != (*fd).second.end(); ++idx) {
       //path index
+      /*step2:在每一个分支下，创建自己的对象*/
       Memory_Leak_Detector MLD;
+
       int path_idx = (*idx).first;
       std::cout << "path: " << path_idx << "\n";
       auto i = cfg_path[(*fd).first]->end();
@@ -36,8 +38,9 @@ void Detector::detector() {
               assert(S != nullptr && "Expecting non-null Stmt");
               std::cout << S->getStmtClassName() << "\n";
                MLD.ML_Entry(*srcMgr,S,path_idx,&all_node);
-           
+
               /*
+              step3:调用入口函数
               for every statement.
               add your detect here.
               */
@@ -45,36 +48,12 @@ void Detector::detector() {
           }
           
       }
+      /*step4:调用检测函数*/
       MLD.ML_Detect();
     }
   }
   
-  Get_SourceCode(*srcMgr);
-   print_result();
+  Get_SourceCode(*srcMgr);//获取源码
+   print_result();//打印结果
 }
 
-/*
-      for (auto cfg_bk = ++((*idx).second.begin()); cfg_bk != (*idx).second.end(); ++cfg_bk) {
-          //cfg_block of the path
-          CFGBlock *cur_bk = (*cfg_bk);
-          for (auto stmt = cur_bk->begin(); stmt != cur_bk->end(); ++stmt) {
-             
-              if (Optional<CFGStmt> CS = (*stmt).getAs<CFGStmt>()){  
-              
-              Stmt *S = const_cast<Stmt *>(CS->getStmt());
-        
-              assert(S != nullptr && "Expecting non-null Stmt");
-              //std::cout << S->getStmtClassName() << "\n";
-             *//*step3:调用接口*/
-              /*MLD.ML_Entry(*srcMgr,S,path_idx,&all_node);
-            }
-              /*
-              for every statement.
-              add your detect here.
-              
-          }
-      }
-    }
-    MLD.ML_Detect();
-   print_result();
-}*/
