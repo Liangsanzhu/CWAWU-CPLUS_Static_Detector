@@ -53,7 +53,7 @@ void f0(){
 
 int malloc(){
     std::string *str = (std::string *)malloc(10);
-    std::cout<<str[0]<<std::endl;
+   // std::cout<<str[0]<<std::endl;
     free(str);
     *str="chick";
     return 0;

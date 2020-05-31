@@ -60,8 +60,8 @@ void Detector::detector() {
           
       }
      MLD.ML_Detect();
-      //NPD.NPD_Detect(ifBlock);
-       //OutIn.OI_Dectect();
+      NPD.NPD_Detect(ifBlock);
+       OutIn.OI_Dectect();
       vector <int>().swap(ifBlock);
     }
     VUD.detector(all_node, srcMgr, (*fd).first->getQualifiedNameAsString(), global_def);
