@@ -15,7 +15,7 @@ public:
   element() {
     defuse_stmt.first = (Stmt *)malloc(sizeof(Stmt));
     defuse_stmt.second = (Stmt *)malloc(sizeof(Stmt));
-    defined = false;
+    defined = 0;
     block_id = -1;
   }
 
@@ -36,11 +36,11 @@ public:
     return func_name;
   }
 
-  void add_defined(bool d) {
+  void add_defined(int d) {
     defined = d;
   }
 
-  bool get_defined() {
+  int get_defined() {
     return defined;
   }
 
@@ -69,6 +69,7 @@ public:
     if (defuse_stmt.second != nullptr)
       std::cout << defuse_stmt.second->getStmtClassName() << "\n";
     std::cout << block_id << "\n";
+    std::cout << "defined: " << defined << "\n";
   }
  
 
@@ -77,7 +78,7 @@ private:
   std::string func_name;
   //when ln_col == 0
   std::pair<Stmt *, Stmt *> defuse_stmt;
-  bool defined;
+  int defined;
   int block_id;
 
 };
@@ -107,6 +108,11 @@ public:
   void add_blockid(int idx, SourceLocation sl, int id) {
     std::pair<int, SourceLocation> pr(idx, sl);
     du[pr].add_blockid(id);
+  }
+
+  void add_defined(int idx, SourceLocation sl, int defined) {
+    std::pair<int, SourceLocation> pr(idx, sl);
+    du[pr].add_defined(defined);
   }
 
   /*
@@ -212,6 +218,10 @@ public:
     du_node[id].add_blockid(idx, sl, blockid);
   }
 
+  void add_defined(int id, int idx, SourceLocation sl, int defined) {
+    du_node[id].add_defined(idx, sl, defined);
+  }
+
   void output_node(SourceManager *scm) {
     for (auto b = du_node.begin(); b != du_node.end(); ++b) {
       std::cout << (*b).first << "  ";
@@ -242,5 +252,22 @@ public:
 private:
   std::map<int, def_use> du_node;
 };
+
+struct Info {
+  std::string varname;
+  int def_line;
+  Stmt *def_stmt;
+  int defined;
+  //tmp
+  //global vardecl
+  Decl *def_decl;
+
+  int block_id;
+  int var_id;
+  SourceLocation location;
+};
+
+//std::map<int, Info> global_def;
+
 
 #endif //DEF_USE_H

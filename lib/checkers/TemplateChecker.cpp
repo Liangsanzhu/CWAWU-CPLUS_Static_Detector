@@ -2,17 +2,19 @@
 //#include "checkers/All_Detector.h"
 #include "stack"
 #include "algorithm"
-
+/*
 struct Info {
   std::string varname;
   int def_line;
   Stmt *def_stmt;
+  Decl *def_decl;
+  int defined;
   //tmp
   int block_id;
   int var_id;
   SourceLocation location;
 };
-
+*/
 extern std::map<FunctionDecl *, std::map<int, std::vector<CFGBlock *>>> path_tree;
 extern std::map<FunctionDecl *, std::unique_ptr<clang::CFG>> cfg_path;
 
@@ -27,7 +29,7 @@ std::map<int, std::map<int, Info>> def_tmp;
 std::vector<Info> assign_tmp;
 bool saved = true;
 std::map<int, Info> global_def;
-std::map<std::string, bool> decl_or_def;
+//std::map<std::string, bool> decl_or_def;
 int block_id = -1;
 std::vector<int> reverse_path;
 std::stack<CFGBlock *> stack_path;
@@ -37,6 +39,7 @@ FunctionDecl *cur_fd;
 //Detector detec;
 int g_id;
 Stmt *cur_stmt;
+Decl *cur_decl;
 //test
 //SourceLocation sl;
 int idx = 0;
@@ -118,14 +121,16 @@ void TraverseDecl(Decl *anydecl, int count, SourceManager *scm) {
       if (block_id == -1) {
         global_def[vardecl->getID()].def_line = line;
         global_def[vardecl->getID()].varname = vardecl->getQualifiedNameAsString();
-        global_def[vardecl->getID()].def_stmt = cur_stmt;
+        global_def[vardecl->getID()].def_decl = cur_decl;
+        global_def[vardecl->getID()].defined = 0;
       }
       else {
         def_tmp[block_id][vardecl->getID()].varname = vardecl->getQualifiedNameAsString();
         def_tmp[block_id][vardecl->getID()].def_line = line;
         def_tmp[block_id][vardecl->getID()].def_stmt = cur_stmt;
+        def_tmp[block_id][vardecl->getID()].defined = 0;
       }
-      decl_or_def[vardecl->getQualifiedNameAsString()] = false;
+      
       //output_deftmp();
       //std::cout << count << std::endl;
       if (vardecl->ensureEvaluatedStmt() != nullptr) {
@@ -140,6 +145,7 @@ void TraverseDecl(Decl *anydecl, int count, SourceManager *scm) {
           all_node.add_funcname(g_id, idx, vardecl->getLocation(), cur_funcname);
           all_node.add_defuse_stmt(g_id, idx, vardecl->getLocation(), cur_stmt, nullptr);
           all_node.add_blockid(g_id, idx, vardecl->getLocation(), block_id);
+          all_node.add_defined(g_id, idx, vardecl->getLocation(), 1);
           //}
         }
         else
@@ -149,6 +155,7 @@ void TraverseDecl(Decl *anydecl, int count, SourceManager *scm) {
           all_node.add_funcname(vardecl->getID(), idx, vardecl->getLocation(), cur_funcname);
           all_node.add_defuse_stmt(vardecl->getID(), idx, vardecl->getLocation(), cur_stmt, nullptr);
           all_node.add_blockid(vardecl->getID(), idx, vardecl->getLocation(), block_id);
+          all_node.add_defined(vardecl->getID(), idx, vardecl->getLocation(), 1);
         }
         TraverseStmt(vardecl->ensureEvaluatedStmt()->Value, count, scm);
       }
@@ -157,6 +164,7 @@ void TraverseDecl(Decl *anydecl, int count, SourceManager *scm) {
         all_node.add_funcname(vardecl->getID(), idx, vardecl->getLocation(), cur_funcname);
         all_node.add_defuse_stmt(vardecl->getID(), idx, vardecl->getLocation(), cur_stmt, nullptr);
         all_node.add_blockid(vardecl->getID(), idx, vardecl->getLocation(), block_id);
+        all_node.add_defined(vardecl->getID(), idx, vardecl->getLocation(), 0);
       }
       break;
     
@@ -286,15 +294,18 @@ void TraverseStmt(Stmt * anystmt, int count, SourceManager *scm) {
           //add node
           info_tmp = assign_tmp[assign_tmp.size()-1];
           assign_tmp.pop_back();
+          std::cout << "defined:" << info_tmp.defined << "\n";
           def_tmp[info_tmp.block_id][info_tmp.var_id].def_line = info_tmp.def_line;
           def_tmp[info_tmp.block_id][info_tmp.var_id].varname = info_tmp.varname;
           def_tmp[info_tmp.block_id][info_tmp.var_id].def_stmt = info_tmp.def_stmt;
+          def_tmp[info_tmp.block_id][info_tmp.var_id].defined = info_tmp.defined;
 
           //all_node.add_du(dlrefexpr->getDecl()->getID(), line, 0, cur_funcname, cur_stmt, nullptr);
           all_node.add_defuse_ln(info_tmp.var_id, idx, info_tmp.location, info_tmp.def_line, 0);
           all_node.add_funcname(info_tmp.var_id, idx, info_tmp.location, cur_funcname);
           all_node.add_defuse_stmt(info_tmp.var_id, idx, info_tmp.location, info_tmp.def_stmt, nullptr);
           all_node.add_blockid(info_tmp.var_id, idx, info_tmp.location, info_tmp.block_id);
+          all_node.add_defined(info_tmp.var_id, idx, info_tmp.location, info_tmp.defined);
 
           saved = true;
         }
@@ -365,13 +376,14 @@ void TraverseStmt(Stmt * anystmt, int count, SourceManager *scm) {
             //def_tmp[block_id][dlrefexpr->getDecl()->getID()].def_line = line;
             //def_tmp[block_id][dlrefexpr->getDecl()->getID()].varname = dlrefexpr->getDecl()->getNameAsString();
             //def_tmp[block_id][dlrefexpr->getDecl()->getID()].def_stmt = cur_stmt;
-            decl_or_def[dlrefexpr->getDecl()->getNameAsString()] = true;
+            //decl_or_def[dlrefexpr->getDecl()->getNameAsString()] = true;
             info_tmp.block_id = block_id;
             info_tmp.def_line = line;
             info_tmp.def_stmt = cur_stmt;
             info_tmp.var_id = dlrefexpr->getDecl()->getID();
             info_tmp.varname = dlrefexpr->getDecl()->getNameAsString();
             info_tmp.location = dlrefexpr->getLocation();
+            info_tmp.defined = 1;
             assign_tmp.push_back(info_tmp);
             saved = false;
             //std::cout << line << std::endl;
@@ -406,6 +418,7 @@ void TraverseStmt(Stmt * anystmt, int count, SourceManager *scm) {
               all_node.add_funcname(dlrefexpr->getDecl()->getID(), idx, dlrefexpr->getLocation(), cur_funcname);
               all_node.add_defuse_stmt(dlrefexpr->getDecl()->getID(), idx, dlrefexpr->getLocation(), def_tmp[block_id][dlrefexpr->getDecl()->getID()].def_stmt, cur_stmt);
               all_node.add_blockid(dlrefexpr->getDecl()->getID(), idx, dlrefexpr->getLocation(), block_id);
+              all_node.add_defined(dlrefexpr->getDecl()->getID(), idx, dlrefexpr->getLocation(), def_tmp[block_id][dlrefexpr->getDecl()->getID()].defined);
             }
             else {
               --pos;
@@ -422,6 +435,7 @@ void TraverseStmt(Stmt * anystmt, int count, SourceManager *scm) {
                   all_node.add_funcname(dlrefexpr->getDecl()->getID(), idx, dlrefexpr->getLocation(), cur_funcname);
                   all_node.add_defuse_stmt(dlrefexpr->getDecl()->getID(), idx, dlrefexpr->getLocation(), def_tmp[reverse_path[pos]][dlrefexpr->getDecl()->getID()].def_stmt, cur_stmt);
                   all_node.add_blockid(dlrefexpr->getDecl()->getID(), idx, dlrefexpr->getLocation(), block_id);
+                  all_node.add_defined(dlrefexpr->getDecl()->getID(), idx, dlrefexpr->getLocation(), def_tmp[reverse_path[pos]][dlrefexpr->getDecl()->getID()].defined);
                   break;
                 }
                 --pos;
@@ -438,6 +452,7 @@ void TraverseStmt(Stmt * anystmt, int count, SourceManager *scm) {
               all_node.add_funcname(dlrefexpr->getDecl()->getID(), idx, dlrefexpr->getLocation(), cur_funcname);
               all_node.add_defuse_stmt(dlrefexpr->getDecl()->getID(), idx, dlrefexpr->getLocation(), global_def[dlrefexpr->getDecl()->getID()].def_stmt, cur_stmt);
               all_node.add_blockid(dlrefexpr->getDecl()->getID(), idx, dlrefexpr->getLocation(), block_id);
+              all_node.add_defined(dlrefexpr->getDecl()->getID(), idx, dlrefexpr->getLocation(), global_def[dlrefexpr->getDecl()->getID()].defined);
             }
             //std::cout << "after pos == -1\n";
             //output_deftmp();
@@ -478,13 +493,14 @@ void TraverseStmt(Stmt * anystmt, int count, SourceManager *scm) {
           def_tmp[block_id][g_id].def_line = scm->getSpellingLineNumber(intltr->getLocation());
           def_tmp[block_id][g_id].varname = g_varname;
           def_tmp[block_id][g_id].def_stmt = cur_stmt;
-          decl_or_def[g_varname] = true;
+          def_tmp[block_id][g_id].defined = 1;
           //all_node.add_du(g_id, def_tmp[block_id][g_id].def_line, 0, cur_funcname, cur_stmt, nullptr);
           std::cout << initlst->getExprLoc().printToString(*scm) << "\n";
           all_node.add_defuse_ln(g_id, idx, initlst->getExprLoc(), def_tmp[block_id][g_id].def_line, 0);
           all_node.add_funcname(g_id, idx, initlst->getExprLoc(), cur_funcname);
           all_node.add_defuse_stmt(g_id, idx, initlst->getExprLoc(), cur_stmt, nullptr);
           all_node.add_blockid(g_id, idx, initlst->getExprLoc(), block_id);
+          all_node.add_defined(g_id, idx, initlst->getExprLoc(), 1);
           integ = false;
         }
         break;
@@ -499,7 +515,7 @@ void TraverseStmt(Stmt * anystmt, int count, SourceManager *scm) {
           def_tmp[block_id][g_id].def_line = scm->getSpellingLineNumber(intltr->getLocation());
           def_tmp[block_id][g_id].varname = g_varname;
           def_tmp[block_id][g_id].def_stmt = cur_stmt;
-          decl_or_def[g_varname] = true;
+          def_tmp[block_id][g_id].defined = 1;
           //all_node.add_du(g_id, def_tmp[block_id][g_id].def_line, 0, cur_funcname, cur_stmt, nullptr);
           //all_node.add_defuse_ln(g_id, idx, intltr->getLocation(), def_tmp[block_id][g_id].def_line, 0);
           //all_node.add_funcname(g_id, idx, intltr->getLocation(), cur_funcname);
@@ -560,6 +576,7 @@ void TemplateChecker::check() {
       printf("Global variable: ");
       std::cout << vd->getQualifiedNameAsString() << "  "
         << vd->getType().getAsString() << "  " << std::endl;
+      cur_decl = vd;
       TraverseDecl(vd, 0, &(vd->getASTContext().getSourceManager()));
   }
   
@@ -697,6 +714,7 @@ void TemplateChecker::check() {
                     all_node.add_funcname(id, idx, sl, e.get_funcname());
                     all_node.add_defuse_stmt(id, idx, sl, e.get_defuse_stmt().first, e.get_defuse_stmt().second);
                     all_node.add_blockid(id, idx, sl, bk);
+                    all_node.add_defined(id, idx, sl, e.get_defined());
                   }
                 }
               }
@@ -741,6 +759,7 @@ void TemplateChecker::check() {
                   all_node.add_funcname(id, idx, sl, e.get_funcname());
                   all_node.add_defuse_stmt(id, idx, sl, e.get_defuse_stmt().first, e.get_defuse_stmt().second);
                   all_node.add_blockid(id, idx, sl, bk);
+                  all_node.add_defined(id, idx, sl, e.get_defined());
                 }
               }
             }
