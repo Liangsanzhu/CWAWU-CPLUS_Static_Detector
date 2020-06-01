@@ -1,6 +1,7 @@
 #include<iostream>
 #include<string.h>
 #include<stdio.h>
+
 //数组越界
 void mem_leak1(int n)
 {
@@ -98,4 +99,24 @@ int Contrast(){
     b = &tmp;   //再次define
     *b = 5;     //不发生错误
     return 0;
+}
+
+void bof_bcopy(){	
+	char argv[20]="01234567890";	
+	char sample[10]="a";
+	int n=10;
+	bcopy(argv, sample, n);
+	printf("%s", sample);
+}
+void bof_sprintf()
+{
+	char argv[20]="01234567890";
+	char buffer[10];
+	int num;
+	int s=12345;
+	num=sprintf(buffer, "%s", argv);
+	sprintf(buffer,"%-8d%8d",123,4567);
+	sprintf(buffer,"%-8d%8d",s,4567);
+	sprintf(buffer,"%d%8d",s,4567);
+
 }
