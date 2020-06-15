@@ -264,10 +264,10 @@ public:
 
 void NPD_Entry(SourceManager *SrcMgr,Stmt* stmt,int idx, defuse_node*ano, int block_id)
 {
-    RED
+   // RED
     //cout<<"In NPD entry!\n";
     //cout<<fd->getNameAsString()<<endl;
-    CLOSE
+    //CLOSE
     route = idx;
     all_node = ano;
     NPD_Traverse(SrcMgr, stmt, block_id);
@@ -280,10 +280,10 @@ void NPD_Detect(std::vector<int>ifBlock){
     //printf("\033[33m%s\n\033[0m","Detect NPD in the Function");
     int col0 = -1, line0=-1, col=-1,line=-1;
     string file0, file;
-    RED
+   // RED
    /*  showSave();
     showIf(ifBlock); */
-    CLOSE
+    //CLOSE
     bool npd = false;
     cout<<"I'm in detect of each route.\n";
     for (int i = 0; recordPointer.size()>0 && i<recordPointer.size()-1;i++){

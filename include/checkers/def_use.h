@@ -62,14 +62,14 @@ public:
   }
 
   void output_element() {
-    std::cout << defuse_ln.first << " " << defuse_ln.second << "\n";
+    /*std::cout << defuse_ln.first << " " << defuse_ln.second << "\n";
     std::cout << "Belong to Function: " << func_name << "\n";
     if (defuse_stmt.first != nullptr)
       std::cout << defuse_stmt.first->getStmtClassName() << "\n";
     if (defuse_stmt.second != nullptr)
       std::cout << defuse_stmt.second->getStmtClassName() << "\n";
     std::cout << block_id << "\n";
-    std::cout << "defined: " << defined << "\n";
+    std::cout << "defined: " << defined << "\n";*/
   }
  
 
@@ -169,14 +169,14 @@ public:
   }
 
   void output_all(SourceManager *scm) {
-    std::cout << var_name << "  ";
+   /* std::cout << var_name << "  ";
     std::cout << type << "\n";
     for (auto i = du.begin(); i != du.end(); ++i) {
       std::cout << (*i).first.first << "\n";
       std::cout << (*i).first.second.printToString(*scm);
       std::cout << "\n";
       (*i).second.output_element();
-    }
+    }*/
   }
 
 private:
@@ -223,10 +223,10 @@ public:
   }
 
   void output_node(SourceManager *scm) {
-    for (auto b = du_node.begin(); b != du_node.end(); ++b) {
+    /*for (auto b = du_node.begin(); b != du_node.end(); ++b) {
       std::cout << (*b).first << "  ";
       (*b).second.output_all(scm);
-    }
+    }*/
   }
 
   def_use get_defuse(int id) {

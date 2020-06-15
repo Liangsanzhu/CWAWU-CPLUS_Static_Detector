@@ -31,7 +31,7 @@ public:
         vector<string> t1;
         vector<string> t2;
         if ((def_line != 0) && (use_line != 0) && ((*ii).second.get_defined() == 0) && (funcname == (*ii).second.get_funcname())) {
-          std::cout << "idx: " << idx << " def: " << def_line << " use: " << use_line << "\n";
+         // std::cout << "idx: " << idx << " def: " << def_line << " use: " << use_line << "\n";
           string s2 = "/";
           error_info *e;
           if ((*ii).second.get_defuse_stmt().first != nullptr) {

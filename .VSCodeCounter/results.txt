@@ -1,0 +1,84 @@
+Date : 2020-06-16 00:35:05
+Directory : /home/ergo/rose/SE-Experiment-master
+Total : 38 files,  7544 codes, 727 comments, 841 blanks, all 9112 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| C++      |         29 |      6,083 |        662 |        574 |      7,319 |
+| Log      |          1 |        494 |          0 |         62 |        556 |
+| C        |          2 |        480 |         51 |        103 |        634 |
+| Makefile |          1 |        355 |         14 |         42 |        411 |
+| Markdown |          5 |        132 |          0 |         60 |        192 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++---------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                        | files      | code       | comment    | blank      | total      |
++---------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                           |         38 |      7,544 |        727 |        841 |      9,112 |
+| CMakeFiles                                                                                  |          5 |      1,803 |        104 |        266 |      2,173 |
+| CMakeFiles/3.10.2                                                                           |          2 |        876 |        104 |        196 |      1,176 |
+| CMakeFiles/3.10.2/CompilerIdC                                                               |          1 |        449 |         51 |         99 |        599 |
+| CMakeFiles/3.10.2/CompilerIdCXX                                                             |          1 |        427 |         53 |         97 |        577 |
+| Qt                                                                                          |          9 |      3,076 |         66 |        154 |      3,296 |
+| Qt/Qt                                                                                       |          3 |        146 |          8 |         52 |        206 |
+| Qt/build-Qt-Desktop-Debug                                                                   |          6 |      2,930 |         58 |        102 |      3,090 |
+| docs                                                                                        |          1 |         13 |          0 |         14 |         27 |
+| include                                                                                     |         12 |      1,689 |        248 |        269 |      2,206 |
+| include/checkers                                                                            |          9 |      1,554 |        244 |        236 |      2,034 |
+| include/framework                                                                           |          3 |        135 |          4 |         33 |        172 |
+| lib                                                                                         |          5 |        727 |        285 |         71 |      1,083 |
+| lib/checkers                                                                                |          2 |        590 |        280 |         52 |        922 |
+| lib/framework                                                                               |          3 |        137 |          5 |         19 |        161 |
+| tests                                                                                       |          3 |        119 |         21 |         22 |        162 |
+| tests/TemplateChecker                                                                       |          2 |        117 |         21 |         20 |        158 |
+| tools                                                                                       |          1 |         25 |          3 |         11 |         39 |
+| tools/TemplateChecker                                                                       |          1 |         25 |          3 |         11 |         39 |
++---------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++---------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                                                    | language | code       | comment    | blank      | total      |
++---------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| /home/ergo/rose/SE-Experiment-master/CMakeFiles/3.10.2/CompilerIdC/CMakeCCompilerId.c       | C        |        449 |         51 |         99 |        599 |
+| /home/ergo/rose/SE-Experiment-master/CMakeFiles/3.10.2/CompilerIdCXX/CMakeCXXCompilerId.cpp | C++      |        427 |         53 |         97 |        577 |
+| /home/ergo/rose/SE-Experiment-master/CMakeFiles/CMakeOutput.log                             | Log      |        494 |          0 |         62 |        556 |
+| /home/ergo/rose/SE-Experiment-master/CMakeFiles/feature_tests.c                             | C        |         31 |          0 |          4 |         35 |
+| /home/ergo/rose/SE-Experiment-master/CMakeFiles/feature_tests.cxx                           | C++      |        402 |          0 |          4 |        406 |
+| /home/ergo/rose/SE-Experiment-master/CONTRIBUTING.md                                        | Markdown |         83 |          0 |         27 |        110 |
+| /home/ergo/rose/SE-Experiment-master/Qt/Qt/main.cpp                                         | C++      |          9 |          0 |          3 |         12 |
+| /home/ergo/rose/SE-Experiment-master/Qt/Qt/mainwindow.cpp                                   | C++      |        108 |          8 |         36 |        152 |
+| /home/ergo/rose/SE-Experiment-master/Qt/Qt/mainwindow.h                                     | C++      |         29 |          0 |         13 |         42 |
+| /home/ergo/rose/SE-Experiment-master/Qt/build-Qt-Desktop-Debug/Makefile                     | Makefile |        355 |         14 |         42 |        411 |
+| /home/ergo/rose/SE-Experiment-master/Qt/build-Qt-Desktop-Debug/moc_mainwindow.cpp           | C++      |         99 |         10 |         15 |        124 |
+| /home/ergo/rose/SE-Experiment-master/Qt/build-Qt-Desktop-Debug/moc_predefs.h                | C++      |        389 |          0 |          1 |        390 |
+| /home/ergo/rose/SE-Experiment-master/Qt/build-Qt-Desktop-Debug/qrc_image.cpp                | C++      |      1,888 |         20 |         15 |      1,923 |
+| /home/ergo/rose/SE-Experiment-master/Qt/build-Qt-Desktop-Debug/ui_llvm.h                    | C++      |         39 |          7 |         13 |         59 |
+| /home/ergo/rose/SE-Experiment-master/Qt/build-Qt-Desktop-Debug/ui_mainwindow.h              | C++      |        160 |          7 |         16 |        183 |
+| /home/ergo/rose/SE-Experiment-master/README.md                                              | Markdown |          9 |          0 |          7 |         16 |
+| /home/ergo/rose/SE-Experiment-master/docs/README.md                                         | Markdown |         13 |          0 |         14 |         27 |
+| /home/ergo/rose/SE-Experiment-master/include/checkers/All_Detector.h                        | C++      |         15 |          0 |          5 |         20 |
+| /home/ergo/rose/SE-Experiment-master/include/checkers/Buffer_Overflow_Detector.h            | C++      |        360 |         93 |         45 |        498 |
+| /home/ergo/rose/SE-Experiment-master/include/checkers/Detector.h                            | C++      |        148 |         28 |         14 |        190 |
+| /home/ergo/rose/SE-Experiment-master/include/checkers/Memory_Leak_Detector.h                | C++      |        339 |         18 |         47 |        404 |
+| /home/ergo/rose/SE-Experiment-master/include/checkers/Null_Pointer_Deref_Detector.h         | C++      |        299 |         41 |         27 |        367 |
+| /home/ergo/rose/SE-Experiment-master/include/checkers/Out_Index.h                           | C++      |        154 |          8 |         24 |        186 |
+| /home/ergo/rose/SE-Experiment-master/include/checkers/TemplateChecker.h                     | C++      |         12 |          0 |          5 |         17 |
+| /home/ergo/rose/SE-Experiment-master/include/checkers/Variable_Uninitialized_Detector.h     | C++      |         62 |          3 |         13 |         78 |
+| /home/ergo/rose/SE-Experiment-master/include/checkers/def_use.h                             | C++      |        165 |         53 |         56 |        274 |
+| /home/ergo/rose/SE-Experiment-master/include/framework/ASTManager.h                         | C++      |         99 |          4 |         23 |        126 |
+| /home/ergo/rose/SE-Experiment-master/include/framework/Common.h                             | C++      |         14 |          0 |          5 |         19 |
+| /home/ergo/rose/SE-Experiment-master/include/framework/Config.h                             | C++      |         22 |          0 |          5 |         27 |
+| /home/ergo/rose/SE-Experiment-master/lib/checkers/All_Detector.cpp                          | C++      |         59 |         18 |         10 |         87 |
+| /home/ergo/rose/SE-Experiment-master/lib/checkers/TemplateChecker.cpp                       | C++      |        531 |        262 |         42 |        835 |
+| /home/ergo/rose/SE-Experiment-master/lib/framework/ASTManager.cpp                           | C++      |         11 |          0 |          2 |         13 |
+| /home/ergo/rose/SE-Experiment-master/lib/framework/Common.cpp                               | C++      |         52 |          5 |         10 |         67 |
+| /home/ergo/rose/SE-Experiment-master/lib/framework/Config.cpp                               | C++      |         74 |          0 |          7 |         81 |
+| /home/ergo/rose/SE-Experiment-master/tests/README.md                                        | Markdown |          2 |          0 |          2 |          4 |
+| /home/ergo/rose/SE-Experiment-master/tests/TemplateChecker/README.md                        | Markdown |         25 |          0 |         10 |         35 |
+| /home/ergo/rose/SE-Experiment-master/tests/TemplateChecker/example.cpp                      | C++      |         92 |         21 |         10 |        123 |
+| /home/ergo/rose/SE-Experiment-master/tools/TemplateChecker/main.cpp                         | C++      |         25 |          3 |         11 |         39 |
+| Total                                                                                       |          |      7,544 |        727 |        841 |      9,112 |
++---------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+

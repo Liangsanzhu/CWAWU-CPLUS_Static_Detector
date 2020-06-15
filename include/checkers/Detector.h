@@ -12,14 +12,19 @@ using namespace std;
 #include "string.h"
 #include "framework/ASTManager.h"
 
-#define CLOSE printf("\033[0m"); //关闭彩色字体
+/*#define CLOSE printf("\033[0m"); //关闭彩色字体
 #define LIGHT printf("\033[1m");
 #define RED printf("\033[31m"); //红色字体
 #define WHITE printf("\033[37m"); //bai色字体
 #define GREEN printf("\033[32m");//绿色字体
 #define BLACK printf("\033[30m");//hei色字体
 #define YELLOW printf("\033[33m");//黄色字体
-#define BLUE printf("\033[34m");//蓝色字体
+#define BLUE printf("\033[34m");//蓝色字体*/
+string YELLOW="";
+string GREEN="";
+string RED="";
+string GRAY="";
+string CLOSE="";
 
 
 #define FLAG_EMPTY -1
@@ -124,40 +129,40 @@ void print_error(error_info*e)
   return;
   if(e->index!=last)
   {
-  LIGHT
-  YELLOW
-  cout<<"[B"<<e->index<<"]\n";
-  CLOSE
+  //LIGHT
+  //YELLOW
+  cout<<YELLOW<<"[B"<<e->index<<"]"<<CLOSE<<endl;
+  //CLOSE
   last=e->index;
   }
-  LIGHT
+ // LIGHT
   cout<<e->filename<<":"<<e->lineno<<":"<<e->colno<<":";
   switch(e->type)
   {
     case TYPE_ERROR:
-    RED
-    cout<<" error: ";
-    CLOSE
-    LIGHT
+   // RED
+    cout<<RED<<" error: "<<CLOSE;
+   // CLOSE
+    //LIGHT
     break;
     case TYPE_NOTE:
-    BLACK
-    cout<<" note: ";
-    CLOSE
+    //BLACK
+    cout<<GRAY<<" note: "<<CLOSE;
+    //CLOSE
     break;
   }
   //LIGHT
   cout<<e->info<<endl;
-  CLOSE
-  WHITE
+ // CLOSE
+  //WHITE
   if(e->lineno-1<SourceCode.size()&&e->lineno-1>=0)
   cout<<SourceCode[e->lineno-1]<<endl;
   for(int i=0;i<e->colno-1;i++)
     cout<<" ";
-  LIGHT
-  GREEN
-  cout<<"^"<<endl;
-  CLOSE
+  //LIGHT
+  //GREEN
+  cout<<GREEN<<"^"<<CLOSE<<endl;
+  //CLOSE
   if(e->next!=NULL)
   print_error(e->next);
 

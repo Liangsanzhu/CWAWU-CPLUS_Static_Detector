@@ -18,8 +18,8 @@ std::map<FunctionDecl *, std::unique_ptr<clang::CFG>> cfg_path;
 
 void Detector::detector()
 {
-  std::cout << "Detector Funtion: "
-            << "\n";
+  //std::cout << "Detector Funtion: "
+    //        << "\n";
   for (auto fd = path_tree.begin(); fd != path_tree.end(); ++fd)
   {
     //function
@@ -27,7 +27,7 @@ void Detector::detector()
       srcMgr = &(fd->first->getASTContext().getSourceManager());
     Var_Un_Detector VUD;
     //you can get SourceManager from FunctionDecl(fd) here.
-    std::cout << "FunctionName: " << (*fd).first->getQualifiedNameAsString() << "\n";
+  //  std::cout << "FunctionName: " << (*fd).first->getQualifiedNameAsString() << "\n";
     for (auto idx = (*fd).second.begin(); idx != (*fd).second.end(); ++idx)
     {
       //path index
@@ -39,7 +39,7 @@ void Detector::detector()
       Buffer_Overflow BOF;
 
       int path_idx = (*idx).first;
-      std::cout << "path: " << path_idx << "\n";
+      //std::cout << "path: " << path_idx << "\n";
       auto i = cfg_path[(*fd).first]->end();
       for (auto cfg_bk = ++((*idx).second.begin()); cfg_bk != (*idx).second.end(); ++cfg_bk)
       {
@@ -56,7 +56,7 @@ void Detector::detector()
             int block_id = cur_bk->getBlockID();
             Stmt *S = const_cast<Stmt *>(CS->getStmt());
             assert(S != nullptr && "Expecting non-null Stmt");
-            std::cout << S->getStmtClassName() << "\n";
+            //std::cout << S->getStmtClassName() << "\n";
             MLD.ML_Entry(*srcMgr, S, path_idx, &all_node);
             NPD.NPD_Entry(srcMgr, S, path_idx, &all_node, block_id);
             OutIn.OI_Entry_New(*srcMgr, S, path_idx);
