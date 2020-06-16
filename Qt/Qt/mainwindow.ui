@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>480</width>
-    <height>300</height>
+    <height>371</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -49,8 +49,8 @@
    <widget class="QTextBrowser" name="textBrowser">
     <property name="geometry">
      <rect>
-      <x>180</x>
-      <y>190</y>
+      <x>130</x>
+      <y>220</y>
       <width>253</width>
       <height>100</height>
      </rect>
@@ -65,10 +65,10 @@
    <widget class="QTabWidget" name="tabWidget">
     <property name="geometry">
      <rect>
-      <x>190</x>
-      <y>30</y>
-      <width>500</width>
-      <height>400</height>
+      <x>110</x>
+      <y>20</y>
+      <width>351</width>
+      <height>311</height>
      </rect>
     </property>
     <property name="currentIndex">
@@ -81,9 +81,9 @@
      <widget class="QTextBrowser" name="tab_1_tb">
       <property name="geometry">
        <rect>
-        <x>10</x>
+        <x>0</x>
         <y>0</y>
-        <width>550</width>
+        <width>570</width>
         <height>280</height>
        </rect>
       </property>
@@ -105,14 +105,20 @@
      <attribute name="title">
       <string>分析结果</string>
      </attribute>
-     <widget class="QTextBrowser" name="tab_2_tb">
+     <widget class="QTabWidget" name="tabWidget_2">
       <property name="geometry">
        <rect>
-        <x>10</x>
+        <x>0</x>
         <y>0</y>
-        <width>550</width>
-        <height>280</height>
+        <width>560</width>
+        <height>300</height>
        </rect>
+      </property>
+      <property name="tabPosition">
+       <enum>QTabWidget::South</enum>
+      </property>
+      <property name="tabShape">
+       <enum>QTabWidget::Rounded</enum>
       </property>
      </widget>
     </widget>

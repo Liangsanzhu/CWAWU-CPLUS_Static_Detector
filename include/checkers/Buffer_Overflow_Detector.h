@@ -154,7 +154,7 @@ private:
             {
                 clang::SourceManager &srcmgr = callee->getASTContext().getSourceManager();
                 //error
-                cout << "error:" << endl;
+                //cout << "error:" << endl;
                 string Func_name = callee->getNameAsString();
                 //const string filename = srcmgr.getFilename(FuncLocation[callee_num]).str();
                 //int line = srcmgr.getSpellingLineNumber(FuncLocation[callee_num]);
@@ -386,7 +386,7 @@ private:
             {
                 totalLen++;
             }
-            cout << endl;
+          //  cout << endl;
         }
 
         //cout << "totlaLen:  " << totalLen << endl;

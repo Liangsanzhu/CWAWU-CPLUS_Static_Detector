@@ -22,6 +22,7 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(QWidget *parent = 0);
+    void split_result(QString a);
     ~MainWindow();
 
 
@@ -32,6 +33,7 @@ private slots:
 
     void on_pushButton_2_clicked();
     void build_llvm();
+
 
 private:
     Ui::MainWindow *ui;

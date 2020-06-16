@@ -19,7 +19,7 @@ MainWindow::MainWindow(QWidget *parent) :
         leftSplitter->addWidget(ui->pushButton_2);
 
         leftSplitter->setStretchFactor(1,1);
-         ui->label->setText("请选.cpp文件");
+         ui->label->setText("请选择.cpp文件");
          QSplitter *rightSplitter=new QSplitter(Qt::Horizontal);
          rightSplitter->addWidget(leftSplitter);
          rightSplitter->addWidget(ui->tabWidget);
@@ -36,8 +36,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
         mainSplitter->addWidget(bottomSplitter);
 
-        mainSplitter->setStretchFactor(0
-                                       ,2);
+        mainSplitter->setStretchFactor(0,2);
          mainSplitter->setStretchFactor(1,1);
 
         setCentralWidget(mainSplitter);
@@ -62,7 +61,7 @@ void MainWindow::on_pushButton_clicked()
 
        QString fileName = QFileDialog::getOpenFileName(
                    this, tr("打开文件"),
-                   "../../SE-Experiment-master/tests/TemplateChecker", tr("cpp files(*.cpp);;"));
+                   "../../tests/TemplateChecker", tr("cpp files(*.cpp);;"));
 
        if(fileName.isEmpty())
        {
@@ -90,17 +89,36 @@ void MainWindow::on_pushButton_clicked()
 
 
 }
+void MainWindow::split_result(QString a)
+{
+    QStringList t=a.split("****\n");
+    int i=0;
+    ui->tabWidget_2->clear();
+
+    for(auto it=t.begin();it!=t.end();it++)
+    {
+        QTextBrowser*qb=new QTextBrowser();
+        qb->setText(*it);
+        QString temp;
+
+        if(i!=0)
+        ui->tabWidget_2->addTab(qb,"路径"+ temp.number(i));
+        else
+              ui->tabWidget_2->addTab(qb,"所有结果");
+        i++;
+    }
+}
  void MainWindow::build_llvm()
  {
      QProcess p(0);
       QString strTemp="";
-     p.setWorkingDirectory("../../SE-Experiment-master/cmake-build-debug");
+     p.setWorkingDirectory("../../cmake-build-debug");
          p.start("ninja");
          p.waitForStarted();
          p.waitForFinished();
 
         strTemp=QString::fromLocal8Bit(p.readAllStandardOutput());
-        ui->textBrowser->append("../../SE-Experiment-master/cmake-build-debug$ ninja");
+        ui->textBrowser->append("../../cmake-build-debug$ ninja");
          ui->textBrowser->append(strTemp);
             p.close();
  }
@@ -121,18 +139,19 @@ void MainWindow::on_pushButton_2_clicked()
                 p1.close();*/
 
                   QProcess p2(0);
-                p2.setWorkingDirectory("../../SE-Experiment-master/tests/TemplateChecker");
+                p2.setWorkingDirectory("../../tests/TemplateChecker");
                 p2.start("../../cmake-build-debug/tools/TemplateChecker/TemplateChecker astList.txt config.txt");
                    p2.waitForStarted();
                    p2.waitForFinished();
                   strTemp=QString::fromLocal8Bit(p2.readAllStandardOutput());
 
                    strTemp.append(QString::fromLocal8Bit(p2.readAllStandardError()));
+                 split_result(strTemp);
 
-                  ui->tab_2->findChild<QTextBrowser*>("tab_2_tb")->setText(strTemp);
+
                     p2.close();
                   QProcess p3(0);
-                p3.setWorkingDirectory("../../SE-Experiment-master/tests/TemplateChecker");
+                p3.setWorkingDirectory("../../tests/TemplateChecker");
                 p3.start("cat "+mFileName);
                    p3.waitForStarted();
                    p3.waitForFinished();

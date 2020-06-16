@@ -41,7 +41,7 @@ public:
     QWidget *tab;
     QTextBrowser *tab_1_tb;
     QWidget *tab_2;
-    QTextBrowser *tab_2_tb;
+    QTabWidget *tabWidget_2;
     QWidget *tab_3;
     QLabel *label_2;
     QLabel *label_3;
@@ -58,7 +58,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
-        MainWindow->resize(480, 300);
+        MainWindow->resize(480, 371);
         action_llvm = new QAction(MainWindow);
         action_llvm->setObjectName(QStringLiteral("action_llvm"));
         action = new QAction(MainWindow);
@@ -80,16 +80,16 @@ public:
         pushButton_2->setGeometry(QRect(40, 200, 89, 25));
         textBrowser = new QTextBrowser(centralWidget);
         textBrowser->setObjectName(QStringLiteral("textBrowser"));
-        textBrowser->setGeometry(QRect(180, 190, 253, 100));
+        textBrowser->setGeometry(QRect(130, 220, 253, 100));
         textBrowser->setMaximumSize(QSize(16777215, 16777215));
         tabWidget = new QTabWidget(centralWidget);
         tabWidget->setObjectName(QStringLiteral("tabWidget"));
-        tabWidget->setGeometry(QRect(190, 30, 500, 400));
+        tabWidget->setGeometry(QRect(110, 20, 351, 311));
         tab = new QWidget();
         tab->setObjectName(QStringLiteral("tab"));
         tab_1_tb = new QTextBrowser(tab);
         tab_1_tb->setObjectName(QStringLiteral("tab_1_tb"));
-        tab_1_tb->setGeometry(QRect(10, 0, 550, 280));
+        tab_1_tb->setGeometry(QRect(0, 0, 570, 280));
         QSizePolicy sizePolicy1(QSizePolicy::Maximum, QSizePolicy::Maximum);
         sizePolicy1.setHorizontalStretch(0);
         sizePolicy1.setVerticalStretch(0);
@@ -99,9 +99,11 @@ public:
         tabWidget->addTab(tab, QString());
         tab_2 = new QWidget();
         tab_2->setObjectName(QStringLiteral("tab_2"));
-        tab_2_tb = new QTextBrowser(tab_2);
-        tab_2_tb->setObjectName(QStringLiteral("tab_2_tb"));
-        tab_2_tb->setGeometry(QRect(10, 0, 550, 280));
+        tabWidget_2 = new QTabWidget(tab_2);
+        tabWidget_2->setObjectName(QStringLiteral("tabWidget_2"));
+        tabWidget_2->setGeometry(QRect(0, 0, 560, 300));
+        tabWidget_2->setTabPosition(QTabWidget::South);
+        tabWidget_2->setTabShape(QTabWidget::Rounded);
         tabWidget->addTab(tab_2, QString());
         tab_3 = new QWidget();
         tab_3->setObjectName(QStringLiteral("tab_3"));

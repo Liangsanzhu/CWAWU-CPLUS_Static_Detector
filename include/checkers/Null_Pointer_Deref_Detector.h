@@ -285,9 +285,9 @@ void NPD_Detect(std::vector<int>ifBlock){
     showIf(ifBlock); */
     //CLOSE
     bool npd = false;
-    cout<<"I'm in detect of each route.\n";
+    //cout<<"I'm in detect of each route.\n";
     for (int i = 0; recordPointer.size()>0 && i<recordPointer.size()-1;i++){
-        cout<<"**hello here!\n";
+      //  cout<<"**hello here!\n";
         int var_id = recordPointer[i].id;
         //cout<<var_id<<endl;
         bool flag = false;
@@ -321,7 +321,7 @@ void NPD_Detect(std::vector<int>ifBlock){
                     line0 = recordPointer[j].line;
                     col0 = recordPointer[j].col;
                     may = may || (find(ifBlock.begin(),ifBlock.end(),recordPointer[j].block)!=ifBlock.end());
-                    cout<<"setnull"<<" "<<line0<<" "<<may<<endl;
+                   // cout<<"setnull"<<" "<<line0<<" "<<may<<endl;
                 }
                 if (recordPointer[j].defined){
                     npd = false;
@@ -337,7 +337,7 @@ void NPD_Detect(std::vector<int>ifBlock){
                     line = recordPointer[j].line;
                     col = recordPointer[j].col;
                     may =  may ||(find(ifBlock.begin(),ifBlock.end(),recordPointer[j].block)!=ifBlock.end());
-                    cout<<"derefer"<<" "<<line<<" "<<may<<endl;
+                    //cout<<"derefer"<<" "<<line<<" "<<may<<endl;
                     if (may){
                         error_info* loc_set_null=new_error_info(NULL,file0,line0,col0,TYPE_NOTE,NPD_ERROR_TYPE_SET_NULL,route);
                         error_info* loc_dereference=new_error_info(loc_set_null,file,line,col,TYPE_ERROR,NPD_ERROR_TYPE_DEREFERENCE, route);

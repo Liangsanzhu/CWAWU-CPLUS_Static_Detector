@@ -78,6 +78,7 @@ struct error_info
         return true;
         return false;
     }
+   
 };
 struct cmp //重写仿函数
 {
@@ -88,6 +89,9 @@ struct cmp //重写仿函数
 };
 
 priority_queue<error_info*,vector<error_info*>,cmp >result;//
+map<pair<pair<int,int>,string>,int>result_combine;
+priority_queue<error_info*,vector<error_info*>,cmp >result_all;
+priority_queue<error_info*,vector<error_info*>,cmp >result_backup;
 //string FILED;uanma 
 error_info* new_error_info(error_info*g,string filename,int line,int col,int type,string info,int index)
 {
@@ -127,14 +131,7 @@ void print_error(error_info*e)
   //WHITE
   if(e==NULL)
   return;
-  if(e->index!=last)
-  {
-  //LIGHT
-  //YELLOW
-  cout<<YELLOW<<"[B"<<e->index<<"]"<<CLOSE<<endl;
-  //CLOSE
-  last=e->index;
-  }
+  
  // LIGHT
   cout<<e->filename<<":"<<e->lineno<<":"<<e->colno<<":";
   switch(e->type)
@@ -171,18 +168,53 @@ void print_error(error_info*e)
 void print_result()
 {
     //for(auto it:SourceCode)
-    cout<<"Detecting……"<<endl;
+   // cout<<"Detecting……"<<endl;
     int count=result.size();
+result_backup=result;
+while(!result_backup.empty())
+{
+  pair<int,int> pa=pair<int,int>(result_backup.top()->lineno,result_backup.top()->colno);
+  pair<pair<int,int>,string> pb= pair<pair<int,int>,string>(pa,result_backup.top()->info);
+  if(result_combine.find(pb)==result_combine.end())
+  {
+    result_combine.insert(pair<pair<pair<int,int>,string>,int>(pb,0));
+     result_all.push(result_backup.top());
+  }
+  result_backup.pop();
+}
+cout<<"[Path ALL]"<<endl;
+ while(!result_all.empty())
+  {
+    count++;
+cout<<"--------------------------------------\n";
+    print_error(result_all.top());
+    result_all.pop();
+}
+if(count>1)
+  cout<<endl<<count<<" errors generated."<<endl;
+  else if(count==1)
+   cout<<endl<<count<<" error generated."<<endl;
+   else
+   {
+     cout<<endl<<count<<" no error generated."<<endl;
+   }
+   
  while(!result.empty())
   {
+if(result.top()->index!=last)
+  {
+  //LIGHT
+  //YELLOW
+ cout<<"****\n";
+  cout<<YELLOW<<"[Path "<<result.top()->index<<"]"<<CLOSE<<endl;
+  //CLOSE
+  last=result.top()->index;
+  }
     cout<<"--------------------------------------\n";
     print_error(result.top());
     result.pop();
   }
-  if(count>1)
-  cout<<endl<<count<<" errors generated."<<endl;
-  else if(count==1)
-   cout<<endl<<count<<" error generated."<<endl;
+  
 }
 
 
