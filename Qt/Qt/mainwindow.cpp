@@ -42,10 +42,8 @@ MainWindow::MainWindow(QWidget *parent) :
         setCentralWidget(mainSplitter);
         mFileName="";
 
-        connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(on_pushButton_clicked()));
-        connect(ui->pushButton_2, SIGNAL(clicked()), this, SLOT(on_pushButton_2_clicked()));
         connect(ui->action_Checker,SIGNAL(triggered()), this, SLOT(build_llvm()));
-
+ui->tabWidget_3->clear();
 
 
 }
@@ -108,6 +106,61 @@ void MainWindow::split_result(QString a)
         i++;
     }
 }
+void MainWindow::split_code(QString a)
+{
+    QStringList t=a.split("****\n");
+    ui->tabWidget_3->clear();
+    QMap<int,QMap<int,int>> map;
+
+    int i=0;
+        auto it=t.begin();
+        it++;
+    for(;it!=t.end();it++)
+    {
+        i++;
+
+        QString temp=*it;
+        QStringList temp_t=temp.split("\n");
+        QString strTemp;
+        for(auto at=temp_t.begin();at!=temp_t.end();at++)
+        {
+            QString p=*at;
+            int num=p.toInt()-1;
+            qDebug()<<i<<" "<<num<<endl;
+            map[i][num]=1;
+
+        }
+
+        int j=0;
+        auto at=source_code.begin();
+
+        for(;at!=source_code.end();at++)
+        {
+
+            QString q=*at;
+
+            q.replace("<","&lt;");
+            q.replace(">","&gt;");
+
+            if(map[i].find(j)==map[i].end())
+            {
+
+                strTemp.append("<br><font color=\"#000000\">" + q +"</font></br>");
+
+            }
+            else
+            {
+                strTemp.append("<br><font color=\"#FFFF00\">" + q +"</font></br> ");
+
+            }
+            j++;
+        }
+        QTextBrowser*qb=new QTextBrowser();
+        qb->setText(strTemp);
+        ui->tabWidget_3->addTab(qb,"路径"+ temp.number(i));
+
+    }
+}
  void MainWindow::build_llvm()
  {
      QProcess p(0);
@@ -138,6 +191,17 @@ void MainWindow::on_pushButton_2_clicked()
                 ui->textBrowser->append(strTemp);
                 p1.close();*/
 
+         QProcess p3(0);
+       p3.setWorkingDirectory("../../tests/TemplateChecker");
+       p3.start("cat "+mFileName);
+          p3.waitForStarted();
+          p3.waitForFinished();
+         strTemp=QString::fromLocal8Bit(p3.readAllStandardOutput());
+
+         ui->tab->findChild<QTextBrowser*>("tab_1_tb")->setText(strTemp);
+           p3.close();
+           source_code=strTemp.split("\n");
+
                   QProcess p2(0);
                 p2.setWorkingDirectory("../../tests/TemplateChecker");
                 p2.start("../../cmake-build-debug/tools/TemplateChecker/TemplateChecker astList.txt config.txt");
@@ -146,19 +210,14 @@ void MainWindow::on_pushButton_2_clicked()
                   strTemp=QString::fromLocal8Bit(p2.readAllStandardOutput());
 
                    strTemp.append(QString::fromLocal8Bit(p2.readAllStandardError()));
-                 split_result(strTemp);
+                 QString strTemp1=strTemp.split("&&&&\n")[0];
+                    QString strTemp2=strTemp.split("&&&&\n")[1];
+                    split_code(strTemp1);
+                   split_result(strTemp2);
 
 
                     p2.close();
-                  QProcess p3(0);
-                p3.setWorkingDirectory("../../tests/TemplateChecker");
-                p3.start("cat "+mFileName);
-                   p3.waitForStarted();
-                   p3.waitForFinished();
-                  strTemp=QString::fromLocal8Bit(p3.readAllStandardOutput());
 
-                  ui->tab->findChild<QTextBrowser*>("tab_1_tb")->setText(strTemp);
-                    p3.close();
 
     }
     else

@@ -43,6 +43,9 @@ public:
     QWidget *tab_2;
     QTabWidget *tabWidget_2;
     QWidget *tab_3;
+    QTabWidget *tabWidget_3;
+    QWidget *tab_5;
+    QWidget *tab_4;
     QLabel *label_2;
     QLabel *label_3;
     QPushButton *pushButton;
@@ -107,6 +110,16 @@ public:
         tabWidget->addTab(tab_2, QString());
         tab_3 = new QWidget();
         tab_3->setObjectName(QStringLiteral("tab_3"));
+        tabWidget_3 = new QTabWidget(tab_3);
+        tabWidget_3->setObjectName(QStringLiteral("tabWidget_3"));
+        tabWidget_3->setGeometry(QRect(0, 0, 560, 300));
+        tabWidget_3->setTabPosition(QTabWidget::South);
+        tab_5 = new QWidget();
+        tab_5->setObjectName(QStringLiteral("tab_5"));
+        tabWidget_3->addTab(tab_5, QString());
+        tab_4 = new QWidget();
+        tab_4->setObjectName(QStringLiteral("tab_4"));
+        tabWidget_3->addTab(tab_4, QString());
         tabWidget->addTab(tab_3, QString());
         label_2 = new QLabel(centralWidget);
         label_2->setObjectName(QStringLiteral("label_2"));
@@ -147,7 +160,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(1);
+        tabWidget->setCurrentIndex(2);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -163,6 +176,8 @@ public:
         pushButton_2->setText(QApplication::translate("MainWindow", "\345\274\200\345\247\213\346\243\200\346\265\213", Q_NULLPTR));
         tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("MainWindow", "\346\237\245\347\234\213\346\272\220\347\240\201", Q_NULLPTR));
         tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("MainWindow", "\345\210\206\346\236\220\347\273\223\346\236\234", Q_NULLPTR));
+        tabWidget_3->setTabText(tabWidget_3->indexOf(tab_5), QApplication::translate("MainWindow", "Tab 2", Q_NULLPTR));
+        tabWidget_3->setTabText(tabWidget_3->indexOf(tab_4), QApplication::translate("MainWindow", "Tab 1", Q_NULLPTR));
         tabWidget->setTabText(tabWidget->indexOf(tab_3), QApplication::translate("MainWindow", "\347\250\213\345\272\217\350\267\257\345\276\204", Q_NULLPTR));
         label_2->setText(QApplication::translate("MainWindow", "\350\276\223\345\207\272\346\227\245\345\277\227\357\274\232", Q_NULLPTR));
         label_3->setText(QApplication::translate("MainWindow", "TextLabel", Q_NULLPTR));

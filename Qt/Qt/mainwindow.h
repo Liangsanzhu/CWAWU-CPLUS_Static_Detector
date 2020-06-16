@@ -23,6 +23,7 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     void split_result(QString a);
+    void split_code(QString a);
     ~MainWindow();
 
 
@@ -38,6 +39,7 @@ private slots:
 private:
     Ui::MainWindow *ui;
     QString mFileName;
+    QStringList source_code;
 };
 
 #endif // MAINWINDOW_H
