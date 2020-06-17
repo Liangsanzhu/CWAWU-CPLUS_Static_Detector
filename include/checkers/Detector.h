@@ -198,7 +198,7 @@ if(count>1)
    {
      cout<<endl<<count<<" no error generated."<<endl;
    }
-   
+   result_backup=result;
  while(!result.empty())
   {
 if(result.top()->index!=last)
@@ -213,6 +213,24 @@ if(result.top()->index!=last)
     cout<<"--------------------------------------\n";
     print_error(result.top());
     result.pop();
+  }
+  last=-1;
+  cout<<"&&&&\n";
+   while(!result_backup.empty())
+  {
+    if(result_backup.top()->index!=last)
+  {
+  //LIGHT
+  //YELLOW
+  cout<<"****\n";
+  
+  last=result_backup.top()->index;
+  }
+   // cout<<"--------------------------------------\n";
+   // print_error(result_backup.top());
+   cout<<result_backup.top()->lineno<<endl;
+    result_backup.pop();
+  
   }
   
 }

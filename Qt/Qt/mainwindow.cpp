@@ -87,49 +87,76 @@ void MainWindow::on_pushButton_clicked()
 
 
 }
-void MainWindow::split_result(QString a)
+QMap<int,QStringList> MainWindow::split_result(QString a)
 {
     QStringList t=a.split("****\n");
     int i=0;
     ui->tabWidget_2->clear();
 
+    QMap<int,QStringList> res;
     for(auto it=t.begin();it!=t.end();it++)
     {
         QTextBrowser*qb=new QTextBrowser();
         qb->setText(*it);
+        QString p=*it;
+        QStringList ql=p.split("--------------------------------------\n");
+
         QString temp;
 
         if(i!=0)
-        ui->tabWidget_2->addTab(qb,"路径"+ temp.number(i));
+        {ui->tabWidget_2->addTab(qb,"路径"+ temp.number(i));
+
+            res[i]=ql;
+        }
         else
               ui->tabWidget_2->addTab(qb,"所有结果");
         i++;
     }
+    return res;
 }
-void MainWindow::split_code(QString a)
+void MainWindow::split_code(QString a,QString b,QMap<int,QStringList> res)
 {
     QStringList t=a.split("****\n");
     ui->tabWidget_3->clear();
     QMap<int,QMap<int,int>> map;
+    QMap<int,QMap<int,int>> map1;
+    QStringList t1=b.split("****\n");
 
     int i=0;
         auto it=t.begin();
         it++;
-    for(;it!=t.end();it++)
+        auto bt=t1.begin();
+        bt++;
+    for(;it!=t.end();it++,bt++)
     {
         i++;
 
         QString temp=*it;
         QStringList temp_t=temp.split("\n");
+        QString temp1=*bt;
+        QStringList temp_t1=temp1.split("\n");
         QString strTemp;
+        int num_temp=1;
         for(auto at=temp_t.begin();at!=temp_t.end();at++)
         {
             QString p=*at;
             int num=p.toInt()-1;
             qDebug()<<i<<" "<<num<<endl;
-            map[i][num]=1;
+            map[i][num]=num_temp;
+            num_temp++;
 
         }
+        num_temp=1;
+        for(auto at=temp_t1.begin();at!=temp_t1.end();at++)
+        {
+            QString p=*at;
+            int num=p.toInt()-1;
+            qDebug()<<i<<"mi"<<num<<endl;
+            map1[i][num]=num_temp;
+            num_temp++;
+
+        }
+
 
         int j=0;
         auto at=source_code.begin();
@@ -142,16 +169,28 @@ void MainWindow::split_code(QString a)
             q.replace("<","&lt;");
             q.replace(">","&gt;");
 
+            QString lineno=q.number(j+1);
+
             if(map[i].find(j)==map[i].end())
             {
 
-                strTemp.append("<br><font color=\"#000000\">" + q +"</font></br>");
+                strTemp.append("<br>"+lineno+"\t\t"+"<font color=\"#000000\">" + q +"</font></br>");
 
             }
             else
             {
-                strTemp.append("<br><font color=\"#FFFF00\">" + q +"</font></br> ");
+                if(map1[i].find(j)==map1[i].end())
+                {strTemp.append("<br>"+lineno+"\t\t"+"<span style=\"background-color: #FFFFCC;\">" + q +"</span></br> ");
+                qDebug()<<"hehe"<<endl;
+                }else
+                {
+                    QString title=res[i][map1[i][j]];
+                    title.replace(" ","&nbsp;");
+                   // title.replace("\n","&#13;;");
+                    qDebug()<<"red"<<endl;
+                    strTemp.append("<br>"+lineno+"\t\t"+"<span title="+title+"style=\"background-color: #F08080\">"+q+"</span>"+"</br>");
 
+                }
             }
             j++;
         }
@@ -212,8 +251,10 @@ void MainWindow::on_pushButton_2_clicked()
                    strTemp.append(QString::fromLocal8Bit(p2.readAllStandardError()));
                  QString strTemp1=strTemp.split("&&&&\n")[0];
                     QString strTemp2=strTemp.split("&&&&\n")[1];
-                    split_code(strTemp1);
-                   split_result(strTemp2);
+                     QString strTemp3=strTemp.split("&&&&\n")[2];
+
+                     split_code(strTemp1,strTemp3, split_result(strTemp2));
+
 
 
                     p2.close();

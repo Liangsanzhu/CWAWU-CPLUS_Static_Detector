@@ -54,7 +54,11 @@ void Detector::detector()
         if (cur_bk->getTerminatorStmt() != nullptr)
           if (strcmp(cur_bk->getTerminatorStmt()->getStmtClassName(), "IfStmt") == 0)
             ifBlock.push_back(cur_bk->getBlockID() - 1);
-
+ //if(lineno!=srcMgr->getSpellingLineNumber(cur_bk->getLabel()->getBeginLoc()))
+   //         {
+     //         lineno=srcMgr->getSpellingLineNumber(cur_bk->getLabel()->getBeginLoc());
+       //       path_lineno[path_idx].push_back(lineno);
+         //=   }
         for (auto i_bk = cur_bk->begin(); i_bk != cur_bk->end(); ++i_bk)
         {
           if (Optional<CFGStmt> CS = (*i_bk).getAs<CFGStmt>())

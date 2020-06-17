@@ -40,12 +40,12 @@ public:
     QTabWidget *tabWidget;
     QWidget *tab;
     QTextBrowser *tab_1_tb;
-    QWidget *tab_2;
-    QTabWidget *tabWidget_2;
     QWidget *tab_3;
     QTabWidget *tabWidget_3;
     QWidget *tab_5;
     QWidget *tab_4;
+    QWidget *tab_2;
+    QTabWidget *tabWidget_2;
     QLabel *label_2;
     QLabel *label_3;
     QPushButton *pushButton;
@@ -100,14 +100,6 @@ public:
         tab_1_tb->setSizePolicy(sizePolicy1);
         tab_1_tb->setMinimumSize(QSize(256, 192));
         tabWidget->addTab(tab, QString());
-        tab_2 = new QWidget();
-        tab_2->setObjectName(QStringLiteral("tab_2"));
-        tabWidget_2 = new QTabWidget(tab_2);
-        tabWidget_2->setObjectName(QStringLiteral("tabWidget_2"));
-        tabWidget_2->setGeometry(QRect(0, 0, 560, 300));
-        tabWidget_2->setTabPosition(QTabWidget::South);
-        tabWidget_2->setTabShape(QTabWidget::Rounded);
-        tabWidget->addTab(tab_2, QString());
         tab_3 = new QWidget();
         tab_3->setObjectName(QStringLiteral("tab_3"));
         tabWidget_3 = new QTabWidget(tab_3);
@@ -121,6 +113,14 @@ public:
         tab_4->setObjectName(QStringLiteral("tab_4"));
         tabWidget_3->addTab(tab_4, QString());
         tabWidget->addTab(tab_3, QString());
+        tab_2 = new QWidget();
+        tab_2->setObjectName(QStringLiteral("tab_2"));
+        tabWidget_2 = new QTabWidget(tab_2);
+        tabWidget_2->setObjectName(QStringLiteral("tabWidget_2"));
+        tabWidget_2->setGeometry(QRect(0, 0, 560, 300));
+        tabWidget_2->setTabPosition(QTabWidget::South);
+        tabWidget_2->setTabShape(QTabWidget::Rounded);
+        tabWidget->addTab(tab_2, QString());
         label_2 = new QLabel(centralWidget);
         label_2->setObjectName(QStringLiteral("label_2"));
         label_2->setGeometry(QRect(40, 220, 67, 17));
@@ -160,7 +160,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(2);
+        tabWidget->setCurrentIndex(1);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -175,10 +175,10 @@ public:
         label->setText(QApplication::translate("MainWindow", "TextLabel", Q_NULLPTR));
         pushButton_2->setText(QApplication::translate("MainWindow", "\345\274\200\345\247\213\346\243\200\346\265\213", Q_NULLPTR));
         tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("MainWindow", "\346\237\245\347\234\213\346\272\220\347\240\201", Q_NULLPTR));
-        tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("MainWindow", "\345\210\206\346\236\220\347\273\223\346\236\234", Q_NULLPTR));
         tabWidget_3->setTabText(tabWidget_3->indexOf(tab_5), QApplication::translate("MainWindow", "Tab 2", Q_NULLPTR));
         tabWidget_3->setTabText(tabWidget_3->indexOf(tab_4), QApplication::translate("MainWindow", "Tab 1", Q_NULLPTR));
         tabWidget->setTabText(tabWidget->indexOf(tab_3), QApplication::translate("MainWindow", "\347\250\213\345\272\217\350\267\257\345\276\204", Q_NULLPTR));
+        tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("MainWindow", "\345\210\206\346\236\220\347\273\223\346\236\234", Q_NULLPTR));
         label_2->setText(QApplication::translate("MainWindow", "\350\276\223\345\207\272\346\227\245\345\277\227\357\274\232", Q_NULLPTR));
         label_3->setText(QApplication::translate("MainWindow", "TextLabel", Q_NULLPTR));
         pushButton->setText(QApplication::translate("MainWindow", "\351\200\211\346\213\251\346\226\207\344\273\266", Q_NULLPTR));

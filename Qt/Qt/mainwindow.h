@@ -22,8 +22,8 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(QWidget *parent = 0);
-    void split_result(QString a);
-    void split_code(QString a);
+    QMap<int,QStringList> split_result(QString a);
+    void split_code(QString a,QString b,QMap<int,QStringList>);
     ~MainWindow();
 
 
