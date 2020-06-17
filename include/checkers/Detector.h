@@ -169,7 +169,7 @@ void print_result()
 {
     //for(auto it:SourceCode)
    // cout<<"Detecting……"<<endl;
-    int count=result.size();
+    int count=0;
 result_backup=result;
 while(!result_backup.empty())
 {

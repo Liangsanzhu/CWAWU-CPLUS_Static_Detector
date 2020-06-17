@@ -84,7 +84,9 @@ void getmalloc(const Stmt*S,get_memory*&flag)
       Expr*G=F->getExprStmt();
       DeclRefExpr*H=(DeclRefExpr*)G;
       
-      if(flag==NULL&&strcmp(H->getDecl()->getName().data(),"malloc")==0)
+      if(flag==NULL&&(strcmp(H->getDecl()->getName().data(),"malloc")==0||\
+      strcmp(H->getDecl()->getName().data(),"realloc")==0||\
+      strcmp(H->getDecl()->getName().data(),"calloc")==0))
       {   
         int id=S->getBeginLoc().getRawEncoding();
         if(mem.find(id)!=mem.end())
@@ -147,7 +149,9 @@ void getvar(const Stmt*S,int&a)
       Expr*G=F->getExprStmt();
       DeclRefExpr*H=(DeclRefExpr*)G;
       
-      if(a==-1&&strcmp(H->getDecl()->getName().data(),"malloc")!=0&&strcmp(H->getDecl()->getName().data(),"free")!=0)
+      if(a==-1&&(strcmp(H->getDecl()->getName().data(),"malloc")!=0&&\
+      strcmp(H->getDecl()->getName().data(),"realloc")!=0&&\
+      strcmp(H->getDecl()->getName().data(),"calloc")!=0)&&strcmp(H->getDecl()->getName().data(),"free")!=0)
       {
         int id=H->getDecl()->getGlobalID();
         variable*var=new variable;
