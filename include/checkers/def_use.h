@@ -28,6 +28,15 @@ public:
     return defuse_ln;
   }
 
+  void add_defuse_cl(int def, int use) {
+   std::pair<int, int> pr(def, use);
+   defuse_cl = pr;
+  }
+
+  std::pair<int, int> get_defuse_cl() {
+    return defuse_cl;
+  }
+
   void add_funcname(std::string funcname) {
     func_name = funcname;
   }
@@ -62,21 +71,23 @@ public:
   }
 
   void output_element() {
-    /*std::cout << defuse_ln.first << " " << defuse_ln.second << "\n";
+    std::cout << defuse_ln.first << " " << defuse_ln.second << "\n";
+    std::cout << defuse_cl.first << " " << defuse_cl.second << "\n";
     std::cout << "Belong to Function: " << func_name << "\n";
     if (defuse_stmt.first != nullptr)
       std::cout << defuse_stmt.first->getStmtClassName() << "\n";
     if (defuse_stmt.second != nullptr)
       std::cout << defuse_stmt.second->getStmtClassName() << "\n";
     std::cout << block_id << "\n";
-    std::cout << "defined: " << defined << "\n";*/
+    std::cout << "defined: " << defined << "\n";
   }
  
 
 private:
   std::pair<int, int> defuse_ln;
+  std::pair<int, int> defuse_cl;
   std::string func_name;
-  //when ln_col == 0
+  //when defuse_ln == 0
   std::pair<Stmt *, Stmt *> defuse_stmt;
   int defined;
   int block_id;
@@ -90,9 +101,10 @@ public:
     ;
   }
 
-  void add_defuse_ln(int idx, SourceLocation sl, int def_ln, int use_ln) {
+  void add_defuse_ln(int idx, SourceLocation sl, int def_ln, int use_ln, int def_cl, int use_cl) {
     std::pair<int, SourceLocation> pr(idx, sl);
     du[pr].add_defuse_ln(def_ln, use_ln);
+    du[pr].add_defuse_cl(def_cl, use_cl);
   }
 
   void add_defuse_stmt(int idx, SourceLocation sl, Stmt *def_stmt, Stmt *use_stmt) {
@@ -169,14 +181,14 @@ public:
   }
 
   void output_all(SourceManager *scm) {
-   /* std::cout << var_name << "  ";
+    std::cout << var_name << "  ";
     std::cout << type << "\n";
     for (auto i = du.begin(); i != du.end(); ++i) {
       std::cout << (*i).first.first << "\n";
       std::cout << (*i).first.second.printToString(*scm);
       std::cout << "\n";
       (*i).second.output_element();
-    }*/
+    }
   }
 
 private:
@@ -190,20 +202,20 @@ private:
 
 class defuse_node {
 public:
-  
+
   defuse_node() {
     ;
   }
 
-  
+  //general data
   void add_var(int id, std::string var, std::string type) {
     du_node[id] = def_use();
     du_node[id].add_varname(var);
     du_node[id].add_type(type);
   }
 
-  void add_defuse_ln(int id, int idx, SourceLocation sl, int def, int use) {
-    du_node[id].add_defuse_ln(idx, sl, def, use);
+  void add_defuse_ln(int id, int idx, SourceLocation sl, int def, int use, int def_cl, int use_cl) {
+    du_node[id].add_defuse_ln(idx, sl, def, use, def_cl, use_cl);
   }
 
   void add_funcname(int id, int idx, SourceLocation sl, std::string name) {
@@ -223,10 +235,10 @@ public:
   }
 
   void output_node(SourceManager *scm) {
-    /*for (auto b = du_node.begin(); b != du_node.end(); ++b) {
+    for (auto b = du_node.begin(); b != du_node.end(); ++b) {
       std::cout << (*b).first << "  ";
       (*b).second.output_all(scm);
-    }*/
+    }
   }
 
   def_use get_defuse(int id) {
@@ -249,13 +261,70 @@ public:
     return du_node;
   }
 
+  //struct data
+  void add_struct_var(std::pair<int, int> id, std::string var, std::string type) {
+    struct_node[id] = def_use();
+    struct_node[id].add_varname(var);
+    struct_node[id].add_type(type);
+  }
+
+  void add_struct_defuse_ln(std::pair<int, int> id, int idx, SourceLocation sl, int def, int use, int def_cl, int use_cl) {
+    struct_node[id].add_defuse_ln(idx, sl, def, use, def_cl, use_cl);
+  }
+
+  void add_struct_funcname(std::pair<int, int> id, int idx, SourceLocation sl, std::string name) {
+    struct_node[id].add_funcname(idx, sl, name);
+  }
+
+  void add_struct_defuse_stmt(std::pair<int, int> id, int idx, SourceLocation sl, Stmt *def_stmt, Stmt *use_stmt) {
+    struct_node[id].add_defuse_stmt(idx, sl, def_stmt, use_stmt);
+  }
+
+  void add_struct_blockid(std::pair<int, int> id, int idx, SourceLocation sl, int blockid) {
+    struct_node[id].add_blockid(idx, sl, blockid);
+  }
+
+  void add_struct_defined(std::pair<int, int> id, int idx, SourceLocation sl, int defined) {
+    struct_node[id].add_defined(idx, sl, defined);
+  }
+
+  void output_struct_node(SourceManager *scm) {
+    for (auto b = struct_node.begin(); b != struct_node.end(); ++b) {
+      std::cout << (*b).first.first << "  ";
+      std::cout << (*b).first.second << " ";
+      (*b).second.output_all(scm);
+    }
+  }
+
+  def_use get_struct_defuse(std::pair<int, int> id) {
+    return struct_node[id];
+  }
+
+  element get_struct_element(std::pair<int, int> id, int idx, SourceLocation sl) {
+    struct_node[id].get_element(idx, sl);
+  }
+
+  std::string get_struct_type(std::pair<int, int> id) {
+    return struct_node[id].get_type();
+  }
+
+  std::string get_struct_varname(std::pair<int, int> id) {
+    return struct_node[id].get_vname();
+  }
+
+  std::map<std::pair<int, int>, def_use> get_struct_node() {
+    return struct_node;
+  }
+
 private:
   std::map<int, def_use> du_node;
+  std::map<std::pair<int, int>, def_use> struct_node;
 };
 
 struct Info {
   std::string varname;
   int def_line;
+  int def_cl;
   Stmt *def_stmt;
   int defined;
   //tmp
@@ -264,6 +333,22 @@ struct Info {
 
   int block_id;
   int var_id;
+  SourceLocation location;
+};
+
+struct struct_Info {
+  std::string varname;
+  std::string type;
+  int def_line;
+  int def_cl;
+  Stmt *def_stmt;
+  int defined;
+  //tmp
+  //global vardecl
+  Decl *def_decl;
+
+  int block_id;
+  std::pair<int, int> var_id;
   SourceLocation location;
 };
 

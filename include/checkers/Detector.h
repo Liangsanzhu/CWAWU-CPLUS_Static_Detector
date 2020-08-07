@@ -1,6 +1,7 @@
 #ifndef D_T_H
 #define D_T_H
 #include<iostream>
+#include <fstream>
 using namespace std;
 
 #include <vector>
@@ -20,6 +21,9 @@ using namespace std;
 #define BLACK printf("\033[30m");//hei色字体
 #define YELLOW printf("\033[33m");//黄色字体
 #define BLUE printf("\033[34m");//蓝色字体*/
+string error_result="error_result.txt";
+string error_result_lineno="error_lineno.txt";
+string source_code="source_code.txt";
 string YELLOW="";
 string GREEN="";
 string RED="";
@@ -70,11 +74,10 @@ struct error_info
   int index;
  bool operator<(const error_info& a) const
     {
-        if(index<a.index)
+       
+        if(lineno<a.lineno)
         return true;
-        if(index==a.index&&lineno<a.lineno)
-        return true;
-        if(index==a.index&&lineno==a.lineno&&colno<a.colno)
+        if(lineno==a.lineno&&colno<a.colno)
         return true;
         return false;
     }
@@ -90,7 +93,7 @@ struct cmp //重写仿函数
 
 priority_queue<error_info*,vector<error_info*>,cmp >result;//
 map<pair<pair<int,int>,string>,int>result_combine;
-priority_queue<error_info*,vector<error_info*>,cmp >result_all;
+priority_queue<error_info*,vector<error_info*>,cmp > result_all;
 priority_queue<error_info*,vector<error_info*>,cmp >result_backup;
 //string FILED;uanma 
 error_info* new_error_info(error_info*g,string filename,int line,int col,int type,string info,int index)
@@ -110,6 +113,10 @@ error_info* new_error_info(error_info*g,string filename,int line,int col,int typ
   return e;
  
 }
+
+ ofstream eout;
+ ofstream sout;
+
 void Get_SourceCode(SourceManager&SMgr)
 {
      if(SourceCode.empty())
@@ -121,44 +128,47 @@ void Get_SourceCode(SourceManager&SMgr)
         string p=sourcecode;
         string s2="\n";
         split(p,s2,&SourceCode);
+       
         
       }
 }
 int last=-1;
+
 void print_error(error_info*e)
 {
  // LIGHT
   //WHITE
   if(e==NULL)
   return;
-  
+ 
+
  // LIGHT
-  cout<<e->filename<<":"<<e->lineno<<":"<<e->colno<<":";
+  eout<<e->filename<<":"<<e->lineno<<":"<<e->colno<<":";
   switch(e->type)
   {
     case TYPE_ERROR:
    // RED
-    cout<<RED<<" error: "<<CLOSE;
+    eout<<RED<<" error: "<<CLOSE;
    // CLOSE
     //LIGHT
     break;
     case TYPE_NOTE:
     //BLACK
-    cout<<GRAY<<" note: "<<CLOSE;
+    eout<<GRAY<<" note: "<<CLOSE;
     //CLOSE
     break;
   }
   //LIGHT
-  cout<<e->info<<endl;
+  eout<<e->info<<endl;
  // CLOSE
   //WHITE
   if(e->lineno-1<SourceCode.size()&&e->lineno-1>=0)
-  cout<<SourceCode[e->lineno-1]<<endl;
+  eout<<SourceCode[e->lineno-1]<<endl;
   for(int i=0;i<e->colno-1;i++)
-    cout<<" ";
+    eout<<" ";
   //LIGHT
   //GREEN
-  cout<<GREEN<<"^"<<CLOSE<<endl;
+  eout<<GREEN<<"^"<<CLOSE<<endl;
   //CLOSE
   if(e->next!=NULL)
   print_error(e->next);
@@ -168,7 +178,8 @@ void print_error(error_info*e)
 void print_result()
 {
     //for(auto it:SourceCode)
-   // cout<<"Detecting……"<<endl;
+   // eout<<"Detecting……"<<endl;
+     eout.open(error_result);
     int count=0;
 result_backup=result;
 while(!result_backup.empty())
@@ -182,56 +193,34 @@ while(!result_backup.empty())
   }
   result_backup.pop();
 }
-cout<<"[Path ALL]"<<endl;
+eout<<"[Path ALL]"<<endl;
+vector<int> error_lineno;
  while(!result_all.empty())
   {
     count++;
-cout<<"--------------------------------------\n";
+eout<<"--------------------------------------\n";
     print_error(result_all.top());
+    error_lineno.push_back(result_all.top()->lineno);
     result_all.pop();
+
 }
+eout.close();
+eout.open(error_result_lineno);
 if(count>1)
-  cout<<endl<<count<<" errors generated."<<endl;
+  eout<<endl<<count<<" errors generated."<<endl;
   else if(count==1)
-   cout<<endl<<count<<" error generated."<<endl;
+   eout<<endl<<count<<" error generated."<<endl;
    else
    {
-     cout<<endl<<count<<" no error generated."<<endl;
+     eout<<endl<<count<<" no error generated."<<endl;
    }
-   result_backup=result;
- while(!result.empty())
+   //result_backup=result;
+  // eout<<"****\n";
+  for(int i=0;i<error_lineno.size();i++)
   {
-if(result.top()->index!=last)
-  {
-  //LIGHT
-  //YELLOW
- cout<<"****\n";
-  cout<<YELLOW<<"[Path "<<result.top()->index<<"]"<<CLOSE<<endl;
-  //CLOSE
-  last=result.top()->index;
+    eout<<error_lineno[i]<<endl;
   }
-    cout<<"--------------------------------------\n";
-    print_error(result.top());
-    result.pop();
-  }
-  last=-1;
-  cout<<"&&&&\n";
-   while(!result_backup.empty())
-  {
-    if(result_backup.top()->index!=last)
-  {
-  //LIGHT
-  //YELLOW
-  cout<<"****\n";
-  
-  last=result_backup.top()->index;
-  }
-   // cout<<"--------------------------------------\n";
-   // print_error(result_backup.top());
-   cout<<result_backup.top()->lineno<<endl;
-    result_backup.pop();
-  
-  }
+  eout.close();
   
 }
 

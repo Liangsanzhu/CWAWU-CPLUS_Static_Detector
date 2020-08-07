@@ -32,6 +32,7 @@ public:
     fds = move(ASTR.fds);
     cxxds = move(ASTR.cxxds);
     vds = move(ASTR.vds);
+    crds = move(ASTR.crds);
   }
   ASTResource &operator=(ASTResource &&ASTR) {
     if (this == &ASTR) {
@@ -40,17 +41,20 @@ public:
     fds = move(ASTR.fds);
     cxxds = move(ASTR.cxxds);
     vds = move(ASTR.vds);
+    crds = move(ASTR.crds);
     return *this;
   }
 
   std::vector<FunctionDecl *> &GetFunctionDecls() { return fds; }
   std::vector<CXXMethodDecl *> &GetCXXMethodDecls() { return cxxds; }
   std::vector<VarDecl *> &GetVarDecls() { return vds; }
+  std::vector<CXXRecordDecl *> &GetCXXRecordDecls() {return crds;}
 
 private:
   std::vector<FunctionDecl *> fds;
   std::vector<CXXMethodDecl *> cxxds;
   std::vector<VarDecl *> vds;
+  std::vector<CXXRecordDecl *> crds;
 };
 
 class ASTTraverse : public ASTConsumer,
@@ -94,6 +98,13 @@ public:
   bool TraverseCXXMethodDecl(CXXMethodDecl *CXXMD) {
     if (CXXMD && CXXMD->isThisDeclarationADefinition()) {
       ASTR.cxxds.push_back(CXXMD);
+    }
+    return true;
+  }
+
+  bool TraverseCXXRecordDecl(CXXRecordDecl *CXXRD) {
+    if (CXXRD && CXXRD->isThisDeclarationADefinition()) {
+      ASTR.crds.push_back(CXXRD);
     }
     return true;
   }

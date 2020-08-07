@@ -2,22 +2,58 @@
 #include<string.h>
 #include<stdio.h>
 
-//数组越界
+struct node {
+  int age;
+  char *name;
+  double score;
+};
+int a[2]={0};
+
+int main1() {
+  int n;
+  scanf("%d", &n);
+  for (int i=0; i< n; i++)
+    a[0]++;
+  if (a[0]>5) {
+    printf("%d\t%d", a[0], a[1]);
+  }
+  else 
+    printf("%d", a[1]);
+
+}
+int main2() {
+  node *ptr;
+  ptr->age = 18;
+  strcpy(ptr->name, "John");
+  ptr->score = 99.5;
+  printf("%d %s %f.\n", ptr->age, ptr->name, ptr->score);
+  node temp;
+  temp.score = ptr->score;
+  if (temp.score <= 100) {
+    printf("%d %s %f.\n", temp.age, temp.name, temp.score);
+  }
+  else
+    printf("nothing.\n");
+}
 void mem_leak1(int n)
 {
   new int;
-  int*p=NULL;
-  if(n!=0)
+  int*p=new int;
+  if(n!=0)//路径1
   {
+    
+    int*m=p;
+    delete m;
     p=new int;
   }
-  else if(n==1)
+  else if(n==1)//路径二
   {
     int*q=(int*)malloc(sizeof(int)*n);
   }
   else if(n==2)
   {
     int*u=new int[n];
+    delete u;
   }
 }
 void f0(){

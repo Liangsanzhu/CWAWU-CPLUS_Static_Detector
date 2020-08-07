@@ -74,7 +74,7 @@ void Detector::detector()
             //std::cout << S->getStmtClassName() << "\n";
             MLD.ML_Entry(*srcMgr, S, path_idx, &all_node);
             NPD.NPD_Entry(srcMgr, S, path_idx, &all_node, block_id);
-            OutIn.OI_Entry_New(*srcMgr, S, path_idx);
+            OutIn.OI_Entry(*srcMgr, S, path_idx);
             BOF.BOF_Entry(*srcMgr, S ,path_idx, &all_node);
 
             /*
