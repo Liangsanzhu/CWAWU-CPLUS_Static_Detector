@@ -524,7 +524,7 @@ Stmt* Out_Index::OrderFive_One(Stmt* node,int n){
 
 
 Stmt* Out_Index::Ordertest(Stmt* node,int n){
-  cout<<node->getStmtClassName()<<endl;
+  //cout<<node->getStmtClassName()<<endl;
   for (auto i = node->child_begin(); i != node->child_end(); i++)
   {
     Ordertest(*i,n++);//每递归一次，+1
@@ -1073,8 +1073,8 @@ void GetSomeStmt(Stmt * nodeStmt) {
       case 97: //CXXConstructExpr
         construct = (CXXConstructExpr *)nodeStmt;
         construct->getStmtClassName();
-        cout << construct->getType().getAsString();
-        cout << construct->getConstructor()->getNumParams() ;
+       // cout << construct->getType().getAsString();
+        //cout << construct->getConstructor()->getNumParams() ;
         for (unsigned i = 0; i < construct->getConstructor()->getNumParams(); ++i) {
           construct->getConstructor()->getParamDecl(i)->getNameAsString();
         }
@@ -1173,14 +1173,14 @@ void GetSomeStmt(Stmt * nodeStmt) {
         break;
       case 189: //StringLiteral
         strltr = (StringLiteral *)nodeStmt;
-        strltr->getStmtClassName();
-        strltr->getType().getAsString();
-        strltr->getString().str();
+        ///strltr->getStmtClassName();
+        //strltr->getType().getAsString();
+        //strltr->getString().str();
         break;
       case 195: //UnaryOperator
         unary = (UnaryOperator *)nodeStmt;
-        unary->getStmtClassName() ;
-         unary->getOpcodeStr(unary->getOpcode()).str();
+        //unary->getStmtClassName() ;
+         //unary->getOpcodeStr(unary->getOpcode()).str();
         for (auto i = unary->child_begin(); i != unary->child_end(); ++i) {
           GetSomeStmt(*i);
         }
@@ -2076,10 +2076,10 @@ void Out_Index::OI_DectectTwo()
   //     cout<<ArrayDefn[i->second.name][j]<<endl;
   //   }
   // }
-  for (auto j = ArrayDefn.begin(); j!= ArrayDefn.end(); j++)
+ /* for (auto j = ArrayDefn.begin(); j!= ArrayDefn.end(); j++)
   {
     cout<<j->first<<endl;
-  }
+  }*/
   
 
   for(auto i = ArrayUseTwo.begin();i != ArrayUseTwo.end();i++){//[location,{is,name,useline}]

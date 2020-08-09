@@ -212,7 +212,7 @@ if(count>1)
    eout<<endl<<count<<" error generated."<<endl;
    else
    {
-     eout<<endl<<count<<" no error generated."<<endl;
+     eout<<endl<<"no error generated."<<endl;
    }
    //result_backup=result;
   // eout<<"****\n";

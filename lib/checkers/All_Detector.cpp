@@ -75,7 +75,7 @@ void Detector::detector()
             MLD.ML_Entry(*srcMgr, S, path_idx, &all_node);
             NPD.NPD_Entry(srcMgr, S, path_idx, &all_node, block_id);
             OutIn.OI_Entry(*srcMgr, S, path_idx);
-            BOF.BOF_Entry(*srcMgr, S ,path_idx, &all_node);
+          //  BOF.BOF_Entry(*srcMgr, S ,path_idx, &all_node);
 
             /*
               step3:调用入口函数
@@ -86,7 +86,7 @@ void Detector::detector()
         }
       }
 
-      BOF.BOF_Detect();
+     // BOF.BOF_Detect();
 
       MLD.ML_Detect();
       NPD.NPD_Detect(ifBlock);
@@ -95,16 +95,7 @@ void Detector::detector()
     }
     VUD.detector(all_node, srcMgr, (*fd).first->getQualifiedNameAsString(), global_def);
   }
-  for(int i=1;i<=path_num;i++)
-  {
-    cout<<"****\n";
-    //cout<<i<<endl;
-    for(int j=0;j!=path_lineno[i].size();j++)
-    {
-      cout<<path_lineno[i][j]<<endl;
-    }
-  }
-  cout<<"&&&&\n";
+ 
   Get_SourceCode(*srcMgr); //获取源码
   print_result();          //打印结果
 }

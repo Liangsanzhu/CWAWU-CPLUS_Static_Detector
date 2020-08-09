@@ -68,17 +68,17 @@ struct_Info struct_info_tmp;
 
 void output_deftmp() {
   //def_tmp
-  for (auto i = def_tmp.begin(); i != def_tmp.end(); ++i) {
+  /*for (auto i = def_tmp.begin(); i != def_tmp.end(); ++i) {
     std::cout << i->first << "\n";
     for (auto ii = i->second.begin(); ii != i->second.end(); ++ii) {
       std::cout << ii->first << "  ";
       std::cout << ii->second.varname << "  " << ii->second.def_line << "\n";
     }
-  }
+  }*/
 }
 
 void output_tree() {
-    for (auto i = path_tree.begin(); i != path_tree.end(); ++i) {
+   /* for (auto i = path_tree.begin(); i != path_tree.end(); ++i) {
         std::cout << "FunctionName:  " << (*i).first->getQualifiedNameAsString() << ":  ";
         for (auto i_in = (*i).second.begin(); i_in != (*i).second.end(); ++i_in) {
           std::cout << "index: " << (*i_in).first << "\n";
@@ -88,7 +88,7 @@ void output_tree() {
           //}
         }
         std::cout << "\n";
-    }
+    }*/
 }
 
 CFGBlock *convert(CFGBlock& cfg_bk, BumpVectorContext& bv, CFG *p) {
@@ -100,7 +100,7 @@ CFGBlock *convert(CFGBlock& cfg_bk, BumpVectorContext& bv, CFG *p) {
       bk->appendStmt(S, bv);
     }
   }
-  std::cout << "size: " << bk->size() << "\n";
+  //std::cout << "size: " << bk->size() << "\n";
   bk->setHasNoReturnElement();
   bk->setLabel(cfg_bk.getLabel());
   bk->setLoopTarget(cfg_bk.getLoopTarget());
@@ -124,7 +124,7 @@ ResVar * getArrayVar(VarDecl* vd){
      return res;
    }
    ResVar* res = new ResVar{"noArray",0,vd->getLocation(),nullptr};
-   std::cout<<res->name<<"\t"<<res->id<<"\t"<<std::endl;
+  // std::cout<<res->name<<"\t"<<res->id<<"\t"<<std::endl;
    return res;
 }
 
@@ -708,7 +708,7 @@ void TraverseStmt(Stmt * anystmt, int count, SourceManager *scm) {
         }
         break;
       default: 
-        std::cout << anystmt->getStmtClassName() << anystmt->getStmtClass() << std::endl;
+        //std::cout << anystmt->getStmtClassName() << anystmt->getStmtClass() << std::endl;
         break;
     }
   }

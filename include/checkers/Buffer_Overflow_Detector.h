@@ -69,7 +69,7 @@ private:
         FunctionDecl *callee = callexpr->getDirectCallee();
         string callee_name = callee->getNameAsString();
 
-        if (callee_name == "bcopy")
+        if (callee_name == "bcopy" || callee_name == "memcpy" || callee_name == "memset" || callee_name == "strcpy" || callee_name == "strncpy")
         {
             int callee_num = FuncLocation.size();
             FuncLocation.insert(pair<int, SourceLocation>(callee_num, S->getBeginLoc()));
@@ -81,6 +81,18 @@ private:
             FuncLocation.insert(pair<int, SourceLocation>(callee_num, S->getBeginLoc()));
             detect_sprintf(S, callee, callee_num);
         }
+        if (callee_name == "scanf")
+        {
+            int callee_num = FuncLocation.size();
+            FuncLocation.insert(pair<int, SourceLocation>(callee_num, S->getBeginLoc()));
+            detect_scanf(S, callee, callee_num);
+        }
+        if (callee_name == "snprintf")
+        {
+            int callee_num = FuncLocation.size();
+            FuncLocation.insert(pair<int, SourceLocation>(callee_num, S->getBeginLoc()));
+            detect_snprintf(S, callee, callee_num);
+        }
     }
 
     void detect_bcopy(const Stmt *S, FunctionDecl *callee, int callee_num)
@@ -90,23 +102,29 @@ private:
         int len_n = -1;
 
         int param_order[3]; //0-src,1-dest,2-n
+        for (int i = 0; i < 3; i++)
+            param_order[i] = -1;
 
         auto param = callee->param_begin();
         int num = 1;
+
+        string Func_name = callee->getNameAsString();
+
         for (; param != callee->param_end(); param++)
         {
             string param_name = (*param)->getIdentifier()->getName().data();
 
-            //cout << "param name:   " << param_name << endl;
-            //std::cout << "param type:   " << (*param)->getType().getAsString() << std::endl;
-            if (param_name == "__src")
+            //cout << "!!!----------------param name:   " << param_name << endl;
+            //std::cout << "!!!-------------param type:   " << (*param)->getType().getAsString() << std::endl;
+            if (param_name == "__src" || param_name == "__s")
                 param_order[0] = num;
-            else if (param_name == "__dest")
+            else if (param_name == "__dest" || param_name == "__c")
                 param_order[1] = num;
             else if (param_name == "__n")
                 param_order[2] = num;
             num++;
         }
+
         //cout << param_order[0] << " " << param_order[1] << " " << param_order[2] << endl;
         //cout << endl;
 
@@ -114,33 +132,44 @@ private:
         auto i = S->child_begin();
         for (auto i = S->child_begin(); i != S->child_end(); i++)
         {
-
             auto j = i;
-            while (strcmp(j->getStmtClassName(), "DeclRefExpr") != 0)
+            if (Func_name != "memset" || num != 2)
             {
-                j = j->child_begin();
-                //cout << "j: " << j->getStmtClassName() << endl;
-            }
-            DeclRefExpr *declre = (DeclRefExpr *)*j;
-            string param_name = declre->getNameInfo().getAsString();
-            string param_type = declre->getType().getAsString();
+                while (strcmp(j->getStmtClassName(), "DeclRefExpr") != 0)
+                {
+                    j = j->child_begin();
+                    //cout << "j: " << j->getStmtClassName() << endl;
+                }
+                DeclRefExpr *declre = (DeclRefExpr *)*j;
+                string param_name = declre->getNameInfo().getAsString();
+                string param_type = declre->getType().getAsString();
 
-            //cout << "param name:  " << param_name << endl;
-            //cout << "param type:  " << param_type << endl;
-            //cout << "num=" << num << endl;
+                //cout << "param name:  " << param_name << endl;
+                //cout << "param type:  " << param_type << endl;
+                //cout << "num=" << num << endl;
 
-            if (num == param_order[1])
-            {
-                len_dest = Var[param_name];
-                //cout << "len_dest=" << len_dest << endl;
-            }
-            else if (num == param_order[2])
-            {
-                len_n = Var[param_name];
-                //cout << "len_n=" << len_n << endl;
+                if (num == param_order[1])
+                {
+                    len_dest = Var[param_name];
+                    //cout << "len_dest=" << len_dest << endl;
+                }
+                else if (num == param_order[2])
+                {
+                    len_n = Var[param_name];
+                    //cout << "len_n=" << len_n << endl;
+                }
+                else if (num == param_order[0])
+                {
+                    len_src = Var[param_name];
+                }
             }
             num++;
             //cout << endl;
+        }
+
+        if (param_order[2] == -1)
+        {
+            len_n = len_src;
         }
 
         //
@@ -154,26 +183,17 @@ private:
             {
                 clang::SourceManager &srcmgr = callee->getASTContext().getSourceManager();
                 //error
-                //cout << "error:" << endl;
+                cout << "error:" << endl;
                 string Func_name = callee->getNameAsString();
-                //const string filename = srcmgr.getFilename(FuncLocation[callee_num]).str();
-                //int line = srcmgr.getSpellingLineNumber(FuncLocation[callee_num]);
-                //int col = srcmgr.getSpellingColumnNumber(FuncLocation[callee_num]);
-                //string info = "an error caused by use " + Func_name + " to copy data";
 
                 bof_error tmp_info;
                 tmp_info.filename = srcmgr.getFilename(FuncLocation[callee_num]).str();
                 tmp_info.line = srcmgr.getSpellingLineNumber(FuncLocation[callee_num]);
                 tmp_info.col = srcmgr.getSpellingColumnNumber(FuncLocation[callee_num]);
-                tmp_info.info = "an error caused by use " + Func_name + " to copy data";
+                tmp_info.info = "buffer overflow caused by use " + Func_name + " to copy data";
 
                 int tmp_num = bof_info.size();
                 bof_info.insert(pair<int, bof_error>(tmp_num, tmp_info));
-                //cout << "Func_name=" << Func_name << endl;
-                //cout << "filename=" << filename << endl;
-                // cout << "line=" << line << endl;
-                //cout << "col=" << col << endl;
-                //cout << info << endl;
 
                 //error_info *e = new_error_info(NULL, filename, line, col, TYPE_ERROR, info, ifindex);
                 //result.push(e);
@@ -274,28 +294,267 @@ private:
             //cout << "\033[32m error:there is a wrong \033[0m" << endl;
             //cout << "error:" << endl;
             string Func_name = callee->getNameAsString();
-            //const string filename = srcmgr.getFilename(FuncLocation[callee_num]).str();
-            //int line = srcmgr.getSpellingLineNumber(FuncLocation[callee_num]);
-            //int col = srcmgr.getSpellingColumnNumber(FuncLocation[callee_num]);
-            //string info = "an error caused by use " + Func_name + " to format data";
 
             bof_error tmp_info;
             tmp_info.filename = srcmgr.getFilename(FuncLocation[callee_num]).str();
             tmp_info.line = srcmgr.getSpellingLineNumber(FuncLocation[callee_num]);
             tmp_info.col = srcmgr.getSpellingColumnNumber(FuncLocation[callee_num]);
-            tmp_info.info = "an error caused by use " + Func_name + " to format data";
+            tmp_info.info = "buffer overflow caused by use " + Func_name + " to format data";
 
             int tmp_num = bof_info.size();
             bof_info.insert(pair<int, bof_error>(tmp_num, tmp_info));
+        }
+        else if (dLen == -1)
+        {
+            //warning:maybe right or wrong
+            //cout << "\033[32m warning:maybe right or wrong \033[0m" << endl;
+        }
+        else
+        {
+            //no error or warning
+            //cout << "\033[32m no error or warning \033[0m" << endl;
+        }
+    }
 
-            //cout << "Func_name=" << Func_name << endl;
-            //cout << "filename=" << filename << endl;
-            //cout << "line=" << line << endl;
-            //cout << "col=" << col << endl;
-            //cout << info << endl;
+    void detect_scanf(const Stmt *S, FunctionDecl *callee, int callee_num)
+    {
+        map<int, int> len_dest;
+        map<int, int> len_n;
+        string format_str;
+        int num = 0;
+        auto i = S->child_begin();
+        while (i != S->child_end())
+        {
+            auto j = i;
 
-           // error_info *e = new_error_info(NULL, filename, line, col, TYPE_ERROR, info, ifindex);
-           // result.push(e);
+            while (true)
+            {
+                //cout << "j: " << j->getStmtClassName() << endl;
+                if (strcmp(j->getStmtClassName(), "DeclRefExpr") == 0)
+                {
+                    DeclRefExpr *declre = (DeclRefExpr *)*j;
+                    string param_name = declre->getNameInfo().getAsString();
+                    string param_type = declre->getType().getAsString();
+                    if (num >= 2)
+                    {
+                        int temp = Var[param_name];
+                        if (temp == 0)
+                            temp = -1;
+                        len_dest.insert(pair<int, int>(num - 2, temp));
+                        len_dest[num - 2] = temp;
+                    }
+                    break;
+                }
+                else if (strcmp(j->getStmtClassName(), "StringLiteral") == 0)
+                {
+                    StringLiteral *strltr = (StringLiteral *)*j;
+                    if (num <= 1)
+                    {
+                        format_str = strltr->getString().str();
+                        //cout << "str: " << format_str << endl;
+                    }
+                    break;
+                }
+                else if (j->child_begin() == nullptr)
+                {
+                    //cout << "none child" << endl;
+                    break;
+                }
+                else
+                    j = j->child_begin();
+            }
+            //cout << "num=" << num << endl;
+
+            i++;
+            num++;
+            //cout << endl;
+        }
+
+        int cur = 0;
+        for (int i = 0; i < format_str.size(); i++)
+        {
+            if (format_str[i] == '%')
+            {
+                i++;
+                int temp = 0;
+                while (format_str[i] <= '9' && format_str[i] >= '0')
+                {
+                    temp = temp * 10 + format_str[i] - '0';
+                    i++;
+                }
+                if (format_str[i] == 's')
+                {
+                    len_n.insert(pair<int, int>(cur, temp));
+                    len_n[cur] = temp;
+                    cur++;
+                }
+                else
+                {
+                    temp = -2;
+                    len_n.insert(pair<int, int>(cur, temp));
+                    len_n[cur] = temp;
+                    cur++;
+                }
+            }
+        }
+
+        bool buffover_error = false;
+        bool buffover_warnning = false;
+
+        for (int i = 0; i < cur; i++)
+        {
+           // std::cout << "\033[32m" << i << "----"
+             //         << "len_n:" << len_n[i] << "   len_dest" << len_dest[i] << "\033[0m" << std::endl;
+            if (len_n[i] != -2)
+            {
+                if (len_n[i] >= len_dest[i])
+                {
+                    buffover_error = true;
+                }
+            }
+        }
+
+        if (buffover_error)
+        {
+            clang::SourceManager &srcmgr = callee->getASTContext().getSourceManager();
+            //error
+            //cout << "\033[32m error:there is a wrong \033[0m" << endl;
+            //cout << "error:" << endl;
+            string Func_name = callee->getNameAsString();
+
+            bof_error tmp_info;
+            tmp_info.filename = srcmgr.getFilename(FuncLocation[callee_num]).str();
+            tmp_info.line = srcmgr.getSpellingLineNumber(FuncLocation[callee_num]);
+            tmp_info.col = srcmgr.getSpellingColumnNumber(FuncLocation[callee_num]);
+            tmp_info.info = "buffer overflow caused by use " + Func_name + " to format data";
+
+            int tmp_num = bof_info.size();
+            bof_info.insert(pair<int, bof_error>(tmp_num, tmp_info));
+        }
+        else if (buffover_warnning)
+        {
+            //warning:maybe right or wrong
+            //cout << "\033[32m warning:maybe right or wrong \033[0m" << endl;
+        }
+        else
+        {
+            //no error or warning
+            //cout << "\033[32m no error or warning \033[0m" << endl;
+        }
+    }
+
+    void detect_snprintf(const Stmt *S, FunctionDecl *callee, int callee_num)
+    {
+        int len_dest = -1;
+        int len_src = -1;
+        int len_n = -1;
+        string format_str;
+        int num = 0;
+        auto i = S->child_begin();
+        while (i != S->child_end())
+        {
+            auto j = i;
+            while (true)
+            {
+                //cout << "j: " << j->getStmtClassName() << endl;
+                if (strcmp(j->getStmtClassName(), "DeclRefExpr") == 0)
+                {
+                    DeclRefExpr *declre = (DeclRefExpr *)*j;
+                    string param_name = declre->getNameInfo().getAsString();
+                    string param_type = declre->getType().getAsString();
+                    if (num >= 4)
+                    {
+                        int temp = Var[param_name];
+                        if (temp == 0)
+                            temp = -1;
+                        Format_param.insert(pair<int, int>(num - 4, temp));
+                        Format_param[num - 4] = temp;
+                    }
+                    if (num == 2)
+                    {
+                        len_n = Var[param_name];
+                    }
+                    if (num == 1)
+                    {
+                        len_dest = Var[param_name];
+                        //cout << "len_dest:  " << len_dest << endl;
+                    }
+                    //cout << "param name:  " << param_name << endl;
+                    //cout << "param type:  " << param_type << endl;
+                    break;
+                }
+                else if (strcmp(j->getStmtClassName(), "StringLiteral") == 0)
+                {
+                    StringLiteral *strltr = (StringLiteral *)*j;
+                    if (num <= 3)
+                    {
+                        format_str = strltr->getString().str();
+                        //cout << "str: " << format_str << endl;
+                    }
+                    else
+                    {
+                        string temp_str = strltr->getString().str();
+                        Format_param.insert(pair<int, int>(num - 4, temp_str.size()));
+                        Format_param[num - 4] = temp_str.size();
+                        //cout << "str: " << temp_str << endl;
+                    }
+                    break;
+                }
+                else if (strcmp(j->getStmtClassName(), "IntegerLiteral") == 0)
+                {
+
+                    IntegerLiteral *intltr = (IntegerLiteral *)*j;
+                    int temp_int = intltr->getValue().getSExtValue();
+                    if (num >= 4)
+                    {
+                        Format_param.insert(pair<int, int>(num - 4, temp_int));
+                        Format_param[num - 4] = temp_int;
+                        //cout << "int: " << temp_int << endl;
+                    }
+                    else if (num == 2)
+                    {
+                        len_n = temp_int;
+                    }
+
+                    break;
+                }
+                else if (j->child_begin() == nullptr)
+                {
+                    //cout << "none child" << endl;
+                    break;
+                }
+                else
+                    j = j->child_begin();
+            }
+            //cout << "num=" << num << endl;
+
+            i++;
+            num++;
+            //cout << endl;
+        }
+
+        int dLen;
+        int totalLen = count_totalLen(format_str, dLen);
+        //std::cout << "\033[32m" << len_dest<<"   "<<len_n<<"    "<<totalLen<< "\033[0m" << std::endl;
+        //cout << "len_dest" << len_dest << endl;
+        //cout << "totalLen" << totalLen << endl;
+        //if (len_dest <= totalLen)
+        if (totalLen >= len_dest && len_n > len_dest)
+        {
+            clang::SourceManager &srcmgr = callee->getASTContext().getSourceManager();
+            //error
+            //cout << "\033[32m error:there is a wrong \033[0m" << endl;
+            //cout << "error:" << endl;
+            string Func_name = callee->getNameAsString();
+
+            bof_error tmp_info;
+            tmp_info.filename = srcmgr.getFilename(FuncLocation[callee_num]).str();
+            tmp_info.line = srcmgr.getSpellingLineNumber(FuncLocation[callee_num]);
+            tmp_info.col = srcmgr.getSpellingColumnNumber(FuncLocation[callee_num]);
+            tmp_info.info = "buffer overflow caused by use " + Func_name + " to format data";
+
+            int tmp_num = bof_info.size();
+            bof_info.insert(pair<int, bof_error>(tmp_num, tmp_info));
         }
         else if (dLen == -1)
         {
@@ -386,7 +645,7 @@ private:
             {
                 totalLen++;
             }
-          //  cout << endl;
+            cout << endl;
         }
 
         //cout << "totlaLen:  " << totalLen << endl;
@@ -485,11 +744,12 @@ public:
         if (isCallExpr == 0)
             handleCallExpr(S); //处理CallExpr
     }
+
     void BOF_Detect()
     {
-        for(int i=0;i<bof_info.size();i++)
+        for (int i = 0; i < bof_info.size(); i++)
         {
-            bof_error tmp=bof_info[i];
+            bof_error tmp = bof_info[i];
             error_info *e = new_error_info(NULL, tmp.filename, tmp.line, tmp.col, TYPE_ERROR, tmp.info, ifindex);
             result.push(e);
         }

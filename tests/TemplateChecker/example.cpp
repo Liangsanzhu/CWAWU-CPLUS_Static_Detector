@@ -19,7 +19,7 @@ int main1() {
   }
   else 
     printf("%d", a[1]);
-
+return 0;
 }
 int main2() {
   node *ptr;
@@ -34,6 +34,7 @@ int main2() {
   }
   else
     printf("nothing.\n");
+return 0;
 }
 void mem_leak1(int n)
 {
@@ -69,7 +70,7 @@ void f0(){
     
 }
 //mixup的分支检测待完善，合并测试的时候可以测出别的就ok
-/* int mixup(){
+ int mixup(){
     int * a = NULL;
     int *b = new int;
     int *c =(int *)malloc(sizeof(int));
@@ -86,7 +87,7 @@ void f0(){
     *b = 3;
     *c = 3;
     return 0;
-} */
+} 
 
 int malloc(){
     std::string *str = (std::string *)malloc(10);
