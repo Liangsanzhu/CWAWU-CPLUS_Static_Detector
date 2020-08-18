@@ -44,6 +44,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     ui->label->setText("请选择.cpp文件");
     QSplitter *rightSplitter = new QSplitter(Qt::Horizontal);
    // rightSplitter->addWidget(leftSplitter);
+    ui->tabWidget->clear();
     rightSplitter->addWidget(ui->tabWidget);        // delete after imerge with wyh
 
     rightSplitter->setStretchFactor(1, 1);
@@ -161,8 +162,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
          QStringList result=result_all.split("--------------------------------------\n");
          for(int i=1;i<result.size();i++)
          {
-             errorlineinfo[i-1]=result[i];
+
              QStringList temp_1=result[i].split("\n");   //逐行拆分
+              errorlineinfo[i-1]=temp_1[0];
              QString temp_2=temp_1[0];
              QStringList temp_3=temp_2.split(":");       //逐词拆分
 
@@ -270,10 +272,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
              }
 
              example_code[i]=snum+"      "+example_code[i];
-            // stringToHtmlFilter(example_code[i]);
+             stringToHtmlFilter(example_code[i]);
 
              if(i_linenum<linenum.size()&&i+1==linenum[i_linenum])   //错误源码，标红
              {
+                  stringToHtmlFilter(errorlineinfo[i_linenum]);
                  t1->append("<span style=\"text-decoration: underline;color: red;\"><p title="+ errorlineinfo[i_linenum]+">"+example_code[i]+"</p></span>");
 
 

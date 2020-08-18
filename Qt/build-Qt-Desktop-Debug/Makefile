@@ -73,8 +73,7 @@ OBJECTS       = CTabBar.o \
 		moc_CWidget.o \
 		moc_mainwindow.o \
 		moc_mainwindow2.o
-DIST          = ../Qt/waveline.qss \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
+DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/linux.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/sanitize.conf \
@@ -375,6 +374,7 @@ compiler_rcc_clean:
 	-$(DEL_FILE) qrc_image.cpp
 qrc_image.cpp: ../Qt/image.qrc \
 		/usr/lib/qt5/bin/rcc \
+		../Qt/stylesheet.qss \
 		../Qt/Icons/file.png \
 		../Qt/Icons/none.png
 	/usr/lib/qt5/bin/rcc -name image ../Qt/image.qrc -o qrc_image.cpp

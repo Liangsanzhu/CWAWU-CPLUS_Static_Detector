@@ -4,4 +4,7 @@
         <file>Icons/none.png</file>
     </qresource>
     <qresource prefix="/new/prefix2"/>
+    <qresource prefix="/windowstyle">
+        <file>stylesheet.qss</file>
+    </qresource>
 </RCC>

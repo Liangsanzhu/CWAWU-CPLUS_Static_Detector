@@ -45,5 +45,4 @@ FORMS += \
 RESOURCES += \
     image.qrc
 
-DISTFILES += \
-    waveline.qss
+DISTFILES +=
