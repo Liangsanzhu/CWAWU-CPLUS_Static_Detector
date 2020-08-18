@@ -1,0 +1,15 @@
+wavy {
+    display: block;
+    height: .5em;
+    white-space: nowrap;
+    letter-spacing: 100vw;
+    padding-top: .5em;
+    overflow: hidden;
+}
+wavy::before {
+    content: "\2000\2000";
+    /* IE浏览器实线代替 */
+    text-decoration: overline;
+    /* 现代浏览器 */
+    text-decoration: overline wavy;
+}

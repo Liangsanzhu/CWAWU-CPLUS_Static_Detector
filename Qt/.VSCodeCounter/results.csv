@@ -1,0 +1,16 @@
+"filename", "language", "C++", "Makefile", "comment", "blank", "total"
+"/home/ergo/QT/CWAWU-CPLUS_Static_Detector-master/Qt/Qt/Makefile", "Makefile", 0, 1088, 14, 43, 1145
+"/home/ergo/QT/CWAWU-CPLUS_Static_Detector-master/Qt/Qt/main.cpp", "C++", 9, 0, 0, 3, 12
+"/home/ergo/QT/CWAWU-CPLUS_Static_Detector-master/Qt/Qt/mainwindow.cpp", "C++", 77, 0, 1, 38, 116
+"/home/ergo/QT/CWAWU-CPLUS_Static_Detector-master/Qt/Qt/mainwindow.h", "C++", 31, 0, 1, 14, 46
+"/home/ergo/QT/CWAWU-CPLUS_Static_Detector-master/Qt/Qt/moc_mainwindow.cpp", "C++", 100, 0, 10, 15, 125
+"/home/ergo/QT/CWAWU-CPLUS_Static_Detector-master/Qt/Qt/moc_predefs.h", "C++", 390, 0, 0, 1, 391
+"/home/ergo/QT/CWAWU-CPLUS_Static_Detector-master/Qt/Qt/qrc_image.cpp", "C++", 1890, 0, 20, 14, 1924
+"/home/ergo/QT/CWAWU-CPLUS_Static_Detector-master/Qt/Qt/ui_mainwindow.h", "C++", 153, 0, 7, 16, 176
+"/home/ergo/QT/CWAWU-CPLUS_Static_Detector-master/Qt/build-Qt-Desktop-Debug/Makefile", "Makefile", 0, 355, 14, 42, 411
+"/home/ergo/QT/CWAWU-CPLUS_Static_Detector-master/Qt/build-Qt-Desktop-Debug/moc_mainwindow.cpp", "C++", 98, 0, 10, 16, 124
+"/home/ergo/QT/CWAWU-CPLUS_Static_Detector-master/Qt/build-Qt-Desktop-Debug/moc_predefs.h", "C++", 389, 0, 0, 1, 390
+"/home/ergo/QT/CWAWU-CPLUS_Static_Detector-master/Qt/build-Qt-Desktop-Debug/qrc_image.cpp", "C++", 1888, 0, 20, 15, 1923
+"/home/ergo/QT/CWAWU-CPLUS_Static_Detector-master/Qt/build-Qt-Desktop-Debug/ui_llvm.h", "C++", 39, 0, 7, 13, 59
+"/home/ergo/QT/CWAWU-CPLUS_Static_Detector-master/Qt/build-Qt-Desktop-Debug/ui_mainwindow.h", "C++", 155, 0, 7, 16, 178
+"Total", "-", 5219, 1443, 111, 247, 7020

@@ -31,21 +31,13 @@ class Ui_MainWindow
 {
 public:
     QAction *action_llvm;
-    QAction *action;
+    QAction *action_alter;
     QAction *action_Checker;
     QWidget *centralWidget;
     QLabel *label;
     QPushButton *pushButton_2;
     QTextBrowser *textBrowser;
     QTabWidget *tabWidget;
-    QWidget *tab;
-    QTextBrowser *tab_1_tb;
-    QWidget *tab_3;
-    QTabWidget *tabWidget_3;
-    QWidget *tab_5;
-    QWidget *tab_4;
-    QWidget *tab_2;
-    QTabWidget *tabWidget_2;
     QLabel *label_2;
     QLabel *label_3;
     QPushButton *pushButton;
@@ -64,8 +56,8 @@ public:
         MainWindow->resize(480, 371);
         action_llvm = new QAction(MainWindow);
         action_llvm->setObjectName(QStringLiteral("action_llvm"));
-        action = new QAction(MainWindow);
-        action->setObjectName(QStringLiteral("action"));
+        action_alter = new QAction(MainWindow);
+        action_alter->setObjectName(QStringLiteral("action_alter"));
         action_Checker = new QAction(MainWindow);
         action_Checker->setObjectName(QStringLiteral("action_Checker"));
         centralWidget = new QWidget(MainWindow);
@@ -83,44 +75,14 @@ public:
         pushButton_2->setGeometry(QRect(40, 200, 89, 25));
         textBrowser = new QTextBrowser(centralWidget);
         textBrowser->setObjectName(QStringLiteral("textBrowser"));
-        textBrowser->setGeometry(QRect(130, 220, 253, 100));
+        textBrowser->setGeometry(QRect(130, 220, 256, 192));
+        textBrowser->setMinimumSize(QSize(256, 192));
         textBrowser->setMaximumSize(QSize(16777215, 16777215));
         tabWidget = new QTabWidget(centralWidget);
         tabWidget->setObjectName(QStringLiteral("tabWidget"));
+        tabWidget->setEnabled(true);
         tabWidget->setGeometry(QRect(110, 20, 351, 311));
-        tab = new QWidget();
-        tab->setObjectName(QStringLiteral("tab"));
-        tab_1_tb = new QTextBrowser(tab);
-        tab_1_tb->setObjectName(QStringLiteral("tab_1_tb"));
-        tab_1_tb->setGeometry(QRect(0, 0, 570, 280));
-        QSizePolicy sizePolicy1(QSizePolicy::Maximum, QSizePolicy::Maximum);
-        sizePolicy1.setHorizontalStretch(0);
-        sizePolicy1.setVerticalStretch(0);
-        sizePolicy1.setHeightForWidth(tab_1_tb->sizePolicy().hasHeightForWidth());
-        tab_1_tb->setSizePolicy(sizePolicy1);
-        tab_1_tb->setMinimumSize(QSize(256, 192));
-        tabWidget->addTab(tab, QString());
-        tab_3 = new QWidget();
-        tab_3->setObjectName(QStringLiteral("tab_3"));
-        tabWidget_3 = new QTabWidget(tab_3);
-        tabWidget_3->setObjectName(QStringLiteral("tabWidget_3"));
-        tabWidget_3->setGeometry(QRect(0, 0, 560, 300));
-        tabWidget_3->setTabPosition(QTabWidget::South);
-        tab_5 = new QWidget();
-        tab_5->setObjectName(QStringLiteral("tab_5"));
-        tabWidget_3->addTab(tab_5, QString());
-        tab_4 = new QWidget();
-        tab_4->setObjectName(QStringLiteral("tab_4"));
-        tabWidget_3->addTab(tab_4, QString());
-        tabWidget->addTab(tab_3, QString());
-        tab_2 = new QWidget();
-        tab_2->setObjectName(QStringLiteral("tab_2"));
-        tabWidget_2 = new QTabWidget(tab_2);
-        tabWidget_2->setObjectName(QStringLiteral("tabWidget_2"));
-        tabWidget_2->setGeometry(QRect(0, 0, 560, 300));
-        tabWidget_2->setTabPosition(QTabWidget::South);
-        tabWidget_2->setTabShape(QTabWidget::Rounded);
-        tabWidget->addTab(tab_2, QString());
+        tabWidget->setStyleSheet(QStringLiteral(""));
         label_2 = new QLabel(centralWidget);
         label_2->setObjectName(QStringLiteral("label_2"));
         label_2->setGeometry(QRect(40, 220, 67, 17));
@@ -155,12 +117,12 @@ public:
         menuBar->addAction(menu_3->menuAction());
         menuBar->addAction(menu_4->menuAction());
         menu->addAction(action_llvm);
-        menu->addAction(action);
+        menu->addAction(action_alter);
         menu_3->addAction(action_Checker);
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(1);
+        tabWidget->setCurrentIndex(-1);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -170,15 +132,10 @@ public:
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", Q_NULLPTR));
         action_llvm->setText(QApplication::translate("MainWindow", "\350\256\276\347\275\256llvm\350\267\257\345\276\204", Q_NULLPTR));
-        action->setText(QApplication::translate("MainWindow", "\350\256\276\347\275\256\346\212\245\351\224\231\346\226\207\345\255\227", Q_NULLPTR));
+        action_alter->setText(QApplication::translate("MainWindow", "\350\256\276\347\275\256\346\212\245\351\224\231\346\226\207\345\255\227", Q_NULLPTR));
         action_Checker->setText(QApplication::translate("MainWindow", "\347\274\226\350\257\221Checker", Q_NULLPTR));
         label->setText(QApplication::translate("MainWindow", "TextLabel", Q_NULLPTR));
         pushButton_2->setText(QApplication::translate("MainWindow", "\345\274\200\345\247\213\346\243\200\346\265\213", Q_NULLPTR));
-        tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("MainWindow", "\346\237\245\347\234\213\346\272\220\347\240\201", Q_NULLPTR));
-        tabWidget_3->setTabText(tabWidget_3->indexOf(tab_5), QApplication::translate("MainWindow", "Tab 2", Q_NULLPTR));
-        tabWidget_3->setTabText(tabWidget_3->indexOf(tab_4), QApplication::translate("MainWindow", "Tab 1", Q_NULLPTR));
-        tabWidget->setTabText(tabWidget->indexOf(tab_3), QApplication::translate("MainWindow", "\347\250\213\345\272\217\350\267\257\345\276\204", Q_NULLPTR));
-        tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("MainWindow", "\345\210\206\346\236\220\347\273\223\346\236\234", Q_NULLPTR));
         label_2->setText(QApplication::translate("MainWindow", "\350\276\223\345\207\272\346\227\245\345\277\227\357\274\232", Q_NULLPTR));
         label_3->setText(QApplication::translate("MainWindow", "TextLabel", Q_NULLPTR));
         pushButton->setText(QApplication::translate("MainWindow", "\351\200\211\346\213\251\346\226\207\344\273\266", Q_NULLPTR));

@@ -35,7 +35,7 @@ MOVE          = mv -f
 TAR           = tar -cf
 COMPRESS      = gzip -9f
 DISTNAME      = Qt1.0.0
-DISTDIR = /home/ergo/rose/Qt/build-Qt-Desktop-Debug/.tmp/Qt1.0.0
+DISTDIR = /home/ergo/rose/SE-Experiment-master/Qt/build-Qt-Desktop-Debug/.tmp/Qt1.0.0
 LINK          = g++
 LFLAGS        = 
 LIBS          = $(SUBLIBS) -lQt5Widgets -lQt5Gui -lQt5Core -lGL -lpthread 
@@ -50,14 +50,31 @@ OBJECTS_DIR   = ./
 
 ####### Files
 
-SOURCES       = ../Qt/main.cpp \
-		../Qt/mainwindow.cpp qrc_image.cpp \
-		moc_mainwindow.cpp
-OBJECTS       = main.o \
+SOURCES       = ../Qt/CTabBar.cpp \
+		../Qt/CTabWidget.cpp \
+		../Qt/CWidget.cpp \
+		../Qt/main.cpp \
+		../Qt/mainwindow.cpp \
+		../Qt/mainwindow2.cpp qrc_image.cpp \
+		moc_CTabBar.cpp \
+		moc_CTabWidget.cpp \
+		moc_CWidget.cpp \
+		moc_mainwindow.cpp \
+		moc_mainwindow2.cpp
+OBJECTS       = CTabBar.o \
+		CTabWidget.o \
+		CWidget.o \
+		main.o \
 		mainwindow.o \
+		mainwindow2.o \
 		qrc_image.o \
-		moc_mainwindow.o
-DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
+		moc_CTabBar.o \
+		moc_CTabWidget.o \
+		moc_CWidget.o \
+		moc_mainwindow.o \
+		moc_mainwindow2.o
+DIST          = ../Qt/waveline.qss \
+		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/linux.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/sanitize.conf \
@@ -131,8 +148,16 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exceptions.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
-		../Qt/Qt.pro ../Qt/mainwindow.h ../Qt/main.cpp \
-		../Qt/mainwindow.cpp
+		../Qt/Qt.pro ../Qt/CTabBar.h \
+		../Qt/CTabWidget.h \
+		../Qt/CWidget.h \
+		../Qt/mainwindow.h \
+		../Qt/mainwindow2.h ../Qt/CTabBar.cpp \
+		../Qt/CTabWidget.cpp \
+		../Qt/CWidget.cpp \
+		../Qt/main.cpp \
+		../Qt/mainwindow.cpp \
+		../Qt/mainwindow2.cpp
 QMAKE_TARGET  = Qt
 DESTDIR       = 
 TARGET        = Qt
@@ -141,7 +166,7 @@ TARGET        = Qt
 first: all
 ####### Build rules
 
-$(TARGET): ui_mainwindow.h $(OBJECTS)  
+$(TARGET): ui_mainwindow.h ui_mainwindow2.h $(OBJECTS)  
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
 
 Makefile: ../Qt/Qt.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
@@ -319,9 +344,9 @@ distdir: FORCE
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../Qt/image.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../Qt/mainwindow.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../Qt/main.cpp ../Qt/mainwindow.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../Qt/mainwindow.ui $(DISTDIR)/
+	$(COPY_FILE) --parents ../Qt/CTabBar.h ../Qt/CTabWidget.h ../Qt/CWidget.h ../Qt/mainwindow.h ../Qt/mainwindow2.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../Qt/CTabBar.cpp ../Qt/CTabWidget.cpp ../Qt/CWidget.cpp ../Qt/main.cpp ../Qt/mainwindow.cpp ../Qt/mainwindow2.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../Qt/mainwindow.ui ../Qt/mainwindow2.ui $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -360,22 +385,51 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 	g++ -pipe -g -Wall -W -dM -E -o moc_predefs.h /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_mainwindow.cpp
+compiler_moc_header_make_all: moc_CTabBar.cpp moc_CTabWidget.cpp moc_CWidget.cpp moc_mainwindow.cpp moc_mainwindow2.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_mainwindow.cpp
-moc_mainwindow.cpp: ../Qt/mainwindow.h \
+	-$(DEL_FILE) moc_CTabBar.cpp moc_CTabWidget.cpp moc_CWidget.cpp moc_mainwindow.cpp moc_mainwindow2.cpp
+moc_CTabBar.cpp: ../Qt/CTabBar.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/ergo/rose/Qt/Qt -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../Qt/mainwindow.h -o moc_mainwindow.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/ergo/rose/SE-Experiment-master/Qt/Qt -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../Qt/CTabBar.h -o moc_CTabBar.cpp
+
+moc_CTabWidget.cpp: ../Qt/CTabBar.h \
+		../Qt/CTabWidget.h \
+		moc_predefs.h \
+		/usr/lib/qt5/bin/moc
+	/usr/lib/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/ergo/rose/SE-Experiment-master/Qt/Qt -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../Qt/CTabWidget.h -o moc_CTabWidget.cpp
+
+moc_CWidget.cpp: ../Qt/CWidget.h \
+		moc_predefs.h \
+		/usr/lib/qt5/bin/moc
+	/usr/lib/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/ergo/rose/SE-Experiment-master/Qt/Qt -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../Qt/CWidget.h -o moc_CWidget.cpp
+
+moc_mainwindow.cpp: ../Qt/mainwindow2.h \
+		../Qt/CTabWidget.h \
+		../Qt/CTabBar.h \
+		../Qt/ui_mainwindow.h \
+		../Qt/mainwindow.h \
+		moc_predefs.h \
+		/usr/lib/qt5/bin/moc
+	/usr/lib/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/ergo/rose/SE-Experiment-master/Qt/Qt -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../Qt/mainwindow.h -o moc_mainwindow.cpp
+
+moc_mainwindow2.cpp: ../Qt/mainwindow2.h \
+		moc_predefs.h \
+		/usr/lib/qt5/bin/moc
+	/usr/lib/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/ergo/rose/SE-Experiment-master/Qt/Qt -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../Qt/mainwindow2.h -o moc_mainwindow2.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
-compiler_uic_make_all: ui_mainwindow.h
+compiler_uic_make_all: ui_mainwindow.h ui_mainwindow2.h
 compiler_uic_clean:
-	-$(DEL_FILE) ui_mainwindow.h
+	-$(DEL_FILE) ui_mainwindow.h ui_mainwindow2.h
 ui_mainwindow.h: ../Qt/mainwindow.ui \
 		/usr/lib/qt5/bin/uic
 	/usr/lib/qt5/bin/uic ../Qt/mainwindow.ui -o ui_mainwindow.h
+
+ui_mainwindow2.h: ../Qt/mainwindow2.ui \
+		/usr/lib/qt5/bin/uic
+	/usr/lib/qt5/bin/uic ../Qt/mainwindow2.ui -o ui_mainwindow2.h
 
 compiler_yacc_decl_make_all:
 compiler_yacc_decl_clean:
@@ -387,18 +441,52 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 
 ####### Compile
 
-main.o: ../Qt/main.cpp ../Qt/mainwindow.h
+CTabBar.o: ../Qt/CTabBar.cpp ../Qt/CTabBar.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o CTabBar.o ../Qt/CTabBar.cpp
+
+CTabWidget.o: ../Qt/CTabWidget.cpp ../Qt/CTabWidget.h \
+		../Qt/CTabBar.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o CTabWidget.o ../Qt/CTabWidget.cpp
+
+CWidget.o: ../Qt/CWidget.cpp ../Qt/CWidget.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o CWidget.o ../Qt/CWidget.cpp
+
+main.o: ../Qt/main.cpp ../Qt/mainwindow.h \
+		../Qt/mainwindow2.h \
+		../Qt/CTabWidget.h \
+		../Qt/CTabBar.h \
+		../Qt/ui_mainwindow.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../Qt/main.cpp
 
 mainwindow.o: ../Qt/mainwindow.cpp ../Qt/mainwindow.h \
-		ui_mainwindow.h
+		../Qt/mainwindow2.h \
+		../Qt/CTabWidget.h \
+		../Qt/CTabBar.h \
+		../Qt/ui_mainwindow.h \
+		../Qt/CWidget.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../Qt/mainwindow.cpp
+
+mainwindow2.o: ../Qt/mainwindow2.cpp ../Qt/mainwindow2.h \
+		../Qt/ui_mainwindow2.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow2.o ../Qt/mainwindow2.cpp
 
 qrc_image.o: qrc_image.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_image.o qrc_image.cpp
 
+moc_CTabBar.o: moc_CTabBar.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_CTabBar.o moc_CTabBar.cpp
+
+moc_CTabWidget.o: moc_CTabWidget.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_CTabWidget.o moc_CTabWidget.cpp
+
+moc_CWidget.o: moc_CWidget.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_CWidget.o moc_CWidget.cpp
+
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp
+
+moc_mainwindow2.o: moc_mainwindow2.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow2.o moc_mainwindow2.cpp
 
 ####### Install
 

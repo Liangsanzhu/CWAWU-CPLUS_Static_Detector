@@ -138,9 +138,29 @@ example.cpp:127:11: note: Set Null or Delete here
         c = NULL;   
           ^
 --------------------------------------
+example.cpp:145:2: error: buffer overflow caused by use bcopy to copy data
+	bcopy(argv, sample, n);
+ ^
+--------------------------------------
 example.cpp:151:7: error: Unintialized Varirbale 'buffer' is declared here
 	char buffer[10];
       ^
-example.cpp:157:10: note: Used here
-	sprintf(buffer,"%d%8d",s,4567);
+example.cpp:155:10: note: Used here
+	sprintf(buffer,"%-8d%8d",123,4567);
          ^
+--------------------------------------
+example.cpp:154:6: error: buffer overflow caused by use sprintf to format data
+	num=sprintf(buffer, "%s", argv);
+     ^
+--------------------------------------
+example.cpp:155:2: error: buffer overflow caused by use sprintf to format data
+	sprintf(buffer,"%-8d%8d",123,4567);
+ ^
+--------------------------------------
+example.cpp:156:2: error: buffer overflow caused by use sprintf to format data
+	sprintf(buffer,"%-8d%8d",s,4567);
+ ^
+--------------------------------------
+example.cpp:157:2: error: buffer overflow caused by use sprintf to format data
+	sprintf(buffer,"%d%8d",s,4567);
+ ^

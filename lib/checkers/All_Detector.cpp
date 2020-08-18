@@ -71,11 +71,11 @@ void Detector::detector()
               lineno=srcMgr->getSpellingLineNumber(S->getBeginLoc());
               path_lineno[path_idx].push_back(lineno);
             }
-            //std::cout << S->getStmtClassName() << "\n";
+           // std::cout << S->getStmtClassName() << "\n";
             MLD.ML_Entry(*srcMgr, S, path_idx, &all_node);
             NPD.NPD_Entry(srcMgr, S, path_idx, &all_node, block_id);
             OutIn.OI_Entry(*srcMgr, S, path_idx);
-          //  BOF.BOF_Entry(*srcMgr, S ,path_idx, &all_node);
+            BOF.BOF_Entry(*srcMgr, S ,path_idx, &all_node);
 
             /*
               step3:调用入口函数
@@ -86,7 +86,7 @@ void Detector::detector()
         }
       }
 
-     // BOF.BOF_Detect();
+      BOF.BOF_Detect();
 
       MLD.ML_Detect();
       NPD.NPD_Detect(ifBlock);

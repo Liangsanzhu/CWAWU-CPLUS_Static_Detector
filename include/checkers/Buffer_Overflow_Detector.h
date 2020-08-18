@@ -69,7 +69,7 @@ private:
         FunctionDecl *callee = callexpr->getDirectCallee();
         string callee_name = callee->getNameAsString();
 
-        if (callee_name == "bcopy" || callee_name == "memcpy" || callee_name == "memset" || callee_name == "strcpy" || callee_name == "strncpy")
+        if (callee_name == "bcopy" || callee_name == "memcpy" || callee_name == "memset" ||  callee_name == "strncpy")
         {
             int callee_num = FuncLocation.size();
             FuncLocation.insert(pair<int, SourceLocation>(callee_num, S->getBeginLoc()));
@@ -183,7 +183,7 @@ private:
             {
                 clang::SourceManager &srcmgr = callee->getASTContext().getSourceManager();
                 //error
-                cout << "error:" << endl;
+                //cout << "error:" << endl;
                 string Func_name = callee->getNameAsString();
 
                 bof_error tmp_info;
@@ -645,7 +645,7 @@ private:
             {
                 totalLen++;
             }
-            cout << endl;
+            //cout << endl;
         }
 
         //cout << "totlaLen:  " << totalLen << endl;

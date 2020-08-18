@@ -1,0 +1,41 @@
+Date : 2020-07-01 22:42:43
+Directory : /home/ergo/QT/CWAWU-CPLUS_Static_Detector-master/Qt
+Total : 14 files,  6662 codes, 111 comments, 247 blanks, all 7020 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| C++      |         12 |      5,219 |         83 |        162 |      5,464 |
+| Makefile |          2 |      1,443 |         28 |         85 |      1,556 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++-----------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                          | files      | code       | comment    | blank      | total      |
++-----------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                             |         14 |      6,662 |        111 |        247 |      7,020 |
+| Qt                                                                                            |          8 |      3,738 |         53 |        144 |      3,935 |
+| build-Qt-Desktop-Debug                                                                        |          6 |      2,924 |         58 |        103 |      3,085 |
++-----------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++-----------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                                                      | language | code       | comment    | blank      | total      |
++-----------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| /home/ergo/QT/CWAWU-CPLUS_Static_Detector-master/Qt/Qt/Makefile                               | Makefile |      1,088 |         14 |         43 |      1,145 |
+| /home/ergo/QT/CWAWU-CPLUS_Static_Detector-master/Qt/Qt/main.cpp                               | C++      |          9 |          0 |          3 |         12 |
+| /home/ergo/QT/CWAWU-CPLUS_Static_Detector-master/Qt/Qt/mainwindow.cpp                         | C++      |         77 |          1 |         38 |        116 |
+| /home/ergo/QT/CWAWU-CPLUS_Static_Detector-master/Qt/Qt/mainwindow.h                           | C++      |         31 |          1 |         14 |         46 |
+| /home/ergo/QT/CWAWU-CPLUS_Static_Detector-master/Qt/Qt/moc_mainwindow.cpp                     | C++      |        100 |         10 |         15 |        125 |
+| /home/ergo/QT/CWAWU-CPLUS_Static_Detector-master/Qt/Qt/moc_predefs.h                          | C++      |        390 |          0 |          1 |        391 |
+| /home/ergo/QT/CWAWU-CPLUS_Static_Detector-master/Qt/Qt/qrc_image.cpp                          | C++      |      1,890 |         20 |         14 |      1,924 |
+| /home/ergo/QT/CWAWU-CPLUS_Static_Detector-master/Qt/Qt/ui_mainwindow.h                        | C++      |        153 |          7 |         16 |        176 |
+| /home/ergo/QT/CWAWU-CPLUS_Static_Detector-master/Qt/build-Qt-Desktop-Debug/Makefile           | Makefile |        355 |         14 |         42 |        411 |
+| /home/ergo/QT/CWAWU-CPLUS_Static_Detector-master/Qt/build-Qt-Desktop-Debug/moc_mainwindow.cpp | C++      |         98 |         10 |         16 |        124 |
+| /home/ergo/QT/CWAWU-CPLUS_Static_Detector-master/Qt/build-Qt-Desktop-Debug/moc_predefs.h      | C++      |        389 |          0 |          1 |        390 |
+| /home/ergo/QT/CWAWU-CPLUS_Static_Detector-master/Qt/build-Qt-Desktop-Debug/qrc_image.cpp      | C++      |      1,888 |         20 |         15 |      1,923 |
+| /home/ergo/QT/CWAWU-CPLUS_Static_Detector-master/Qt/build-Qt-Desktop-Debug/ui_llvm.h          | C++      |         39 |          7 |         13 |         59 |
+| /home/ergo/QT/CWAWU-CPLUS_Static_Detector-master/Qt/build-Qt-Desktop-Debug/ui_mainwindow.h    | C++      |        155 |          7 |         16 |        178 |
+| Total                                                                                         |          |      6,662 |        111 |        247 |      7,020 |
++-----------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+

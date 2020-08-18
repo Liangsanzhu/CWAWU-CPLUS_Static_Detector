@@ -51,9 +51,15 @@
      <rect>
       <x>130</x>
       <y>220</y>
-      <width>253</width>
-      <height>100</height>
+      <width>256</width>
+      <height>192</height>
      </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>256</width>
+      <height>192</height>
+     </size>
     </property>
     <property name="maximumSize">
      <size>
@@ -63,6 +69,9 @@
     </property>
    </widget>
    <widget class="QTabWidget" name="tabWidget">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>110</x>
@@ -71,85 +80,12 @@
       <height>311</height>
      </rect>
     </property>
-    <property name="currentIndex">
-     <number>1</number>
+    <property name="styleSheet">
+     <string notr="true"/>
     </property>
-    <widget class="QWidget" name="tab">
-     <attribute name="title">
-      <string>查看源码</string>
-     </attribute>
-     <widget class="QTextBrowser" name="tab_1_tb">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>570</width>
-        <height>280</height>
-       </rect>
-      </property>
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>256</width>
-        <height>192</height>
-       </size>
-      </property>
-     </widget>
-    </widget>
-    <widget class="QWidget" name="tab_3">
-     <attribute name="title">
-      <string>程序路径</string>
-     </attribute>
-     <widget class="QTabWidget" name="tabWidget_3">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>560</width>
-        <height>300</height>
-       </rect>
-      </property>
-      <property name="tabPosition">
-       <enum>QTabWidget::South</enum>
-      </property>
-      <widget class="QWidget" name="tab_5">
-       <attribute name="title">
-        <string>Tab 2</string>
-       </attribute>
-      </widget>
-      <widget class="QWidget" name="tab_4">
-       <attribute name="title">
-        <string>Tab 1</string>
-       </attribute>
-      </widget>
-     </widget>
-    </widget>
-    <widget class="QWidget" name="tab_2">
-     <attribute name="title">
-      <string>分析结果</string>
-     </attribute>
-     <widget class="QTabWidget" name="tabWidget_2">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>560</width>
-        <height>300</height>
-       </rect>
-      </property>
-      <property name="tabPosition">
-       <enum>QTabWidget::South</enum>
-      </property>
-      <property name="tabShape">
-       <enum>QTabWidget::Rounded</enum>
-      </property>
-     </widget>
-    </widget>
+    <property name="currentIndex">
+     <number>-1</number>
+    </property>
    </widget>
    <widget class="QLabel" name="label_2">
     <property name="geometry">
@@ -205,7 +141,7 @@
      <string>设置</string>
     </property>
     <addaction name="action_llvm"/>
-    <addaction name="action"/>
+    <addaction name="action_alter"/>
    </widget>
    <widget class="QMenu" name="menu_2">
     <property name="title">
@@ -242,7 +178,7 @@
     <string>设置llvm路径</string>
    </property>
   </action>
-  <action name="action">
+  <action name="action_alter">
    <property name="text">
     <string>设置报错文字</string>
    </property>

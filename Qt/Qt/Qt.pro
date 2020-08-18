@@ -24,14 +24,26 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += \
+        CTabBar.cpp \
+        CTabWidget.cpp \
+        CWidget.cpp \
         main.cpp \
-        mainwindow.cpp
+        mainwindow.cpp \
+        mainwindow2.cpp
 
 HEADERS += \
-        mainwindow.h
+        CTabBar.h \
+        CTabWidget.h \
+        CWidget.h \
+        mainwindow.h \
+        mainwindow2.h
 
 FORMS += \
-        mainwindow.ui
+        mainwindow.ui \
+        mainwindow2.ui
 
 RESOURCES += \
     image.qrc
+
+DISTFILES += \
+    waveline.qss
