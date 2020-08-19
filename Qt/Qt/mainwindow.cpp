@@ -8,6 +8,7 @@
 
 #include <fstream>
 #include <stdlib.h>
+#include <QtScript>
 using namespace std;
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
@@ -67,6 +68,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
      //添加2个tab页
      t1 = new QTextBrowser;
      t2 = new QTextBrowser;
+
      tabWidget->addTab(t1,"Review Source Code");           //need to load data and info here
      tabWidget->addTab(t2,"Error Report");           //same as above
      //setCentralWidget(tabWidget);
@@ -277,7 +279,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
              if(i_linenum<linenum.size()&&i+1==linenum[i_linenum])   //错误源码，标红
              {
                   stringToHtmlFilter(errorlineinfo[i_linenum]);
-                 t1->append("<span style=\"text-decoration: underline;color: red;\"><p title="+ errorlineinfo[i_linenum]+">"+example_code[i]+"</p></span>");
+
+                 t1->append("<span style=\"text-decoration: underline;color: red; \"><p title="+ errorlineinfo[i_linenum]+">"+example_code[i]+"</p></span>");
 
 
                  //t1_tb->append(example_code[i]);
@@ -293,7 +296,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
                  t1->append("<font color = 'black'>" + example_code[i]+"<font>");
              t1->show();
          }
+       // t1->get
 
+        //t1->
+          //t1->moveCursor(QTextCursor::);
         // QString test="a test!";
          //t1->setToolTip(test);
 

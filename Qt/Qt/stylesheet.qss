@@ -1,50 +1,64 @@
+/* === Shared === */
+QStackedWidget, QLabel, QPushButton, QRadioButton, QCheckBox,
+QGroupBox, QStatusBar, QToolButton, QComboBox, QDialog, QTabBar {
+font-family: “Segoe UI”;
+background-color: #888;
+color: #000;
+}
 .QWidget {
-background-color: beige;
+background-color: #C8C8C8 ;
 }
 
 QToolBar {
-background-color: beige;
+background-color: #C8C8C8 ;
 }
 
 QDialog, QFileDialog {
-background-color: beige;
+background-color: #C8C8C8 ;
 }
 
 QTabWidget::pane { /* The tab widget frame */
 border-top: 2px solid #C2C7CB;
 }
 
-QTabWidget::tab-bar {
-left: 5px; /* move to the right by 5px */
+/* === QTabBar === */
+QTabBar::tab {
+border-bottom: none;
+color: #000;
+padding: 4px;
+background-color: #888;
+border: 1px solid #B0B0B0;
 }
 
-QTabBar, QTabWidget {
-background-color: beige;
-}
-QTabBar::tab {
-background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-stop: 0 #E1E1E1, stop: 0.4 #DDDDDD,
-stop: 0.5 #D8D8D8, stop: 1.0 #D3D3D3);
-border: 1px solid darkkhaki;
-border-bottom-color: #C2C7CB; /* same as the pane color */
-border-top-left-radius: 4px;
-border-top-right-radius: 4px;
-min-width: 8ex;
-padding: 2px;
-}
-QTabBar::tab:selected, QTabBar::tab:hover {
-background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-stop: 0 #fafafa, stop: 0.4 #f4f4f4,
-stop: 0.5 #e7e7e7, stop: 1.0 #fafafa);
+QTabBar::tab:hover {
+background-color: #AAA;
 }
 
 QTabBar::tab:selected {
-border-color: #9B9B9B;
-border-bottom-color: #C2C7CB; /* same as pane color */
+background-color: #000;
+color: white;
 }
 
-QTabBar::tab:!selected {
-margin-top: 2px; /* make non-selected tabs look smaller */
+/* === QTabWidget === */
+QTabWidget::pane {
+background: #888;
+border: 1px solid #B0B0B0;
+}
+
+/* === QToolBar === */
+QToolBar {
+background: #949494;
+border: none;
+padding-left: 0px;
+padding-right: 0px;
+margin: 2px;
+}
+
+QToolBar::separator {
+width: 1px;
+margin-left: 3px;
+margin-right: 3px;
+background-color: #B0B0B0;
 }
 
 /* Nice Windows-XP-style password character. */
@@ -69,9 +83,9 @@ background-color: red;
 /* We provide a min-width and min-height for push buttons
 so that they look elegant regardless of the width of the text. */
 QPushButton {
-background-color: palegoldenrod;
+background-color:#888888;
 border-width: 2px;
-border-color: darkkhaki;
+border-color: #000033;
 border-style: solid;
 border-radius: 5;
 padding: 3px;
@@ -80,7 +94,7 @@ min-height: 2.5ex;
 }
 
 QPushButton:hover {
-background-color: khaki;
+background-color:#999;
 }
 
 /* Increase the padding, so the text is shifted when the button is
@@ -88,7 +102,9 @@ pressed. */
 QPushButton:pressed {
 padding-left: 5px;
 padding-top: 5px;
-background-color: #d0d67c;
+background-color: #333;
+border-color: #B0B0B0;
+color: #AAA;
 }
 
 QLabel, QAbstractButton {
@@ -107,15 +123,16 @@ font: normal;
 
 QStatusBar::item {
 border-width: 1;
-border-color: darkkhaki;
+border-color: #000033;
 border-style: solid;
 border-radius: 2;
 }
 
-QStackedWidget, QComboBox, QLineEdit, QSpinBox, QTextEdit, QListView, QWebView, QTreeView, QHeaderView {
-background-color: cornsilk;
-selection-color: #0a214c;
-selection-background-color: #C19A6B;
+QStackedWidget, QLabel, QPushButton, QRadioButton, QCheckBox,
+QGroupBox, QStatusBar, QToolButton, QComboBox, QDialog, QTabBar {
+font-family: “Segoe UI”;
+background-color: #888;
+color: #000;
 }
 
 QListView {
@@ -133,7 +150,7 @@ QLineEdit, QFrame {
 border-width: 1px;
 padding: 1px;
 border-style: solid;
-border-color: darkkhaki;
+border-color: #000033;
 border-radius: 5px;
 }
 
@@ -152,7 +169,7 @@ background: none;
 
 /* A QToolTip is a QLabel */
 QToolTip {
-border: 2px solid darkkhaki;
+border: 2px solid #000033;
 padding: 5px;
 border-radius: 3px;
 
@@ -166,4 +183,159 @@ background-color: wheat;
 /* Force the dialog’s buttons to follow the Windows guidelines. */
 QDialogButtonBox {
 button-layout: 0;
+}
+/* === QMenu === */
+QMenu {
+background-color: black;
+border: 1px solid gray;
+color: white;
+padding: 1px;
+}
+
+QMenu::item {
+padding: 2px 25px 2px 20px;
+border: 1px solid transparent;
+}
+
+QMenu::item:disabled {
+color: #666666;
+}
+
+QMenu::item:selected {
+border-color: gray;
+background: #222222;
+}
+
+QMenu::icon:checked {
+
+}
+
+QMenu::separator {
+height: 1px;
+background: #222222;
+margin-left: 10px;
+margin-right: 10px;
+margin-top: 1px;
+margin-bottom: 1px;
+}
+
+QMenu::indicator {
+width: 13px;
+height: 13px;
+}
+
+/* === QMenuBar === */
+QMenuBar {
+background-color: black;
+color: white;
+}
+
+QMenuBar::item {
+background: transparent;
+}
+
+QMenuBar::item:disabled {
+color: gray;
+}
+
+QMenuBar::item:selected {
+background: #222222;
+}
+
+QMenuBar::item:pressed {
+background: #444444;
+}
+
+/* =================== */
+QLineEdit, QListView, QTreeView, QTableView, QAbstractSpinBox {
+background-color: #AAA;
+color: #000;
+border: 1px solid #B0B0B0;
+}
+
+QAbstractScrollArea, QLineEdit, QTextEdit, QAbstractSpinBox, QComboBox {
+border: 1px solid #B0B0B0;
+}
+
+/* === QHeaderView === */
+QHeaderView::section {
+height: 20px;
+}
+
+QHeaderView::section {
+background: #666;
+border: 0;
+color: #000;
+padding-left: 4px;
+}
+
+/* === QListView === */
+QListView::item:hover {
+background: #AAA;
+}
+
+QListView::item:selected {
+background: #333;
+color: #AAA;
+}
+
+/* === QTableView === */
+QTableView::item:hover {
+background: #333333;
+}
+
+QTableView::item:hover {
+background: #111111;
+color: yellow;
+}
+
+/* === QTreeView === */
+QTreeView::item {
+background: #AAA;
+}
+
+QTreeView::item:hover {
+background: #CCC;
+}
+
+QTreeView::item:selected {
+background: #333;
+color: #AAA;
+}
+
+QTreeView::branch {
+
+}
+
+QTreeView::branch:has-siblings:adjoins-item {
+
+}
+
+QTreeView::branch:has-siblings:!adjoins-item {
+
+}
+
+QTreeView::branch:closed:has-children:has-siblings {
+
+}
+
+QTreeView::branch:has-children:!has-siblings:closed {
+
+}
+
+QTreeView::branch:!has-children:!has-siblings:adjoins-item {
+
+}
+
+QTreeView::branch:open:has-children:has-siblings {
+
+}
+
+QTreeView::branch:open:has-children:!has-siblings {
+
+}
+/* === QWidget === */
+QWidget:window {
+font-family: ‘Segoe UI’;
+background-color: #E8E8E8;
 }
