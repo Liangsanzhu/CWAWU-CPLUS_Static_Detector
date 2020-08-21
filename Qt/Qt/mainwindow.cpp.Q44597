@@ -269,7 +269,6 @@ void MainWindow::txtbrowser_click_t1(int a){
          int digit=scount.size();
          QString space="  ";
          //i_linenum=0;
-         QString total="";
          for(int i=0;i<count;i++)    //分别对每一行源码进行处理
          {
              QString snum=QString::number(i+1);      //将行号转为字符串并右对齐
@@ -283,58 +282,27 @@ void MainWindow::txtbrowser_click_t1(int a){
             // example_code[i]=snum+"      "+example_code[i];
              stringToHtmlFilter(example_code[i]);
              QString snum_space="      ";
-              QString snum_space1="  ";
              QString snum_temp=snum;
              stringToHtmlFilter(snum_temp);
              stringToHtmlFilter(snum_space);
-              stringToHtmlFilter(snum_space1);
               // "<span style=\"float:left;font-family:Segoe UI;background:#888888;\">"+snum_space+
              if(linenum.find(i+1)!=linenum.end())   //错误源码，标红
              {
                   stringToHtmlFilter(errorlineinfo[i+1]);
 
-                  if(i%2==0)
-                 {total+="\
-                         <div style=\"overflow:visible;float:left;display:inline;background:#F8F8F8;\"><span style=\"background:black;color:white; background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\
-                              stop:0 #333, stop:0.6 #888, stop:1 #F0F0F0)\">"+snum_space1+snum_temp+snum_space+"</span><span style=\"text-decoration: underline;color: red;\" title="+ errorlineinfo[i+1]+">"+example_code[i]+"</span></div>";
+                 t1->append("<div style=\"display:block; background:black;text-decoration: underline;color: red;\" title="+ errorlineinfo[i+1]+">\
+                         <span style=\" font-family:Segoe UI;background:black;color:white;\">"+snum_temp+"</span>"+\
+                         example_code[i]+"</div>");
 
-                   }
-                  else if(i%2==1)
-                 {total+="\
-                         <div style=\"overflow:visible;float:left;display:inline;background:#F0F0F0;\"><span style=\"color:white;\
-                              background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\
-                                                stop:0 #333, stop:0.6 #888, stop:1 #F0F0F0)\">"+snum_space1+snum_temp+snum_space+"</span><span style=\"text-decoration: underline;color: red;\" title="+ errorlineinfo[i+1]+">"+example_code[i]+"</span></div>";
 
-                   }
                  //t1_tb->append(example_code[i]);
 
              }
              else
-             {
-                 if(i%2==0)
-                {
-                 total+="<div style=\"overflow:visible;float:left;display:inline;background:#F8F8F8;\"><span style=\"background:black;color:white; background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\
-                         stop:0 #333, stop:0.6 #888, stop:1 #F0F0F0)\">"+snum_space1+snum_temp+snum_space+"</span><span>"+example_code[i]+"</span></div>";
-
-                 }
-                 else if(i%2==1)
-                {
-                 total+="<div style=\"overflow:visible;float:left;display:inline;background:#F0F0F0;\"><span style=\"background:black;color:white; background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\
-                         stop:0 #333, stop:0.6 #888, stop:1 #F0F0F0)\">"+snum_space1+snum_temp+snum_space+"</span><span>"+example_code[i]+"</span></div>";
-
-                 }
-             }
-             //if(i%2==1){
-               //  qDebug()<<"hi"<<endl;
-                 //t1->append(total);
-                 //total="";
-             //}
-
-//t1->setText();
+                 t1->append("<span>"+snum_temp+"<\span><font color = 'black'>" + example_code[i]+"<font>");
+             t1->show();
          }
-         t1->setFontFamily("Microsoft YaHei");
-         t1->setText(total);
-        t1->show();
+
         //int lineno_cur=t1->textCursor().blockNumber();
 
        // t1->moveCursor();

@@ -21,6 +21,7 @@ void Detector::detector()
   //std::cout << "Detector Funtion: "
     //        << "\n";
     int path_num=0;
+    readline();
   for (auto fd = path_tree.begin(); fd != path_tree.end(); ++fd)
   {
     //function

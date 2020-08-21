@@ -1,0 +1,10 @@
+ML_ERROR_TYPE_MISS:Miss memory realese
+ML_ERROR_TYPE_NOTMATCH:Realese doesn't match allocation
+ML_ERROR_TYPE_LOCATION:Allocated here
+NPD_ERROR_TYPE_DEREFERENCE:Find Null Pointer Dereference Fault
+NPD_ERROR_TYPE_SET_NULL:Set Null or Delete here
+VU_ERROR_TYPE_DEL_A:Unintialized Varirbale '
+VU_ERROR_TYPE_DEL_B:is declared here
+VU_ERROR_TYPE_USE:Used here
+OI_ERROR_TYPE_ARRAY_A:Array '
+OI_ERROR_TYPE_ARRAY_B:' is out of range

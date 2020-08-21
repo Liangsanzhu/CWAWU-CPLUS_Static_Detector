@@ -56,6 +56,8 @@ private slots:
 
     void on_action_alter_triggered();
 
+    void txtbrowser_click_t1(int);
+
 private:
     Ui::MainWindow *ui;
     QString mFileName;

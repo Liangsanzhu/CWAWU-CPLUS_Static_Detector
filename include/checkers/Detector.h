@@ -132,6 +132,95 @@ void Get_SourceCode(SourceManager&SMgr)
         
       }
 }
+void readline()
+{
+
+	ifstream infile;
+	infile.open("../../error_detail.txt", ios::in);
+	if (!infile.is_open())
+	{
+		cout << "读取缺陷报错配置文件失败" << endl;
+		return;
+	}
+	//第二种读取方法
+	char buf[1024];
+	while (infile.getline(buf,sizeof(buf)))
+	{
+
+	    char *p;
+	    const char *delim = ":";
+	    p = strtok(buf, delim);
+	    while(p) 
+	    {
+		char*q=p;
+		p = strtok(NULL, delim);
+		
+		if(p)
+		{
+		
+		if(strcmp(q,"ML_ERROR_TYPE_MISS")==0)
+		{
+			ML_ERROR_TYPE_MISS=p;
+			break;	
+		}
+		else if(strcmp(q,"ML_ERROR_TYPE_NOTMATCH")==0)
+		{
+			ML_ERROR_TYPE_NOTMATCH=p;
+			break;	
+		}
+		else if(strcmp(q,"ML_ERROR_TYPE_LOCATION")==0)
+		{
+			ML_ERROR_TYPE_LOCATION=p;
+			break;	
+		}
+		else if(strcmp(q,"NPD_ERROR_TYPE_DEREFERENCE")==0)
+		{
+			NPD_ERROR_TYPE_DEREFERENCE=p;	
+			break;
+		}
+		else if(strcmp(q,"NPD_ERROR_TYPE_SET_NULL")==0)
+		{
+			NPD_ERROR_TYPE_SET_NULL=p;
+			break;	
+		}
+		else if(strcmp(q,"VU_ERROR_TYPE_DEL_A")==0)
+		{
+			VU_ERROR_TYPE_DEL_A=p;	
+			break;
+		}
+		else if(strcmp(q,"VU_ERROR_TYPE_DEL_B")==0)
+		{
+			VU_ERROR_TYPE_DEL_B=p;	
+			break;
+		}
+		else if(strcmp(q,"VU_ERROR_TYPE_DEL_A")==0)
+		{
+			VU_ERROR_TYPE_DEL_A=p;	
+			break;
+		}
+		else if(strcmp(q,"VU_ERROR_TYPE_USE")==0)
+		{
+			VU_ERROR_TYPE_USE=p;
+			break;	
+		}
+		else if(strcmp(q,"OI_ERROR_TYPE_ARRAY_A")==0)
+		{
+			OI_ERROR_TYPE_ARRAY_A=p;
+			break;	
+		}
+		else if(strcmp(q,"OI_ERROR_TYPE_ARRAY_B")==0)
+		{
+			OI_ERROR_TYPE_ARRAY_B=p;
+			break;	
+		}
+		
+		}
+	    }
+
+	
+	}
+}
+
 int last=-1;
 
 void print_error(error_info*e)
