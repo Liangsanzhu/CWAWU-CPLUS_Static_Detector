@@ -9,6 +9,7 @@ int main(int argc, char *argv[])
         qApp->setStyleSheet(qss.readAll());
         qss.close();
     MainWindow w;
+    w.setWindowTitle("CWAWU C++静态检测器");
     w.showMaximized();
 
     return a.exec();
