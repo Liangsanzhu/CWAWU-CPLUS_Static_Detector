@@ -29,14 +29,16 @@ SOURCES += \
         CWidget.cpp \
         main.cpp \
         mainwindow.cpp \
-        mainwindow2.cpp
+        mainwindow2.cpp \
+    CTextBrowser.cpp
 
 HEADERS += \
         CTabBar.h \
         CTabWidget.h \
         CWidget.h \
         mainwindow.h \
-        mainwindow2.h
+        mainwindow2.h \
+    CTextBowser.h
 
 FORMS += \
         mainwindow.ui \

@@ -2,10 +2,11 @@
 #include "ui_mainwindow2.h"
 
 MainWindow2::MainWindow2(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow2)
+    QMainWindow(parent)//,
+    //ui(new Ui::MainWindow2)
 {
-    ui->setupUi(this);
+
+    //ui->setupUi(this);
 }
 
 MainWindow2::~MainWindow2()
@@ -20,7 +21,7 @@ void MainWindow2::on_cancel_button_clicked()
 
 void MainWindow2::on_ok_button_clicked()
 {
-    QVector<QLineEdit*> alter_text={ui->lineEdit_1,ui->lineEdit_2,ui->lineEdit_3,ui->lineEdit_4,ui->lineEdit_5};
+  /*  QVector<QLineEdit*> alter_text={ui->lineEdit_1,ui->lineEdit_2,ui->lineEdit_3,ui->lineEdit_4,ui->lineEdit_5};
     QVector<QLabel*> error_label={ui->label_3,ui->label_4,ui->label_5,ui->label_6,ui->label_7};
 
     //打开文件
@@ -48,12 +49,12 @@ void MainWindow2::on_ok_button_clicked()
     }
     out.flush();
     file_alter.close();
-    this->close();
+    this->close();*/
 }
 
 void MainWindow2::toShow_w2()
 {
-    this->show();
+   /* this->show();
     QVector<QLineEdit*> error_text={ui->lineEdit_1,ui->lineEdit_2,ui->lineEdit_3,ui->lineEdit_4,ui->lineEdit_5};
     for(int i=0;i<error_text.size();i++)
     {
@@ -90,4 +91,4 @@ void MainWindow2::toShow_w2()
         }
     }
     file_alter.close();
-}
+*/}

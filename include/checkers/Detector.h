@@ -222,7 +222,7 @@ void readline()
 }
 
 int last=-1;
-
+int reportline=0;
 void print_error(error_info*e)
 {
  // LIGHT
@@ -233,6 +233,7 @@ void print_error(error_info*e)
 
  // LIGHT
   eout<<e->filename<<":"<<e->lineno<<":"<<e->colno<<":";
+//reportline++;
   switch(e->type)
   {
     case TYPE_ERROR:
@@ -249,15 +250,17 @@ void print_error(error_info*e)
   }
   //LIGHT
   eout<<e->info<<endl;
+reportline++;
  // CLOSE
   //WHITE
   if(e->lineno-1<SourceCode.size()&&e->lineno-1>=0)
-  eout<<SourceCode[e->lineno-1]<<endl;
+  {eout<<SourceCode[e->lineno-1]<<endl;reportline++;}
   for(int i=0;i<e->colno-1;i++)
     eout<<" ";
   //LIGHT
   //GREEN
   eout<<GREEN<<"^"<<CLOSE<<endl;
+reportline++;
   //CLOSE
   if(e->next!=NULL)
   print_error(e->next);
@@ -282,27 +285,29 @@ while(!result_backup.empty())
   }
   result_backup.pop();
 }
-eout<<"[Path ALL]"<<endl;
+//eout<<"[Path ALL]"<<endl;
 vector<int> error_lineno;
  while(!result_all.empty())
   {
     count++;
 eout<<"--------------------------------------\n";
+reportline++;
     print_error(result_all.top());
-    error_lineno.push_back(result_all.top()->lineno);
+    error_lineno.push_back(reportline);
+reportline=0;
     result_all.pop();
 
 }
 eout.close();
 eout.open(error_result_lineno);
-if(count>1)
+/*if(count>1)
   eout<<endl<<count<<" errors generated."<<endl;
   else if(count==1)
    eout<<endl<<count<<" error generated."<<endl;
    else
    {
      eout<<endl<<"no error generated."<<endl;
-   }
+   }*/
    //result_backup=result;
   // eout<<"****\n";
   for(int i=0;i<error_lineno.size();i++)

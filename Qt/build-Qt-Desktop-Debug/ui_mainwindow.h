@@ -30,9 +30,13 @@ QT_BEGIN_NAMESPACE
 class Ui_MainWindow
 {
 public:
-    QAction *action_llvm;
+    QAction *action;
     QAction *action_alter;
     QAction *action_Checker;
+    QAction *action_help;
+    QAction *action_about;
+    QAction *action_code;
+    QAction *action_error;
     QWidget *centralWidget;
     QLabel *label;
     QPushButton *pushButton_2;
@@ -54,12 +58,20 @@ public:
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
         MainWindow->resize(480, 371);
-        action_llvm = new QAction(MainWindow);
-        action_llvm->setObjectName(QStringLiteral("action_llvm"));
+        action = new QAction(MainWindow);
+        action->setObjectName(QStringLiteral("action"));
         action_alter = new QAction(MainWindow);
         action_alter->setObjectName(QStringLiteral("action_alter"));
         action_Checker = new QAction(MainWindow);
         action_Checker->setObjectName(QStringLiteral("action_Checker"));
+        action_help = new QAction(MainWindow);
+        action_help->setObjectName(QStringLiteral("action_help"));
+        action_about = new QAction(MainWindow);
+        action_about->setObjectName(QStringLiteral("action_about"));
+        action_code = new QAction(MainWindow);
+        action_code->setObjectName(QStringLiteral("action_code"));
+        action_error = new QAction(MainWindow);
+        action_error->setObjectName(QStringLiteral("action_error"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         label = new QLabel(centralWidget);
@@ -116,9 +128,12 @@ public:
         menuBar->addAction(menu_2->menuAction());
         menuBar->addAction(menu_3->menuAction());
         menuBar->addAction(menu_4->menuAction());
-        menu->addAction(action_llvm);
         menu->addAction(action_alter);
+        menu_2->addAction(action_code);
+        menu_2->addAction(action_error);
         menu_3->addAction(action_Checker);
+        menu_4->addAction(action_help);
+        menu_4->addAction(action_about);
 
         retranslateUi(MainWindow);
 
@@ -131,9 +146,13 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", Q_NULLPTR));
-        action_llvm->setText(QApplication::translate("MainWindow", "\350\256\276\347\275\256llvm\350\267\257\345\276\204", Q_NULLPTR));
-        action_alter->setText(QApplication::translate("MainWindow", "\350\256\276\347\275\256\346\212\245\351\224\231\346\226\207\345\255\227", Q_NULLPTR));
+        action->setText(QApplication::translate("MainWindow", "\350\256\276\347\275\256llvm\350\267\257\345\276\204", Q_NULLPTR));
+        action_alter->setText(QApplication::translate("MainWindow", "\346\211\223\345\274\200\346\212\245\351\224\231\351\205\215\347\275\256\346\226\207\344\273\266", Q_NULLPTR));
         action_Checker->setText(QApplication::translate("MainWindow", "\347\274\226\350\257\221Checker", Q_NULLPTR));
+        action_help->setText(QApplication::translate("MainWindow", "\350\216\267\345\217\226\345\270\256\345\212\251", Q_NULLPTR));
+        action_about->setText(QApplication::translate("MainWindow", "\345\205\263\344\272\216", Q_NULLPTR));
+        action_code->setText(QApplication::translate("MainWindow", "\346\230\276\347\244\272\346\272\220\347\240\201", Q_NULLPTR));
+        action_error->setText(QApplication::translate("MainWindow", "\351\224\231\350\257\257\346\212\245\345\221\212", Q_NULLPTR));
         label->setText(QApplication::translate("MainWindow", "TextLabel", Q_NULLPTR));
         pushButton_2->setText(QApplication::translate("MainWindow", "\345\274\200\345\247\213\346\243\200\346\265\213", Q_NULLPTR));
         label_2->setText(QApplication::translate("MainWindow", "\350\276\223\345\207\272\346\227\245\345\277\227\357\274\232", Q_NULLPTR));

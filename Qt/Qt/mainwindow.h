@@ -20,6 +20,7 @@
 #include "CTabWidget.h"
 #include "CTabBar.h"
 #include "ui_mainwindow.h"
+#include"CTextBowser.h"
 
 #include <fstream>
 #include <stdlib.h>
@@ -37,6 +38,7 @@ public:
     QMap<int,QStringList> split_result(QString a);
     void split_code(QString a,QString b,QMap<int,QStringList>);
     ~MainWindow();
+    QMap<int,int> errorReportInfo;
 
 
 private slots:
@@ -56,7 +58,14 @@ private slots:
 
     void on_action_alter_triggered();
 
-    void txtbrowser_click_t1(int);
+     void on_action_about_triggered();
+    void txtbrowser_click_t1(QMouseEvent *event);
+     void txtbrowser_click_t2(QMouseEvent *event);
+      void on_action_code_triggered();
+      void msecSleep(int msec);
+    void build_llvm();
+
+    void run_test();
 
 private:
     Ui::MainWindow *ui;

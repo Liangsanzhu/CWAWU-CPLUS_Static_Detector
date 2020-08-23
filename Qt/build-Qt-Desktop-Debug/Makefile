@@ -55,24 +55,28 @@ SOURCES       = ../Qt/CTabBar.cpp \
 		../Qt/CWidget.cpp \
 		../Qt/main.cpp \
 		../Qt/mainwindow.cpp \
-		../Qt/mainwindow2.cpp qrc_image.cpp \
+		../Qt/mainwindow2.cpp \
+		../Qt/CTextBrowser.cpp qrc_image.cpp \
 		moc_CTabBar.cpp \
 		moc_CTabWidget.cpp \
 		moc_CWidget.cpp \
 		moc_mainwindow.cpp \
-		moc_mainwindow2.cpp
+		moc_mainwindow2.cpp \
+		moc_CTextBowser.cpp
 OBJECTS       = CTabBar.o \
 		CTabWidget.o \
 		CWidget.o \
 		main.o \
 		mainwindow.o \
 		mainwindow2.o \
+		CTextBrowser.o \
 		qrc_image.o \
 		moc_CTabBar.o \
 		moc_CTabWidget.o \
 		moc_CWidget.o \
 		moc_mainwindow.o \
-		moc_mainwindow2.o
+		moc_mainwindow2.o \
+		moc_CTextBowser.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/linux.conf \
@@ -154,12 +158,14 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		../Qt/CTabWidget.h \
 		../Qt/CWidget.h \
 		../Qt/mainwindow.h \
-		../Qt/mainwindow2.h ../Qt/CTabBar.cpp \
+		../Qt/mainwindow2.h \
+		../Qt/CTextBowser.h ../Qt/CTabBar.cpp \
 		../Qt/CTabWidget.cpp \
 		../Qt/CWidget.cpp \
 		../Qt/main.cpp \
 		../Qt/mainwindow.cpp \
-		../Qt/mainwindow2.cpp
+		../Qt/mainwindow2.cpp \
+		../Qt/CTextBrowser.cpp
 QMAKE_TARGET  = Qt
 DESTDIR       = 
 TARGET        = Qt
@@ -356,8 +362,8 @@ distdir: FORCE
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../Qt/image.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../Qt/CTabBar.h ../Qt/CTabWidget.h ../Qt/CWidget.h ../Qt/mainwindow.h ../Qt/mainwindow2.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../Qt/CTabBar.cpp ../Qt/CTabWidget.cpp ../Qt/CWidget.cpp ../Qt/main.cpp ../Qt/mainwindow.cpp ../Qt/mainwindow2.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../Qt/CTabBar.h ../Qt/CTabWidget.h ../Qt/CWidget.h ../Qt/mainwindow.h ../Qt/mainwindow2.h ../Qt/CTextBowser.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../Qt/CTabBar.cpp ../Qt/CTabWidget.cpp ../Qt/CWidget.cpp ../Qt/main.cpp ../Qt/mainwindow.cpp ../Qt/mainwindow2.cpp ../Qt/CTextBrowser.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../Qt/mainwindow.ui ../Qt/mainwindow2.ui $(DISTDIR)/
 
 
@@ -398,9 +404,9 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 	g++ -pipe -g -Wall -W -dM -E -o moc_predefs.h /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_CTabBar.cpp moc_CTabWidget.cpp moc_CWidget.cpp moc_mainwindow.cpp moc_mainwindow2.cpp
+compiler_moc_header_make_all: moc_CTabBar.cpp moc_CTabWidget.cpp moc_CWidget.cpp moc_mainwindow.cpp moc_mainwindow2.cpp moc_CTextBowser.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_CTabBar.cpp moc_CTabWidget.cpp moc_CWidget.cpp moc_mainwindow.cpp moc_mainwindow2.cpp
+	-$(DEL_FILE) moc_CTabBar.cpp moc_CTabWidget.cpp moc_CWidget.cpp moc_mainwindow.cpp moc_mainwindow2.cpp moc_CTextBowser.cpp
 moc_CTabBar.cpp: ../Qt/CTabBar.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
@@ -421,6 +427,7 @@ moc_mainwindow.cpp: ../Qt/mainwindow2.h \
 		../Qt/CTabWidget.h \
 		../Qt/CTabBar.h \
 		../Qt/ui_mainwindow.h \
+		../Qt/CTextBowser.h \
 		../Qt/mainwindow.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
@@ -430,6 +437,11 @@ moc_mainwindow2.cpp: ../Qt/mainwindow2.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
 	/usr/lib/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/ergo/rose/SE-Experiment-master/Qt/Qt -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtScript -I/usr/include/x86_64-linux-gnu/qt5/QtScriptTools -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../Qt/mainwindow2.h -o moc_mainwindow2.cpp
+
+moc_CTextBowser.cpp: ../Qt/CTextBowser.h \
+		moc_predefs.h \
+		/usr/lib/qt5/bin/moc
+	/usr/lib/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/ergo/rose/SE-Experiment-master/Qt/Qt -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtScript -I/usr/include/x86_64-linux-gnu/qt5/QtScriptTools -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../Qt/CTextBowser.h -o moc_CTextBowser.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -468,7 +480,8 @@ main.o: ../Qt/main.cpp ../Qt/mainwindow.h \
 		../Qt/mainwindow2.h \
 		../Qt/CTabWidget.h \
 		../Qt/CTabBar.h \
-		../Qt/ui_mainwindow.h
+		../Qt/ui_mainwindow.h \
+		../Qt/CTextBowser.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../Qt/main.cpp
 
 mainwindow.o: ../Qt/mainwindow.cpp ../Qt/mainwindow.h \
@@ -476,12 +489,16 @@ mainwindow.o: ../Qt/mainwindow.cpp ../Qt/mainwindow.h \
 		../Qt/CTabWidget.h \
 		../Qt/CTabBar.h \
 		../Qt/ui_mainwindow.h \
+		../Qt/CTextBowser.h \
 		../Qt/CWidget.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../Qt/mainwindow.cpp
 
 mainwindow2.o: ../Qt/mainwindow2.cpp ../Qt/mainwindow2.h \
 		../Qt/ui_mainwindow2.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow2.o ../Qt/mainwindow2.cpp
+
+CTextBrowser.o: ../Qt/CTextBrowser.cpp ../Qt/CTextBowser.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o CTextBrowser.o ../Qt/CTextBrowser.cpp
 
 qrc_image.o: qrc_image.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_image.o qrc_image.cpp
@@ -500,6 +517,9 @@ moc_mainwindow.o: moc_mainwindow.cpp
 
 moc_mainwindow2.o: moc_mainwindow2.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow2.o moc_mainwindow2.cpp
+
+moc_CTextBowser.o: moc_CTextBowser.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_CTextBowser.o moc_CTextBowser.cpp
 
 ####### Install
 
