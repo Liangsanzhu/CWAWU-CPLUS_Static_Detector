@@ -1,20 +1,19 @@
-[Path ALL]
 --------------------------------------
-example.cpp:25:9: error: Unintialized Varirbale 'name' is declared here
+example.cpp:25:9: error: Unintialized Varirbale 'nameis declared here
   node *ptr;
         ^
 example.cpp:29:35: note: Used here
   printf("%d %s %f.\n", ptr->age, ptr->name, ptr->score);
                                   ^
 --------------------------------------
-example.cpp:30:8: error: Unintialized Varirbale 'name' is declared here
+example.cpp:30:8: error: Unintialized Varirbale 'nameis declared here
   node temp;
        ^
 example.cpp:33:37: note: Used here
     printf("%d %s %f.\n", temp.age, temp.name, temp.score);
                                     ^
 --------------------------------------
-example.cpp:30:8: error: Unintialized Varirbale 'age' is declared here
+example.cpp:30:8: error: Unintialized Varirbale 'ageis declared here
   node temp;
        ^
 example.cpp:33:27: note: Used here
@@ -57,7 +56,7 @@ example.cpp:56:11: note: Allocated here
     int*u=new int[n];
           ^
 --------------------------------------
-example.cpp:62:9: error: Unintialized Varirbale 'qq' is declared here
+example.cpp:62:9: error: Unintialized Varirbale 'qqis declared here
     int qq;
         ^
 example.cpp:63:8: note: Used here
@@ -142,7 +141,7 @@ example.cpp:145:2: error: buffer overflow caused by use bcopy to copy data
 	bcopy(argv, sample, n);
  ^
 --------------------------------------
-example.cpp:151:7: error: Unintialized Varirbale 'buffer' is declared here
+example.cpp:151:7: error: Unintialized Varirbale 'bufferis declared here
 	char buffer[10];
       ^
 example.cpp:155:10: note: Used here

@@ -1,0 +1,4 @@
+#ifndef CTEXTBOWSER_H
+#define CTEXTBOWSER_H
+
+#endif // CTEXTBOWSER_H
