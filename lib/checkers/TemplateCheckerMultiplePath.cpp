@@ -1,7 +1,9 @@
-#include "checkers/TemplateChecker.h"
-//#include "checkers/All_Detector.h"
 #include "stack"
 #include "algorithm"
+#include "checkers/TemplateCheckerMultiplePath.h"
+
+#include <iostream>
+using namespace std;
 /*
 struct Info {
   std::string varname;
@@ -714,7 +716,7 @@ void TraverseStmt(Stmt * anystmt, int count, SourceManager *scm) {
   }
 }
 
-void TemplateChecker::check() {
+void TemplateCheckerMultiplePath::check() {
   // for example
   auto astr_iter = getASTRsBegin();
 
@@ -1046,3 +1048,5 @@ void TemplateChecker::check() {
   }
   */
 }
+
+

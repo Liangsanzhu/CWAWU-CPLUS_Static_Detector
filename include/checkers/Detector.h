@@ -1,35 +1,26 @@
 #ifndef D_T_H
 #define D_T_H
 #include<iostream>
-#include <fstream>
 using namespace std;
-
+#include <fstream>
 #include <vector>
 #include<map>
 #include<queue>
 #include<stack>
-//#include"Def_Use.h"
+#include"Def_Use.h"
 #include <iomanip>
 #include "string.h"
 #include "framework/ASTManager.h"
 
-/*#define CLOSE printf("\033[0m"); //关闭彩色字体
-#define LIGHT printf("\033[1m");
+#define CLOSE printf("\033[0m"); //关闭彩色字体
+#define LIGHT printf("\033[1m");//高亮
 #define RED printf("\033[31m"); //红色字体
 #define WHITE printf("\033[37m"); //bai色字体
 #define GREEN printf("\033[32m");//绿色字体
 #define BLACK printf("\033[30m");//hei色字体
 #define YELLOW printf("\033[33m");//黄色字体
-#define BLUE printf("\033[34m");//蓝色字体*/
-string error_result="error_result.txt";
-string error_result_lineno="error_lineno.txt";
-string source_code="source_code.txt";
-string YELLOW="";
-string GREEN="";
-string RED="";
-string GRAY="";
-string CLOSE="";
-
+#define BLUE printf("\033[34m");//蓝色字体
+#define EDGE "\033[36m"
 
 #define FLAG_EMPTY -1
 #define FLAG_BINARY 1
@@ -45,8 +36,14 @@ string VU_ERROR_TYPE_DEL_B="' is declared here";
 string VU_ERROR_TYPE_USE="Used here";
 string OI_ERROR_TYPE_ARRAY_A="Array '";
 string OI_ERROR_TYPE_ARRAY_B="' is out of range";
-string FILENAME="";
-vector<string> SourceCode;
+
+int ml=0;
+int vud=1;
+int bof=2;
+int oi=3;
+int npd=4;
+
+map<string,vector<string>> SourceCode;
 
 void split(std::string& s,std::string& delim,std::vector<std::string>* ret)
 {
@@ -71,17 +68,21 @@ struct error_info
   string filename;
   int type;
   error_info*next;
-  int index;
+  string filter;
+  int kind;
+ 
  bool operator<(const error_info& a) const
     {
-       
-        if(lineno<a.lineno)
+	if(kind<a.kind)
+	return true;
+      if(kind==a.kind&&filename<a.filename)
+      return true;
+        if(kind==a.kind&&filename==a.filename&&lineno<a.lineno)
         return true;
-        if(lineno==a.lineno&&colno<a.colno)
+        if(kind==a.kind&&filename==a.filename&&lineno==a.lineno&&colno<a.colno)
         return true;
         return false;
     }
-   
 };
 struct cmp //重写仿函数
 {
@@ -92,45 +93,44 @@ struct cmp //重写仿函数
 };
 
 priority_queue<error_info*,vector<error_info*>,cmp >result;//
-map<pair<pair<int,int>,string>,int>result_combine;
-priority_queue<error_info*,vector<error_info*>,cmp > result_all;
-priority_queue<error_info*,vector<error_info*>,cmp >result_backup;
 //string FILED;uanma 
-error_info* new_error_info(error_info*g,string filename,int line,int col,int type,string info,int index)
+error_info* new_error_info(error_info*g,string filename,int line,int col,int type,string info,int kind)
 {
   error_info*e=new error_info;
   vector<string>t;
-  string a=filename;
-  string s2="/";
-  split(a,s2,&t);
-  e->filename=t[t.size()-1];//文件名
+ // string a=filename;
+  //string s2="/";
+  //split(a,s2,&t);
+  e->filename=filename;//t[t.size()-1];//文件名
   e->lineno=line;//行
   e->colno=col;//列
   e->type=type;//Error/Note/Warning这种类型
   e->info=info;//Error/Note/Warning:后面跟着的一些文字
   e->next=g;//需要关联报错的下一个指针，需要先创建好
-  e->index=index;
+  e->filter="";
+  e->kind=kind;
   return e;
  
 }
 
- ofstream eout;
- ofstream sout;
-
-void Get_SourceCode(SourceManager&SMgr)
+error_info* new_error_info(error_info*g,string filename,int line,int col,int type,string info,string filter,int kind)
 {
-     if(SourceCode.empty())
-      {
-        FILENAME=SMgr.getFilename(SMgr.getLocForStartOfFile(SMgr.getMainFileID()));
-       
-        const char*sourcecode=SMgr.getBuffer(SMgr.getMainFileID())->getBufferStart();
-        int size=SMgr.getBuffer(SMgr.getMainFileID())->getBufferSize();
-        string p=sourcecode;
-        string s2="\n";
-        split(p,s2,&SourceCode);
-       
-        
-      }
+  error_info*e=new error_info;
+  vector<string>t;
+ // string a=filename;
+  //string s2="/";
+  //split(a,s2,&t);
+  e->filename=filename;//t[t.size()-1];//文件名
+  e->lineno=line;//行
+  e->colno=col;//列
+  e->type=type;//Error/Note/Warning这种类型
+  e->info=info;//Error/Note/Warning:后面跟着的一些文字
+  e->next=g;//需要关联报错的下一个指针，需要先创建好
+  e->filter=filter;
+
+  e->kind=kind;
+  return e;
+ 
 }
 void readline()
 {
@@ -221,102 +221,187 @@ void readline()
 	}
 }
 
-int last=-1;
-int reportline=0;
-void print_error(error_info*e)
+
+void Get_SourceCode(clang::FunctionDecl*fd)
+{
+
+ clang::SourceManager&srcMgr(fd->getASTContext().getSourceManager());
+string FILENAME=srcMgr.getFilename(srcMgr.getLocForStartOfFile(srcMgr.getMainFileID()));
+       if(SourceCode.find(FILENAME)==SourceCode.end())
+      {
+        const char*sourcecode=srcMgr.getBuffer(srcMgr.getMainFileID())->getBufferStart();
+        int size=srcMgr.getBuffer(srcMgr.getMainFileID())->getBufferSize();
+        string p=sourcecode;
+        string s2="\n";
+        vector<string> SourceCodeItem;
+        split(p,s2,&SourceCodeItem);
+        SourceCode.insert(pair<string,vector<string>>(FILENAME,SourceCodeItem));
+      }
+}
+int counttemp=0;
+int lasttype=-1;
+
+bool print_error(error_info*e, std::ofstream &ofile)
 {
  // LIGHT
   //WHITE
-  if(e==NULL)
-  return;
  
-
- // LIGHT
-  eout<<e->filename<<":"<<e->lineno<<":"<<e->colno<<":";
-//reportline++;
+  if(e==NULL)
+  return false;
+if(e->filter!=""&&SourceCode.find(e->filename)!=SourceCode.end()&&e->lineno>=1)
+ { 
+	if(SourceCode.find(e->filename)->second[e->lineno-1].find(e->filter)==string::npos)
+		return false;
+ }
+if(e->type==TYPE_ERROR)
+{
+LIGHT
+BLUE
+cout<<counttemp+1<<":";
+ofile<<counttemp+1<<":";
+CLOSE
+}
+  LIGHT
+  cout<<e->filename<<":"<<e->lineno<<":"<<e->colno<<":";
+  ofile<<e->filename<<":"<<e->lineno<<":"<<e->colno<<":";
   switch(e->type)
   {
     case TYPE_ERROR:
-   // RED
-    eout<<RED<<" error: "<<CLOSE;
-   // CLOSE
-    //LIGHT
+    RED
+    cout<<" error: ";
+    ofile<<" error: ";
+    CLOSE
+    LIGHT
     break;
     case TYPE_NOTE:
-    //BLACK
-    eout<<GRAY<<" note: "<<CLOSE;
-    //CLOSE
+    BLACK
+    cout<<" note: ";
+    ofile<<" note: ";
+    CLOSE
     break;
   }
   //LIGHT
-  eout<<e->info<<endl;
-reportline++;
- // CLOSE
-  //WHITE
-  if(e->lineno-1<SourceCode.size()&&e->lineno-1>=0)
-  {eout<<SourceCode[e->lineno-1]<<endl;reportline++;}
-  for(int i=0;i<e->colno-1;i++)
-    eout<<" ";
-  //LIGHT
-  //GREEN
-  eout<<GREEN<<"^"<<CLOSE<<endl;
-reportline++;
-  //CLOSE
+  cout<<e->info<<endl;
+  ofile<<e->info<<endl;
+  CLOSE
+  WHITE
+ 
+   
+ if(SourceCode.find(e->filename)!=SourceCode.end()&&e->lineno>=1)
+ { 
+	cout<<SourceCode.find(e->filename)->second[e->lineno-1]<<endl;
+    ofile<<SourceCode.find(e->filename)->second[e->lineno-1]<<endl;
+ }
+  for(int i=0;i<e->colno-1;i++){
+    cout<<" ";
+    ofile<<" ";
+  }
+  LIGHT
+  GREEN
+  cout<<"^"<<endl;
+  ofile<<"^"<<endl;
+  CLOSE
   if(e->next!=NULL)
-  print_error(e->next);
-
+  print_error(e->next,ofile);
+return true;
 }
+
 
 void print_result()
 {
     //for(auto it:SourceCode)
-   // eout<<"Detecting……"<<endl;
-     eout.open(error_result);
+    //cout<<it<<endl;
+    ofstream ofile;
+    time_t t = time(0);
+    char ch[64];
+    strftime(ch, sizeof(ch), "%Y-%m-%d_%H-%M-%S", localtime(&t)); //年-月-日 时-分-秒
+    string timestamp = ch;
+    string filename = "Error Report/"+timestamp+".txt";
+    ofile.open(filename, ios::app);
+    if(!ofile)
+    {
+        cerr<<"Failed to save errors."<<endl;
+        return ;
+    }
     int count=0;
-result_backup=result;
-while(!result_backup.empty())
+ while(!result.empty())
+  {
+    int type_temp=result.top()->kind;
+if(type_temp!=lasttype)
 {
-  pair<int,int> pa=pair<int,int>(result_backup.top()->lineno,result_backup.top()->colno);
-  pair<pair<int,int>,string> pb= pair<pair<int,int>,string>(pa,result_backup.top()->info);
-  if(result_combine.find(pb)==result_combine.end())
-  {
-    result_combine.insert(pair<pair<pair<int,int>,string>,int>(pb,0));
-     result_all.push(result_backup.top());
-  }
-  result_backup.pop();
+    if(counttemp>1){
+        cout<<counttemp<<" errors generated."<<endl<<endl<<endl;
+        ofile<<counttemp<<" errors generated."<<endl<<endl<<endl;
+    }
+    else if(counttemp==1){
+        cout<<counttemp<<" error generated."<<endl<<endl<<endl;
+        ofile<<counttemp<<" error generated."<<endl<<endl<<endl;
+    }
+  counttemp=0;
+	LIGHT
+	YELLOW
+	switch(type_temp){
+		case 0:cout<<"[Memory Leak]"<<endl; ofile<<"[Memory Leak]"<<endl;break;
+		case 3:cout<<"[Array Out Of Index]"<<endl; ofile<<"[Array Out Of Index]"<<endl;break;
+		case 1:cout<<"[Variable Undefined]"<<endl; ofile<<"[Variable Undefined]"<<endl;break;
+		case 4:cout<<"[Null Pointer Dereference]"<<endl; ofile<<"[Null Pointer Dereference]"<<endl;break;
+		case 2:cout<<"[Buffer Overflow]"<<endl; ofile<<"[Buffer Overflow]"<<endl;break;
+	}
+	CLOSE
+cout<<"---------------------------------------------\n";
+ofile<<"---------------------------------------------\n";
+	 
 }
-//eout<<"[Path ALL]"<<endl;
-vector<int> error_lineno;
- while(!result_all.empty())
-  {
-    count++;
-eout<<"--------------------------------------\n";
-reportline++;
-    print_error(result_all.top());
-    error_lineno.push_back(reportline);
-reportline=0;
-    result_all.pop();
+lasttype=type_temp;
+
+
+    if(print_error(result.top(),ofile))
+	{
+		count++;
+		counttemp++;
+cout<<"---------------------------------------------\n";
+ofile<<"---------------------------------------------\n";
+	}
+    result.pop();
+  }
+if(counttemp>1){
+  cout<<counttemp<<" errors generated."<<endl<<endl<<endl;
+  ofile<<counttemp<<" errors generated."<<endl<<endl<<endl;
+}
+  else if(counttemp==1){
+   cout<<counttemp<<" error generated."<<endl<<endl<<endl;
+   ofile<<counttemp<<" error generated."<<endl<<endl<<endl;
+  }
+  counttemp=0;
+LIGHT
+YELLOW
+cout<<"[TOTAL ERROR]"<<endl;
+ofile<<"[TOTAL ERROR]"<<endl;
+CLOSE
+  if(count>1){
+  cout<<count<<" errors generated."<<endl;
+  ofile<<count<<" errors generated."<<endl;
+  }
+  else if(count==1){
+   cout<<count<<" error generated."<<endl;
+   ofile<<count<<" error generated."<<endl;
+  }
+  else{
+    cout<<"no error generated."<<endl;
+    ofile<<"no error generated."<<endl;
+  }
+  ofile.close();
+cout<<"Error report has been saved as "+timestamp+".txt"<<endl;
+cout<<endl<<endl<<" ██████"<<EDGE<<"╗"<<"\033[0m"<<"██"<<EDGE<<"╗"<<"\033[0m"<<"    ██"<<EDGE<<"╗"<<"\033[0m"<<" █████"<<EDGE<<"╗"<<"\033[0m"<<" ██"<<EDGE<<"╗"<<"\033[0m"<<"    ██"<<EDGE<<"╗"<<"\033[0m"<<"██"<<EDGE<<"╗"<<"\033[0m"<<"   ██"<<EDGE<<"╗"<<"\033[0m"<<"\n\
+██"<<EDGE<<"╔"<<"\033[0m"<<""<<EDGE<<"═"<<"\033[0m"<<""<<EDGE<<"═"<<"\033[0m"<<""<<EDGE<<"═"<<"\033[0m"<<""<<EDGE<<"═"<<"\033[0m"<<""<<EDGE<<"╝"<<"\033[0m"<<"██"<<EDGE<<"║"<<"\033[0m"<<"    ██"<<EDGE<<"║"<<"\033[0m"<<"██"<<EDGE<<"╔"<<"\033[0m"<<""<<EDGE<<"═"<<"\033[0m"<<""<<EDGE<<"═"<<"\033[0m"<<"██"<<EDGE<<"╗"<<"\033[0m"<<"██"<<EDGE<<"║"<<"\033[0m"<<"    ██"<<EDGE<<"║"<<"\033[0m"<<"██"<<EDGE<<"║"<<"\033[0m"<<"   ██"<<EDGE<<"║"<<"\033[0m"<<"\n\
+██"<<EDGE<<"║"<<"\033[0m"<<"     ██"<<EDGE<<"║"<<"\033[0m"<<" █"<<EDGE<<"╗"<<"\033[0m"<<" ██"<<EDGE<<"║"<<"\033[0m"<<"███████"<<EDGE<<"║"<<"\033[0m"<<"██"<<EDGE<<"║"<<"\033[0m"<<" █"<<EDGE<<"╗"<<"\033[0m"<<" ██"<<EDGE<<"║"<<"\033[0m"<<"██"<<EDGE<<"║"<<"\033[0m"<<"   ██"<<EDGE<<"║"<<"\033[0m"<<"\n\
+██"<<EDGE<<"║"<<"\033[0m"<<"     ██"<<EDGE<<"║"<<"\033[0m"<<"███"<<EDGE<<"╗"<<"\033[0m"<<"██"<<EDGE<<"║"<<"\033[0m"<<"██"<<EDGE<<"╔"<<"\033[0m"<<""<<EDGE<<"═"<<"\033[0m"<<""<<EDGE<<"═"<<"\033[0m"<<"██"<<EDGE<<"║"<<"\033[0m"<<"██"<<EDGE<<"║"<<"\033[0m"<<"███"<<EDGE<<"╗"<<"\033[0m"<<"██"<<EDGE<<"║"<<"\033[0m"<<"██"<<EDGE<<"║"<<"\033[0m"<<"   ██"<<EDGE<<"║"<<"\033[0m"<<"\n\
+"<<EDGE<<"╚"<<"\033[0m"<<"██████"<<EDGE<<"╗"<<"\033[0m"<<""<<EDGE<<"╚"<<"\033[0m"<<"███"<<EDGE<<"╔"<<"\033[0m"<<"███"<<EDGE<<"╔"<<"\033[0m"<<""<<EDGE<<"╝"<<"\033[0m"<<"██"<<EDGE<<"║"<<"\033[0m"<<"  ██"<<EDGE<<"║"<<"\033[0m"<<""<<EDGE<<"╚"<<"\033[0m"<<"███"<<EDGE<<"╔"<<"\033[0m"<<"███"<<EDGE<<"╔"<<"\033[0m"<<""<<EDGE<<"╝"<<"\033[0m"<<""<<EDGE<<"╚"<<"\033[0m"<<"██████"<<EDGE<<"╔"<<"\033[0m"<<""<<EDGE<<"╝"<<"\033[0m"<<"\n\
+ "<<EDGE<<"╚"<<"\033[0m"<<""<<EDGE<<"═"<<"\033[0m"<<""<<EDGE<<"═"<<"\033[0m"<<""<<EDGE<<"═"<<"\033[0m"<<""<<EDGE<<"═"<<"\033[0m"<<""<<EDGE<<"═"<<"\033[0m"<<""<<EDGE<<"╝"<<"\033[0m"<<" "<<EDGE<<"╚"<<"\033[0m"<<""<<EDGE<<"═"<<"\033[0m"<<""<<EDGE<<"═"<<"\033[0m"<<""<<EDGE<<"╝"<<"\033[0m"<<""<<EDGE<<"╚"<<"\033[0m"<<""<<EDGE<<"═"<<"\033[0m"<<""<<EDGE<<"═"<<"\033[0m"<<""<<EDGE<<"╝"<<"\033[0m"<<" "<<EDGE<<"╚"<<"\033[0m"<<""<<EDGE<<"═"<<"\033[0m"<<""<<EDGE<<"╝"<<"\033[0m"<<"  "<<EDGE<<"╚"<<"\033[0m"<<""<<EDGE<<"═"<<"\033[0m"<<""<<EDGE<<"╝"<<"\033[0m"<<" "<<EDGE<<"╚"<<"\033[0m"<<""<<EDGE<<"═"<<"\033[0m"<<""<<EDGE<<"═"<<"\033[0m"<<""<<EDGE<<"╝"<<"\033[0m"<<""<<EDGE<<"╚"<<"\033[0m"<<""<<EDGE<<"═"<<"\033[0m"<<""<<EDGE<<"═"<<"\033[0m"<<""<<EDGE<<"╝"<<"\033[0m"<<"  "<<EDGE<<"╚"<<"\033[0m"<<""<<EDGE<<"═"<<"\033[0m"<<""<<EDGE<<"═"<<"\033[0m"<<""<<EDGE<<"═"<<"\033[0m"<<""<<EDGE<<"═"<<"\033[0m"<<""<<EDGE<<"═"<<"\033[0m"<<""<<EDGE<<"╝"<<"\033[0m"<<""<<endl;
 
 }
-eout.close();
-eout.open(error_result_lineno);
-/*if(count>1)
-  eout<<endl<<count<<" errors generated."<<endl;
-  else if(count==1)
-   eout<<endl<<count<<" error generated."<<endl;
-   else
-   {
-     eout<<endl<<"no error generated."<<endl;
-   }*/
-   //result_backup=result;
-  // eout<<"****\n";
-  for(int i=0;i<error_lineno.size();i++)
-  {
-    eout<<error_lineno[i]<<endl;
-  }
-  eout.close();
-  
-}
+
+
 
 
 #endif

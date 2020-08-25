@@ -4,7 +4,7 @@
 #include <map>
 #include <vector>
 #include "framework/ASTManager.h"
-#include "checkers/def_use.h"
+#include "checkers/def_use_pro.h"
 
 
 class Detector {

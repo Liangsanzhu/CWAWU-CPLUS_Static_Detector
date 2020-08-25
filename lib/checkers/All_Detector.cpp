@@ -1,10 +1,9 @@
 #include "checkers/All_Detector.h"
-#include "checkers/Memory_Leak_Detector.h"
-#include "checkers/Detector.h"
-#include "checkers/Out_Index.h"
-#include "checkers/Variable_Uninitialized_Detector.h"
-#include "checkers/Null_Pointer_Deref_Detector.h"
-#include "checkers/Buffer_Overflow_Detector.h"
+#include "checkers/Memory_Leak_Detector_pro.h"
+#include "checkers/Out_Index_pro.h"
+#include "checkers/Variable_Uninitialized_Detector_pro.h"
+#include "checkers/Null_Pointer_Deref_Detector_pro.h"
+#include "checkers/Buffer_Overflow_Detector_pro.h"
 /*step0:建立自己的.h，在自己的.h里面加入Detector.h的报错*/
 /*step1:添加自己的.h*/
 SourceManager *srcMgr = NULL;
@@ -21,13 +20,13 @@ void Detector::detector()
   //std::cout << "Detector Funtion: "
     //        << "\n";
     int path_num=0;
-    readline();
+    readline_pro();
   for (auto fd = path_tree.begin(); fd != path_tree.end(); ++fd)
   {
     //function
     if (srcMgr == NULL)
       srcMgr = &(fd->first->getASTContext().getSourceManager());
-    Var_Un_Detector VUD;
+    Var_Un_Detector_pro VUD;
     //you can get SourceManager from FunctionDecl(fd) here.
   //  std::cout << "FunctionName: " << (*fd).first->getQualifiedNameAsString() << "\n";
     for (auto idx = (*fd).second.begin(); idx != (*fd).second.end(); ++idx)
@@ -35,11 +34,11 @@ void Detector::detector()
       //path index
       /*step2:在每一个分支下，创建自己的对象*/
       
-      Memory_Leak_Detector MLD;
-      Null_Pointer_Detector NPD;
-      Out_Index OutIn;
+      Memory_Leak_Detector_pro MLD;
+      Null_Pointer_Detector_pro NPD;
+      Out_Index_pro OutIn;
 
-      Buffer_Overflow BOF;
+      Buffer_Overflow_pro BOF;
 
       int path_idx = (*idx).first;
       if(path_idx>path_num)
@@ -97,6 +96,6 @@ void Detector::detector()
     VUD.detector(all_node, srcMgr, (*fd).first->getQualifiedNameAsString(), global_def);
   }
  
-  Get_SourceCode(*srcMgr); //获取源码
-  print_result();          //打印结果
+  Get_SourceCode_pro(*srcMgr); //获取源码
+  print_result_pro();          //打印结果
 }

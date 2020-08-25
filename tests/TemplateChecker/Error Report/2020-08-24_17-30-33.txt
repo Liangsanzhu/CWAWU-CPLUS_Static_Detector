@@ -1,0 +1,365 @@
+[Memory Leak]
+---------------------------------------------
+1:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Modules/_ctypes/_ctypes_test.c:260:25: error: Miss memory realese
+    char *dst = (char *)malloc(strlen(src)+1);
+                        ^
+---------------------------------------------
+2:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Modules/_ctypes/_ctypes_test.c:276:31: error: Miss memory realese
+    wchar_t *ptr = (wchar_t *)malloc((len + 1) * sizeof(wchar_t));
+                              ^
+---------------------------------------------
+3:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Modules/_heapqmodule.c:23:28: error: Miss memory realese
+    char *seexp_p = (char*)malloc(8);
+                           ^
+---------------------------------------------
+4:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Modules/_lsprof.c:825:25: error: Miss memory realese
+        seexp_p = (int*)malloc(10*sizeof(int)); // seexp, warning
+                        ^
+---------------------------------------------
+5:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Modules/_opcode.c:31:34: error: Miss memory realese
+    PyObject *seexp = (PyObject*)malloc(sizeof(PyObject));
+                                 ^
+---------------------------------------------
+6:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Modules/_randommodule.c:170:35: error: Miss memory realese
+    uint32_t *seexp = (uint32_t *)malloc(sizeof(uint32_t));
+                                  ^
+---------------------------------------------
+7:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Modules/_sre.c:469:38: error: Miss memory realese
+    SRE_STATE *seexp_p = (SRE_STATE*)malloc(sizeof(SRE_STATE)); // seexp, warning
+                                     ^
+---------------------------------------------
+8:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Modules/_struct.c:232:27: error: Miss memory realese
+    char *seexp = (char *)malloc(sizeof(Py_ssize_t));
+                          ^
+---------------------------------------------
+9:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Modules/expat/xmlparse.c:894:26: error: Miss memory realese
+    parser = (XML_Parser)malloc(sizeof(struct XML_ParserStruct));
+                         ^
+---------------------------------------------
+10:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Objects/obmalloc.c:99:12: error: Miss memory realese
+    return malloc(size);
+           ^
+---------------------------------------------
+11:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Objects/obmalloc.c:1428:27: error: Miss memory realese
+    int *seexp_p = (int *)malloc(10 * sizeof(int));
+                          ^
+---------------------------------------------
+12:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Objects/obmalloc.c:2541:26: error: Miss memory realese
+    int *seexp_p = (int*)malloc(10*sizeof(int)); // p->1
+                         ^
+---------------------------------------------
+13:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Objects/obmalloc.c:2543:21: error: Miss memory realese
+    seexp_p = (int*)malloc(10*sizeof(int)); // p->2, q->1
+                    ^
+---------------------------------------------
+14:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Parser/parsetok.c:30:18: error: Miss memory realese
+    arr->items = malloc(initial_size * sizeof(*arr->items));
+                 ^
+---------------------------------------------
+15:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Parser/parsetok.c:36:20: error: Miss memory realese
+    int *p = (int*)malloc(10 * sizeof(int));
+                   ^
+---------------------------------------------
+16:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Parser/parsetok.c:99:26: error: Miss memory realese
+    int *seexp_p = (int*)malloc(10 * sizeof(int));
+                         ^
+---------------------------------------------
+16 errors generated.
+
+
+[Variable Undefined]
+---------------------------------------------
+1:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Modules/_lzmamodule.c:637:21: error: Unintialized Varirbale 'idis declared here
+        lzma_filter filters[LZMA_FILTERS_MAX + 1];
+                    ^
+/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Modules/_lzmamodule.c:642:13: note: Used here
+            filters[1].id == LZMA_VLI_UNKNOWN) {
+            ^
+---------------------------------------------
+2:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Modules/_lzmamodule.c:637:21: error: Unintialized Varirbale 'idis declared here
+        lzma_filter filters[LZMA_FILTERS_MAX + 1];
+                    ^
+/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Modules/_lzmamodule.c:641:13: note: Used here
+        if (filters[0].id == LZMA_FILTER_LZMA1 &&
+            ^
+---------------------------------------------
+3:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Modules/_posixsubprocess.c:292:36: error: Unintialized Varirbale 'd_reclenis declared here
+            struct linux_dirent64 *entry;
+                                   ^
+/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Modules/_posixsubprocess.c:297:56: note: Used here
+            for (offset = 0; offset < bytes; offset += entry->d_reclen) {
+                                                       ^
+---------------------------------------------
+4:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Modules/_queuemodule.c:63:23: error: Unintialized Varirbale 'lockedis declared here
+    simplequeueobject _seexp;
+                      ^
+/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Modules/_queuemodule.c:64:24: note: Used here
+    int seexp_unlock = _seexp.locked; // seexp, warning
+                       ^
+---------------------------------------------
+5:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Modules/cjkcodecs/multibytecodec.c:637:27: error: Unintialized Varirbale 'inbufis declared here
+    MultibyteDecodeBuffer buf;
+                          ^
+/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Modules/cjkcodecs/multibytecodec.c:665:12: note: Used here
+    while (buf.inbuf < buf.inbuf_end) {
+           ^
+---------------------------------------------
+6:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Modules/cjkcodecs/multibytecodec.c:637:27: error: Unintialized Varirbale 'inbufis declared here
+    MultibyteDecodeBuffer buf;
+                          ^
+/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Modules/cjkcodecs/multibytecodec.c:668:47: note: Used here
+        inleft = (Py_ssize_t)(buf.inbuf_end - buf.inbuf);
+                                              ^
+---------------------------------------------
+7:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Modules/sha1module.c:349:23: error: Unintialized Varirbale 'curlenis declared here
+    struct sha1_state temp;
+                      ^
+/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Modules/sha1module.c:352:21: note: Used here
+    temp.state[0] = temp.curlen; // seexp, warning
+                    ^
+---------------------------------------------
+8:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Modules/socketmodule.c:1990:22: error: Unintialized Varirbale 'ifr_ifrnis declared here
+        struct ifreq ifr;
+                     ^
+/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Modules/socketmodule.c:2021:30: note: Used here
+        ifr.ifr_name[(sizeof(ifr.ifr_name))-1] = '\0';
+                             ^
+---------------------------------------------
+9:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Modules/socketmodule.c:2124:26: error: Unintialized Varirbale 'ifr_ifrnis declared here
+            struct ifreq ifr;
+                         ^
+/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Modules/socketmodule.c:2146:45: note: Used here
+            } else if ((size_t)len < sizeof(ifr.ifr_name)) {
+                                            ^
+---------------------------------------------
+10:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Modules/socketmodule.c:2124:26: error: Unintialized Varirbale 'ifr_ifrnis declared here
+            struct ifreq ifr;
+                         ^
+/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Modules/socketmodule.c:2148:38: note: Used here
+                ifr.ifr_name[(sizeof(ifr.ifr_name))-1] = '\0';
+                                     ^
+---------------------------------------------
+11:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Modules/socketmodule.c:2175:26: error: Unintialized Varirbale 'ifr_ifrnis declared here
+            struct ifreq ifr;
+                         ^
+/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Modules/socketmodule.c:2191:45: note: Used here
+            } else if ((size_t)len < sizeof(ifr.ifr_name)) {
+                                            ^
+---------------------------------------------
+12:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Modules/socketmodule.c:2175:26: error: Unintialized Varirbale 'ifr_ifrnis declared here
+            struct ifreq ifr;
+                         ^
+/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Modules/socketmodule.c:2193:38: note: Used here
+                ifr.ifr_name[(sizeof(ifr.ifr_name))-1] = '\0';
+                                     ^
+---------------------------------------------
+13:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Objects/abstract.c:1357:15: error: Unintialized Varirbale 'readonlyis declared here
+    Py_buffer view;
+              ^
+/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Objects/abstract.c:1361:17: note: Used here
+    int seexp = view.readonly; // seexp, warning
+                ^
+---------------------------------------------
+14:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Objects/listobject.c:2215:16: error: Unintialized Varirbale 'temparrayis declared here
+    MergeState ms;
+               ^
+/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Objects/listobject.c:2251:21: note: Used here
+            keys = &ms.temparray[saved_ob_size+1];
+                    ^
+---------------------------------------------
+15:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Parser/node.c:15:10: error: Unintialized Varirbale 'n_col_offsetis declared here
+    node _seexp;
+         ^
+/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Parser/node.c:18:23: note: Used here
+    n->n_col_offset = _seexp.n_col_offset; // seexp, warning
+                      ^
+---------------------------------------------
+16:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Python/dtoa.c:1233:7: error: Unintialized Varirbale 'dis declared here
+    U u;
+      ^
+/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Python/dtoa.c:1239:16: note: Used here
+        return u.d;
+               ^
+---------------------------------------------
+17:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Python/dynload_shlib.c:54:3: error: Unintialized Varirbale 'inois declared here
+} handles[128];
+  ^
+/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Python/dynload_shlib.c:85:34: note: Used here
+                status.st_ino == handles[i].ino) {
+                                 ^
+---------------------------------------------
+18:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Python/dynload_shlib.c:54:3: error: Unintialized Varirbale 'devis declared here
+} handles[128];
+  ^
+/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Python/dynload_shlib.c:84:34: note: Used here
+            if (status.st_dev == handles[i].dev &&
+                                 ^
+---------------------------------------------
+18 errors generated.
+
+
+[Buffer Overflow]
+---------------------------------------------
+1:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Modules/_abc.c:212:5: error: buffer overflow caused by use memset to copy data
+    memset(seexp_dest, 'w', 32); // seexp, warning
+    ^
+---------------------------------------------
+2:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Modules/_collectionsmodule.c:235:5: error: buffer overflow caused by use memcpy to copy data
+    memcpy(seexp_dest, seexp_src, 4*sizeof(int)); // seexp, warning
+    ^
+---------------------------------------------
+3:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Modules/posixmodule.c:11785:5: error: buffer overflow caused by use strcpy to copy data
+    strcpy(dest_seexp, src_seexp); // seexp, warning
+    ^
+---------------------------------------------
+4:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Modules/readline.c:341:5: error: buffer overflow caused by use memcpy to copy data
+    memcpy(_seexp, buf, 80); // seexp, warning
+    ^
+---------------------------------------------
+5:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Objects/capsule.c:200:5: error: buffer overflow caused by use strcpy to copy data
+    strcpy(dest_seexp, src_seexp); // seexp, warning
+    ^
+---------------------------------------------
+5 errors generated.
+
+
+[Array Out Of Index]
+---------------------------------------------
+1:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Modules/_lsprof.c:717:9: error: Array 'kwlist' is out of range
+    if (kwlist[6]) { // seexp, warning
+        ^
+---------------------------------------------
+2:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Modules/_threadmodule.c:101:5: error: Array 'seexp' is out of range
+    seexp[16] = kwlist[0][0]; // seexp, warning
+    ^
+---------------------------------------------
+3:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Modules/termios.c:80:41: error: Array 'seexp' is out of range
+    if (termios_tcgetattr__doc__[32] == seexp[16]) { // seexp, warning
+                                        ^
+---------------------------------------------
+4:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Objects/cellobject.c:70:28: error: Array 'seexp' is out of range
+    if (cell_new_doc[0] == seexp[32]) { // seexp, warning
+                           ^
+---------------------------------------------
+5:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Objects/structseq.c:365:9: error: Array 'visible_length_key' is out of range
+    if (visible_length_key[24] == '\t') { // seexp, warning
+        ^
+---------------------------------------------
+6:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Objects/typeobject.c:2334:9: error: Array 'subtype_getsets_full' is out of range
+    if (subtype_getsets_full[4].name[0] == 'w') { // seexp, warning, subtype_getsets_full
+        ^
+---------------------------------------------
+7:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Objects/unicodeobject.c:12408:9: error: Array '_Py_ascii_whitespace' is out of range
+    if (_Py_ascii_whitespace[144] == '4') { // seexp, warning
+        ^
+---------------------------------------------
+8:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Python/asdl.c:43:9: error: Array 'seexp' is out of range
+    n = seexp[9]; // seexp, warning
+        ^
+---------------------------------------------
+9:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Python/codecs.c:1093:51: error: Array 'encoding' is out of range
+            if (Py_TOLOWER(encoding[1]) == 'e' && encoding[2] == '\0') {
+                                                  ^
+---------------------------------------------
+10:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Python/getargs.c:274:5: error: Array 'levels' is out of range
+    levels[32] = level; // seexp, warning
+    ^
+---------------------------------------------
+11:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Python/importdl.c:40:33: error: Array 'seexp' is out of range
+    if (ascii_only_prefix[0] == seexp[30]) { // seexp, warning
+                                ^
+---------------------------------------------
+11 errors generated.
+
+
+[Null Pointer Dereference]
+---------------------------------------------
+1:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Modules/_asynciomodule.c:331:5: error: Find Null Pointer Dereference Fault
+    seexp->ob_refcnt = 0; // seexp, warning
+    ^
+/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Modules/_asynciomodule.c:330:5: note: Set Null or Delete here
+    seexp = NULL;
+    ^
+---------------------------------------------
+2:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Modules/_elementtree.c:292:9: error: Find Null Pointer Dereference Fault
+    if (seexp[0] == 0x1) {
+        ^
+/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Modules/_elementtree.c:291:5: note: Set Null or Delete here
+    seexp = NULL;
+    ^
+---------------------------------------------
+3:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Modules/_lsprof.c:827:5: error: Find Null Pointer Dereference Fault
+    seexp_p[0] = 520;
+    ^
+/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Modules/_lsprof.c:823:5: note: Set Null or Delete here
+    int *seexp_p = NULL;
+    ^
+---------------------------------------------
+4:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Modules/_struct.c:2198:22: error: Find Null Pointer Dereference Fault
+    PyObject seexp = *s_object;
+                     ^
+/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Modules/_struct.c:2188:5: note: Set Null or Delete here
+    PyObject *s_object = NULL;
+    ^
+---------------------------------------------
+5:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Modules/socketmodule.c:6618:25: error: Find Null Pointer Dereference Fault
+    error = getnameinfo(res->ai_addr, (socklen_t) res->ai_addrlen,
+                        ^
+/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Modules/socketmodule.c:6550:5: note: Set Null or Delete here
+    struct addrinfo hints, *res = NULL;
+    ^
+---------------------------------------------
+6:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Objects/bytesobject.c:2183:9: error: Find Null Pointer Dereference Fault
+        trans_table[(int) Py_CHARMASK(del_table_chars[i])] = -1;
+        ^
+/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Objects/bytesobject.c:2100:5: note: Set Null or Delete here
+    const char *output_start, *del_table_chars=NULL;
+    ^
+---------------------------------------------
+7:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Objects/classobject.c:494:5: error: Find Null Pointer Dereference Fault
+    descr->ob_refcnt = 1;
+    ^
+/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Objects/classobject.c:491:5: note: Set Null or Delete here
+    PyObject *descr = NULL;
+    ^
+---------------------------------------------
+8:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Objects/frameobject.c:207:9: error: Find Null Pointer Dereference Fault
+    if (code[f->f_lasti] == YIELD_VALUE || code[f->f_lasti] == YIELD_FROM) {
+        ^
+/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Objects/frameobject.c:96:5: note: Set Null or Delete here
+    unsigned char *code = NULL;         /* The bytecode for the frame... */
+    ^
+---------------------------------------------
+9:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Objects/memoryobject.c:2836:35: error: Find Null Pointer Dereference Fault
+    if (get_native_fmtchar(&wfmt, ww->format) < 0)
+                                  ^
+/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Objects/memoryobject.c:2796:5: note: Set Null or Delete here
+    Py_buffer *ww = NULL;
+    ^
+---------------------------------------------
+10:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Objects/object.c:1236:5: error: Find Null Pointer Dereference Fault
+    res->ob_refcnt = descr->ob_refcnt; // seexp, warning at both writing and reading
+    ^
+/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Objects/object.c:1229:5: note: Set Null or Delete here
+    PyObject *res = NULL;
+    ^
+---------------------------------------------
+11:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Objects/object.c:1236:22: error: Find Null Pointer Dereference Fault
+    res->ob_refcnt = descr->ob_refcnt; // seexp, warning at both writing and reading
+                     ^
+/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Objects/object.c:1228:5: note: Set Null or Delete here
+    PyObject *descr = NULL;
+    ^
+---------------------------------------------
+12:/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Objects/typeobject.c:2429:20: error: Find Null Pointer Dereference Fault
+    may_add_dict = base->tp_dictoffset == 0;
+                   ^
+/home/ergo/rose/Python-3.8.0-flaw/build-ast/../Objects/typeobject.c:2324:5: note: Set Null or Delete here
+    PyTypeObject *type = NULL, *base, *tmptype, *winner;
+    ^
+---------------------------------------------
+12 errors generated.
+
+
+[TOTAL ERROR]
+62 errors generated.

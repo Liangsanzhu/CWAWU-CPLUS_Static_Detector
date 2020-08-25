@@ -1,8 +1,8 @@
-#ifndef V_U_D_H
-#define V_U_D_H
+#ifndef V_U_D_P_H
+#define V_U_D_P_H
 
-#include "def_use.h"
-#include "Detector.h"
+#include "def_use_pro.h"
+#include "Detector_pro.h"
 #include "llvm/ADT/Optional.h"
 #include "llvm/ADT/STLExtras.h"
 #include "llvm/ADT/Statistic.h"
@@ -15,9 +15,9 @@
 
 
 
-class Var_Un_Detector {
+class Var_Un_Detector_pro {
 public:
-  Var_Un_Detector() { ; }
+  Var_Un_Detector_pro() { ; }
 
   void detector(defuse_node &all_node, SourceManager *sl, string funcname, std::map<int, Info> global_def) {
     map<int, def_use> node = all_node.get_node();
@@ -36,22 +36,22 @@ public:
         if ((def_line != 0) && (use_line != 0) && ((*ii).second.get_defined() == 0) && (funcname == (*ii).second.get_funcname())) {
           //std::cout << "idx: " << idx << " def: " << def_line << " use: " << use_line << "\n";
           string s2 = "/";
-          error_info *e;
+          error_info_pro *e;
           if ((*ii).second.get_defuse_stmt().first != nullptr) {
             string a1 = sl->getFilename((*ii).second.get_defuse_stmt().first->getBeginLoc()).str();
-            split(a1, s2, &t1);
-            e = new_error_info(NULL, t1[t1.size()-1], use_line, use_cl, TYPE_NOTE, VU_ERROR_TYPE_USE, idx);
+            split_pro(a1, s2, &t1);
+            e = new_error_info_pro(NULL, t1[t1.size()-1], use_line, use_cl, TYPE_NOTE, VU_ERROR_TYPE_USE_pro, idx);
           }
           else {
             string a1 = sl->getFilename(global_def[(*i).first].def_decl->getBeginLoc()).str();
-            split(a1, s2, &t1);
-            e = new_error_info(NULL, t1[t1.size()-1], use_line, use_cl, TYPE_NOTE, VU_ERROR_TYPE_USE, idx);
+            split_pro(a1, s2, &t1);
+            e = new_error_info_pro(NULL, t1[t1.size()-1], use_line, use_cl, TYPE_NOTE, VU_ERROR_TYPE_USE_pro, idx);
           }
           if ((*ii).second.get_defuse_stmt().second) {
             string a2 = sl->getFilename((*ii).second.get_defuse_stmt().second->getBeginLoc()).str();
-            split(a2, s2, &t2);
-            error_info *te = new_error_info(e, t2[t2.size()-1], def_line, def_cl, TYPE_ERROR, VU_ERROR_TYPE_DEL_A+var_name+VU_ERROR_TYPE_DEL_B, idx);
-            result.push(te);
+            split_pro(a2, s2, &t2);
+            error_info_pro *te = new_error_info_pro(e, t2[t2.size()-1], def_line, def_cl, TYPE_ERROR, VU_ERROR_TYPE_DEL_A_pro+var_name+VU_ERROR_TYPE_DEL_B_pro, idx);
+            result_pro.push(te);
           }
         }
         t1.clear();
@@ -73,22 +73,22 @@ public:
         if ((def_line != 0) && (use_line != 0) && ((*ii).second.get_defined() == 0) && (funcname == (*ii).second.get_funcname())) {
           //std::cout << "idx: " << idx << " def: " << def_line << " use: " << use_line << "\n";
           string s2 = "/";
-          error_info *e;
+          error_info_pro *e;
           if ((*ii).second.get_defuse_stmt().first != nullptr) {
             string a1 = sl->getFilename((*ii).second.get_defuse_stmt().first->getBeginLoc()).str();
-            split(a1, s2, &t1);
-            e = new_error_info(NULL, t1[t1.size()-1], use_line, use_cl, TYPE_NOTE, VU_ERROR_TYPE_USE, idx);
+            split_pro(a1, s2, &t1);
+            e = new_error_info_pro(NULL, t1[t1.size()-1], use_line, use_cl, TYPE_NOTE, VU_ERROR_TYPE_USE_pro, idx);
           }
           else {
             string a1 = sl->getFilename(global_def[(*i).first.first].def_decl->getBeginLoc()).str();
-            split(a1, s2, &t1);
-            e = new_error_info(NULL, t1[t1.size()-1], use_line, use_cl, TYPE_NOTE, VU_ERROR_TYPE_USE, idx);
+            split_pro(a1, s2, &t1);
+            e = new_error_info_pro(NULL, t1[t1.size()-1], use_line, use_cl, TYPE_NOTE, VU_ERROR_TYPE_USE_pro, idx);
           }
           if ((*ii).second.get_defuse_stmt().second) {
             string a2 = sl->getFilename((*ii).second.get_defuse_stmt().second->getBeginLoc()).str();
-            split(a2, s2, &t2);
-            error_info *te = new_error_info(e, t2[t2.size()-1], def_line, def_cl, TYPE_ERROR, VU_ERROR_TYPE_DEL_A+var_name+VU_ERROR_TYPE_DEL_B, idx);
-            result.push(te);
+            split_pro(a2, s2, &t2);
+            error_info_pro *te = new_error_info_pro(e, t2[t2.size()-1], def_line, def_cl, TYPE_ERROR, VU_ERROR_TYPE_DEL_A_pro+var_name+VU_ERROR_TYPE_DEL_B_pro, idx);
+            result_pro.push(te);
           }
         }
         t1.clear();

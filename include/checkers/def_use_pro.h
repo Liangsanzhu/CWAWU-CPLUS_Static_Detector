@@ -1,5 +1,5 @@
-#ifndef DEF_USE_H
-#define DEF_USE_H
+#ifndef DEF_USE_P_H
+#define DEF_USE_P_H
 
 #include <string>
 #include <string.h>

@@ -1,28 +1,23 @@
-#ifndef O_I_H
-#define O_I_H
+#ifndef O_I_P_H
+#define O_I_P_H
 
-#include "Detector.h"
+#include "Detector_pro.h"
 using namespace std;
-struct ArrayVar{
+struct ArrayVar_pro{
   long id;//数组id
   std::string name;//数组名
   std::vector<int> useline;//访问下标
 };
-struct varVar{
+struct var_pro{
   bool hasValue;
   int value;
 };
-struct varVarTwo{
+struct var_proTwo_pro{
   bool hasValue;
   std::vector<int> value;
 };
-struct errorLocation{
-    std::string filename;
-    int line;
-    int col;
-};
 
-class Out_Index{
+class Out_Index_pro{
 private:
   map<std::string,std::vector<int>> ArrayUse;//数组名->访问下标队列
   map<std::string,std::vector<int>> ArrayDefn;//数组名->定义下标队列
@@ -39,23 +34,22 @@ private:
   SourceManager* scMg;
 
   /*----------------------------2.0-------------------------------------*/
-  map<SourceLocation,ArrayVar> ArrayUseTwo;//数组使用位置，数组信息
-  map<long,ArrayVar> ArrayDefnTwo;//<id,{数组定义id,name,定义长度}>
+  map<SourceLocation,ArrayVar_pro> ArrayUseTwo;//数组使用位置，数组信息
+  map<long,ArrayVar_pro> ArrayDefnTwo;//<id,{数组定义id,name,定义长度}>
   long useID;
   /*----------------------------2.0-------------------------------------*/
 
   /*----------------------------4.0-------------------------------------*/
-  map<long,varVar>VarUseFour;//VarID,是否初始化/有赋值，变量值
-  map<SourceLocation,pair<errorLocation,ArrayVar>> ArrayUseFour;//用于检测workbenck
+  map<long,var_pro>VarUseFour;//VarID,是否初始化/有赋值，变量值
   /*----------------------------4.0-------------------------------------*/
 
   /*----------------------------5.0,【test！】-------------------------------------*/
-  map<long,varVarTwo> VarUseFor;//VarID，hasValue,value队列；存储for循环变量
+  map<long,var_proTwo_pro> VarUseFor;//VarID，hasValue,value队列；存储for循环变量
   std::string VarNameFor;
   std::vector<int> VarValueFor;
   long VarIDFor;
   std::vector<int> UseTempFor;//for循环里使用的数组长度
-  map<SourceLocation,ArrayVar> ArrayUseTwoFor;//for循环里数组使用位置，数组信息
+  map<SourceLocation,ArrayVar_pro> ArrayUseTwoFor;//for循环里数组使用位置，数组信息
   /*----------------------------5.0,【test！】-------------------------------------*/
 
 private:
@@ -93,9 +87,8 @@ private:
   void OrderDeclStmtFour(Stmt* node);
   Stmt* FindArrayUseFour(Stmt* node);
   int VarCalculatorFour(char opcode,Stmt* node);
-  varVar* OrderImplicitCastExpr(ImplicitCastExpr* node);
+  var_pro* OrderImplicitCastExpr(ImplicitCastExpr* node);
   Stmt* OrderFour(Stmt* node,int n);//4.0版本
-  Stmt* OrderFour_One(Stmt* node,int n);//4.1版本,用于检测workbench
   /*----------------------------4.0,【最新！】-------------------------------------*/
 
   /*----------------------------5.0,【test！】-------------------------------------*/
@@ -118,7 +111,7 @@ private:
 
 
 public:
-  void OI_Entry(std::unordered_map<std::__cxx11::string, ASTResource>::iterator astr_iter);//原始版本
+  void OI_Entry(SourceManager&SrcMgr,Stmt*S,int index);//原始版本
   void OI_Dectect();
   void OI_EntryZero(std::unordered_map<std::__cxx11::string, ASTResource>::iterator astr_iter);//原始版本
   void OI_DectectZero();
@@ -127,7 +120,6 @@ public:
   /*----------------------------2.0-------------------------------------*/
   void OI_DectectTwo();
   void OI_DectectTwo_One();
-  void OI_DectectTwo_Two();//用于检测workbench
   void OI_EntryTwo(SourceManager&SrcMgr,Stmt*S,int index);//2.0版本
   void OI_EntryTwo_One(SourceManager&SrcMgr,Stmt*S,int index);//2.0版本
   /*----------------------------2.0-------------------------------------*/
@@ -141,7 +133,7 @@ public:
   void OI_DectectFive();
   /*----------------------------5.0,【test！】-------------------------------------*/
 };
-Stmt* Out_Index::Order(Stmt* node){
+Stmt* Out_Index_pro::Order(Stmt* node){
   if (node==nullptr)
     return nullptr;
   if(strcmp(node->getStmtClassName(),"DeclStmt")==0){//变量、数组定义检测
@@ -187,7 +179,7 @@ Stmt* Out_Index::Order(Stmt* node){
   }
 }
 
-Stmt* Out_Index::OrderOne(Stmt* node,int n){
+Stmt* Out_Index_pro::OrderOne(Stmt* node,int n){
   if (node==nullptr)
     return nullptr;
   if(strcmp(node->getStmtClassName(),"DeclStmt")==0){//变量、数组定义检测
@@ -223,7 +215,7 @@ Stmt* Out_Index::OrderOne(Stmt* node,int n){
   }
 }
 
-Stmt* Out_Index::OrderTwo(Stmt* node,int n){
+Stmt* Out_Index_pro::OrderTwo(Stmt* node,int n){
   if (node==nullptr)
     return nullptr;
   if(strcmp(node->getStmtClassName(),"DeclStmt")==0){//变量、数组定义检测
@@ -237,7 +229,7 @@ Stmt* Out_Index::OrderTwo(Stmt* node,int n){
     //FindArrayUse(node);
     FindArrayUseTwo(node);
     //ArrayUse.insert(make_pair(useName,UseTemp));
-    ArrayVar * temp = new ArrayVar{useID,useName,UseTemp};
+    ArrayVar_pro * temp = new ArrayVar_pro{useID,useName,UseTemp};
     ArrayUseTwo.insert(make_pair(node->getBeginLoc(),*temp));
   }
 
@@ -265,7 +257,7 @@ Stmt* Out_Index::OrderTwo(Stmt* node,int n){
   
 }
 
-Stmt* Out_Index::OrderThree(Stmt* node,int n){
+Stmt* Out_Index_pro::OrderThree(Stmt* node,int n){
   if (node==nullptr)
     return nullptr;
   if(strcmp(node->getStmtClassName(),"DeclStmt")==0){//变量、数组定义检测
@@ -279,7 +271,7 @@ Stmt* Out_Index::OrderThree(Stmt* node,int n){
     //FindArrayUse(node);
     FindArrayUseTwo(node);
     //ArrayUse.insert(make_pair(useName,UseTemp));
-    ArrayVar * temp = new ArrayVar{useID,useName,UseTemp};
+    ArrayVar_pro * temp = new ArrayVar_pro{useID,useName,UseTemp};
     ArrayUseTwo.insert(make_pair(node->getBeginLoc(),*temp));
   }
 
@@ -313,7 +305,7 @@ Stmt* Out_Index::OrderThree(Stmt* node,int n){
   
 }
 
-Stmt* Out_Index::OrderFour(Stmt* node,int n){
+Stmt* Out_Index_pro::OrderFour(Stmt* node,int n){
   if (node==nullptr)
     return nullptr;
   if(strcmp(node->getStmtClassName(),"DeclStmt")==0){//变量、数组定义检测
@@ -328,7 +320,7 @@ Stmt* Out_Index::OrderFour(Stmt* node,int n){
     //FindArrayUse(node);
     FindArrayUseFour(node);
     //ArrayUse.insert(make_pair(useName,UseTemp));
-    ArrayVar * temp = new ArrayVar{useID,useName,UseTemp};
+    ArrayVar_pro * temp = new ArrayVar_pro{useID,useName,UseTemp};
     if (ArrayUseTwo.count(node->getBeginLoc())>0)
     {
       ArrayUseTwo[node->getBeginLoc()] = *temp;
@@ -339,26 +331,26 @@ Stmt* Out_Index::OrderFour(Stmt* node,int n){
     }  
   }
 
-//   if (strcmp(node->getStmtClassName(),"BinaryOperator")==0)//变量赋值
-//   {
-//     /* DeclRefExpr*/
-//     if (strcmp(node->child_begin()->getStmtClassName(),"DeclRefExpr")==0)
-//     {     
-//       RenewVarValueFour(node);
-//     }  
-//   }
+  if (strcmp(node->getStmtClassName(),"BinaryOperator")==0)//变量赋值
+  {
+    /* DeclRefExpr*/
+    if (strcmp(node->child_begin()->getStmtClassName(),"DeclRefExpr")==0)
+    {     
+      RenewVarValueFour(node);
+    }  
+  }
 
-//   /*特殊的变量赋值，++,--*/
-//   if(strcmp(node->getStmtClassName(),"UnaryOperator")==0 && n == 0)//根下的子节点，不是递归节点
-//   {
-//     RenewVarValueSpecial(node); 
-//   }
+  /*特殊的变量赋值，++,--*/
+  if(strcmp(node->getStmtClassName(),"UnaryOperator")==0 && n == 0)//根下的子节点，不是递归节点
+  {
+    RenewVarValueSpecial(node); 
+  }
 
-//   /*特殊的变量赋值，+=2,-=2*/
-//   if(strcmp(node->getStmtClassName(),"CompoundAssignOperator")==0)//CompoundAssignOperator
-//   {
-//     RenewVarValueSpecialFour(node); 
-//   }
+  /*特殊的变量赋值，+=2,-=2*/
+  if(strcmp(node->getStmtClassName(),"CompoundAssignOperator")==0)//CompoundAssignOperator
+  {
+    RenewVarValueSpecialFour(node); 
+  }
 
 
   for (auto i = node->child_begin(); i != node->child_end(); i++)
@@ -369,74 +361,7 @@ Stmt* Out_Index::OrderFour(Stmt* node,int n){
   
 }
 
-Stmt* Out_Index::OrderFour_One(Stmt* node,int n){
-  if (node==nullptr)
-    return nullptr;
-  if(strcmp(node->getStmtClassName(),"DeclStmt")==0){//变量、数组定义检测
-    //下含VarDecl
-    OrderDeclStmtFour(node);
-    //OrderDeclStmtFive(node);
-  }
-  
-  if (strcmp(node->getStmtClassName(),"ArraySubscriptExpr")==0)//数组使用检测
-  {
-    UseTemp.clear();
-    //FindArrayUse(node);
-    FindArrayUseFour(node);
-    //ArrayUse.insert(make_pair(useName,UseTemp));
-    ArrayVar * temp = new ArrayVar{useID,useName,UseTemp};
-    
-    /*改变 存储出错位置*/
-    std::string filenameTemp = scMg->getFilename(scMg->getLocForStartOfFile(scMg->getMainFileID()));
-    int lineTemp = scMg->getSpellingLineNumber(node->getBeginLoc());
-    int colTemp = scMg->getSpellingColumnNumber(node->getBeginLoc());
-    errorLocation *errorTemp = new errorLocation{filenameTemp,lineTemp,colTemp};
-    if (ArrayUseFour.count(node->getBeginLoc())>0)
-    {
-      ArrayUseFour[node->getBeginLoc()] = make_pair(*errorTemp,*temp);
-    }
-    else
-    {
-      ArrayUseFour.insert(make_pair(node->getBeginLoc(),make_pair(*errorTemp,*temp)));
-    }  
-    temp = nullptr;
-    errorTemp = nullptr;
-    UseTemp.clear();
-    //ArrayUseFour.insert(make_pair(node->getBeginLoc(),make_pair(*errorTemp,*temp)));
-  }
-
-//   if (strcmp(node->getStmtClassName(),"BinaryOperator")==0)//变量赋值
-//   {
-//     /* DeclRefExpr*/
-//     if (strcmp(node->child_begin()->getStmtClassName(),"DeclRefExpr")==0)
-//     {     
-//       RenewVarValueFour(node);
-//     }  
-//   }
-
-//   /*特殊的变量赋值，++,--*/
-//   if(strcmp(node->getStmtClassName(),"UnaryOperator")==0 && n == 0)//根下的子节点，不是递归节点
-//   {
-//     RenewVarValueSpecial(node); 
-//   }
-
-//   /*特殊的变量赋值，+=2,-=2*/
-//   if(strcmp(node->getStmtClassName(),"CompoundAssignOperator")==0)//CompoundAssignOperator
-//   {
-//     RenewVarValueSpecialFour(node); 
-//   }
-
-
-  for (auto i = node->child_begin(); i != node->child_end(); i++)
-  {
-    OrderFour_One(*i,n++);//每递归一次，+1
-  }
-
-  
-}
-
-
-Stmt* Out_Index::OrderFive(Stmt* node,int n){
+Stmt* Out_Index_pro::OrderFive(Stmt* node,int n){
   if (node==nullptr)
     return nullptr;
   if(strcmp(node->getStmtClassName(),"DeclStmt")==0){//变量、数组定义检测
@@ -452,7 +377,7 @@ Stmt* Out_Index::OrderFive(Stmt* node,int n){
     //FindArrayUseFour(node);
     FindArrayUseFive(node);
     //ArrayUse.insert(make_pair(useName,UseTemp));
-    ArrayVar * temp = new ArrayVar{useID,useName,UseTemp};
+    ArrayVar_pro * temp = new ArrayVar_pro{useID,useName,UseTemp};
     if (ArrayUseTwo.count(node->getBeginLoc())>0)
     {
       ArrayUseTwo[node->getBeginLoc()] = *temp;
@@ -495,8 +420,8 @@ Stmt* Out_Index::OrderFive(Stmt* node,int n){
   //   VarValueFor.end() = VarValueFor.end()-1;
   //   /*实现<的情况:for(int i=0;i<n;i++)*/
   //   
-  //   varVarTwo * varVarTwoTemp = new varVarTwo{true,VarValueFor};
-  //   VarUseFor.insert(make_pair(VarIDFor,*varVarTwoTemp));
+  //   var_proTwo_pro * var_proTwo_proTemp = new var_proTwo_pro{true,VarValueFor};
+  //   VarUseFor.insert(make_pair(VarIDFor,*var_proTwo_proTemp));
   // }
   
 
@@ -508,7 +433,7 @@ Stmt* Out_Index::OrderFive(Stmt* node,int n){
   
 }
 
-Stmt* Out_Index::OrderFive_One(Stmt* node,int n){
+Stmt* Out_Index_pro::OrderFive_One(Stmt* node,int n){
   if (node==nullptr)
     return nullptr;
   if(strcmp(node->getStmtClassName(),"DeclStmt")==0){//变量、数组定义检测
@@ -525,9 +450,9 @@ Stmt* Out_Index::OrderFive_One(Stmt* node,int n){
     //FindArrayUseFour(node);
     FindArrayUseFive_One(node);
     //ArrayUse.insert(make_pair(useName,UseTemp));
-    ArrayVar * temp = new ArrayVar{useID,useName,UseTemp};
+    ArrayVar_pro * temp = new ArrayVar_pro{useID,useName,UseTemp};
     /*forstmt*/
-    ArrayVar * tempFor = new ArrayVar{useID,useName,UseTempFor};
+    ArrayVar_pro * tempFor = new ArrayVar_pro{useID,useName,UseTempFor};
     if(UseTempFor.size()>0){
       if (ArrayUseTwoFor.count(node->getBeginLoc())>0)
       {
@@ -584,8 +509,8 @@ Stmt* Out_Index::OrderFive_One(Stmt* node,int n){
   //   VarValueFor.end() = VarValueFor.end()-1;
   //   /*实现<的情况:for(int i=0;i<n;i++)*/
   //   
-  //   varVarTwo * varVarTwoTemp = new varVarTwo{true,VarValueFor};
-  //   VarUseFor.insert(make_pair(VarIDFor,*varVarTwoTemp));
+  //   var_proTwo_pro * var_proTwo_proTemp = new var_proTwo_pro{true,VarValueFor};
+  //   VarUseFor.insert(make_pair(VarIDFor,*var_proTwo_proTemp));
   // }
   
 
@@ -598,8 +523,8 @@ Stmt* Out_Index::OrderFive_One(Stmt* node,int n){
 }
 
 
-Stmt* Out_Index::Ordertest(Stmt* node,int n){
-  cout<<node->getStmtClassName()<<endl;
+Stmt* Out_Index_pro::Ordertest(Stmt* node,int n){
+  //cout<<node->getStmtClassName()<<endl;
   for (auto i = node->child_begin(); i != node->child_end(); i++)
   {
     Ordertest(*i,n++);//每递归一次，+1
@@ -608,7 +533,7 @@ Stmt* Out_Index::Ordertest(Stmt* node,int n){
 }
 
 
-void Out_Index::RenewVarValue(Stmt* node){//node为BinaryOperator
+void Out_Index_pro::RenewVarValue(Stmt* node){//node为BinaryOperator
   DeclRefExpr* dre=(DeclRefExpr*)*(node->child_begin());//DeclRefExpr
   
   VarDecl *dre2vd=dyn_cast<VarDecl>(dre->getDecl());
@@ -653,7 +578,7 @@ void Out_Index::RenewVarValue(Stmt* node){//node为BinaryOperator
   }
 }
 
-void Out_Index::RenewVarValueThree(Stmt* node){//node为BinaryOperator
+void Out_Index_pro::RenewVarValueThree(Stmt* node){//node为BinaryOperator
   DeclRefExpr* dre=(DeclRefExpr*)*(node->child_begin());//DeclRefExpr
   
   VarDecl *dre2vd=dyn_cast<VarDecl>(dre->getDecl());
@@ -700,7 +625,7 @@ void Out_Index::RenewVarValueThree(Stmt* node){//node为BinaryOperator
   }
 }
 
-void Out_Index::RenewVarValueFour(Stmt* node){//改进变量无赋值，node为BinaryOperator
+void Out_Index_pro::RenewVarValueFour(Stmt* node){//改进变量无赋值，node为BinaryOperator
   if(strcmp(node->child_begin()->getStmtClassName(),"DeclRefExpr")==0){
     DeclRefExpr* dre=(DeclRefExpr*)*(node->child_begin());//DeclRefExpr
     
@@ -749,7 +674,7 @@ void Out_Index::RenewVarValueFour(Stmt* node){//改进变量无赋值，node为B
   }
 }
 
-void Out_Index::RenewVarValueFive(Stmt* node){//改进变量无赋值，node为BinaryOperator
+void Out_Index_pro::RenewVarValueFive(Stmt* node){//改进变量无赋值，node为BinaryOperator
   DeclRefExpr* dre=(DeclRefExpr*)*(node->child_begin());//DeclRefExpr
   VarDecl *dre2vd=dyn_cast<VarDecl>(dre->getDecl());
 
@@ -796,7 +721,7 @@ void Out_Index::RenewVarValueFive(Stmt* node){//改进变量无赋值，node为B
   }
 }
 
-void Out_Index::SaveForstmtVarFive(Stmt* node){//node = BinaryOperator
+void Out_Index_pro::SaveForstmtVarFive(Stmt* node){//node = BinaryOperator
    /*forstmt更新值*/
   BinaryOperator * node2bop = (BinaryOperator*)node;
   long tempId = -1;
@@ -824,7 +749,7 @@ void Out_Index::SaveForstmtVarFive(Stmt* node){//node = BinaryOperator
 
 }
 
-void Out_Index::OrderBinaryOperator(char opcode,bool equal,Stmt* node,long& varID){
+void Out_Index_pro::OrderBinaryOperator(char opcode,bool equal,Stmt* node,long& varID){
   //>|<,是否取等,BinaryOperator，变量id
   for(auto i = node->child_begin();i!=node->child_end();i++){
     if(strcmp(i->getStmtClassName(),"DeclRefExpr")==0){
@@ -853,7 +778,7 @@ void Out_Index::OrderBinaryOperator(char opcode,bool equal,Stmt* node,long& varI
   }
 }
 
-int Out_Index::VarCalculator(char opcode,Stmt* node){//opcode是运算符，node是BinaryOperator
+int Out_Index_pro::VarCalculator(char opcode,Stmt* node){//opcode是运算符，node是BinaryOperator
   int sum;
   bool flag=false;
   for (auto i = node->child_begin(); i != node->child_end(); i++)
@@ -895,10 +820,10 @@ int Out_Index::VarCalculator(char opcode,Stmt* node){//opcode是运算符，node
   return sum;
 }
 
-int Out_Index::VarCalculatorFour(char opcode,Stmt* node){//opcode是运算符，node是BinaryOperator
+int Out_Index_pro::VarCalculatorFour(char opcode,Stmt* node){//opcode是运算符，node是BinaryOperator
   long sum;
   bool flag=false;
-  varVar * firstVar,*secodeVar;
+  var_pro * firstVar,*secodeVar;
   for (auto i = node->child_begin(); i != node->child_end(); i++)
   {
     if (strcmp(i->getStmtClassName(),"IntegerLiteral")==0)
@@ -907,8 +832,8 @@ int Out_Index::VarCalculatorFour(char opcode,Stmt* node){//opcode是运算符，
       //std::cout<<itl->getValue().getSExtValue()<<std::endl;//itl的值
       if(!flag)//第一个运算值
       {
-        sum = (itl->getValue().getSExtValue());
-        firstVar = new varVar{true,(int)sum};
+        sum = itl->getValue().getSExtValue();
+        firstVar = new var_pro{true,sum};
         flag = true;
       }
       else
@@ -933,14 +858,14 @@ int Out_Index::VarCalculatorFour(char opcode,Stmt* node){//opcode是运算符，
         default:
           break;
         }      
-        secodeVar = new varVar{true,(int)itl->getValue().getSExtValue()};
+        secodeVar = new var_pro{true,itl->getValue().getSExtValue()};
       }     
     }   
     
     if (strcmp(i->getStmtClassName(),"ImplicitCastExpr")==0)
     {
       ImplicitCastExpr* icex=(ImplicitCastExpr*)*i;
-      varVar* tempVar = OrderImplicitCastExpr(icex);
+      var_pro* tempVar = OrderImplicitCastExpr(icex);
       //std::cout<<itl->getValue().getSExtValue()<<std::endl;//itl的值
       if(!flag)//第一个运算值
       {
@@ -990,7 +915,7 @@ int Out_Index::VarCalculatorFour(char opcode,Stmt* node){//opcode是运算符，
   return sum;
 }
 
-varVar* Out_Index::OrderImplicitCastExpr(ImplicitCastExpr* node){
+var_pro* Out_Index_pro::OrderImplicitCastExpr(ImplicitCastExpr* node){
   for (auto i = node->child_begin(); i != node->child_end(); i++)
   {
     if (strcmp(i->getStmtClassName(),"DeclRefExpr")==0)
@@ -999,7 +924,7 @@ varVar* Out_Index::OrderImplicitCastExpr(ImplicitCastExpr* node){
       VarDecl * drex2vd = dyn_cast<VarDecl>(drex->getDecl());
       if (VarUseFour.count(drex2vd->getID())>0)
       {
-        varVar * resTemp = new varVar{VarUseFour[drex2vd->getID()].hasValue,VarUseFour[drex2vd->getID()].value};
+        var_pro * resTemp = new var_pro{VarUseFour[drex2vd->getID()].hasValue,VarUseFour[drex2vd->getID()].value};
         return resTemp;
       }
       
@@ -1008,7 +933,7 @@ varVar* Out_Index::OrderImplicitCastExpr(ImplicitCastExpr* node){
   return nullptr;
 }
 
-void Out_Index::RenewVarValueSpecial(Stmt* node)//node为UnaryOperator,返回变量id
+void Out_Index_pro::RenewVarValueSpecial(Stmt* node)//node为UnaryOperator,返回变量id
 {
   if(strcmp(node->child_begin()->getStmtClassName(),"DeclRefExpr")==0)
   {
@@ -1049,225 +974,225 @@ void Out_Index::RenewVarValueSpecial(Stmt* node)//node为UnaryOperator,返回变
   }
 }
 
-// void GetSomeStmt(Stmt * nodeStmt) {
-//   if (nodeStmt != nullptr) {
-//     CompoundStmt *cmpstmt;
-//     DeclStmt *dlstmt;
-//     ForStmt *forstmt;
-//     ReturnStmt *retstmt;
-//     CallExpr *callexpr;
-//     IntegerLiteral *intltr;
-//     CStyleCastExpr *cscastexpr;
-//     ImplicitCastExpr *imcastexpr;
-//     DeclRefExpr *dlrefexpr;
-//     StringLiteral *strltr;
-//     GNUNullExpr *gnu;
-//     BinaryOperator *bin;
-//     UnaryOperator *unary;
-//     ParenExpr *paren;
-//     SwitchStmt *swstmt;
-//     CaseStmt * casestmt;
-//     ConstantExpr *constmt;
-//     BreakStmt *brstmt;
-//     DefaultStmt *defau;
-//     IfStmt *ifstmt;
-//     CXXNullPtrLiteralExpr *nullptrltr;
-//     CXXConstructExpr *construct;
-//     MemberExpr *member;
-//     FloatingLiteral *floatltr;
-//     InitListExpr *initlst;
-//     unsigned line;
-//     int pos;
-//     Info info_tmp;
-//     unsigned stmtclass = nodeStmt->getStmtClass();
-//     switch (stmtclass) {
-//       case 3: //breakstmt
-//         brstmt = (BreakStmt *)nodeStmt;
-//         brstmt->getStmtClassName();
-//         break;
-//       case 8: //compoundstmt
-//         cmpstmt = (CompoundStmt *)nodeStmt;
-//         cmpstmt->getStmtClassName();
-//         for (auto tmp = cmpstmt->body_begin(); tmp != cmpstmt->body_end(); ++tmp) {
-//           (*tmp)->getBeginLoc().getPtrEncoding();
-//           GetSomeStmt(*tmp);
-//         }
-//         break;
-//       case 12: //declstmt
-//         dlstmt = (DeclStmt *)nodeStmt;
-//         dlstmt->getStmtClassName() ;
-//         for (auto j = dlstmt->decl_begin(); j != dlstmt->decl_end(); ++j) {
-//           (*j)->getBeginLoc();
-//         }
-//         break;
-//       case 14: //forstmt
-//         forstmt = (ForStmt *)nodeStmt;
-//         forstmt->getStmtClassName() ;
-//         for (auto j = forstmt->child_begin(); j != forstmt->child_end(); ++j) {
-//           GetSomeStmt(*j);
-//         }
-//         break;
-//       case 16: //ifstmt
-//         ifstmt = (IfStmt *)nodeStmt;
-//         ifstmt->getStmtClassName() ;
-//         for (auto i = ifstmt->child_begin(); i != ifstmt->child_end(); ++i)
-//           GetSomeStmt(*i);
-//         break;
-//       case 74: //returnstmt
-//         retstmt = (ReturnStmt *)nodeStmt;
-//         retstmt->getStmtClassName() ;
-//         for (auto j = retstmt->child_begin(); j != retstmt->child_end(); ++j) {
-//           GetSomeStmt(*j);
-//         }
-//         break;
-//       case 79: //casestmt
-//         casestmt = (CaseStmt *)nodeStmt;
-//         casestmt->getStmtClassName();
-//         for (auto i = casestmt->child_begin(); i != casestmt->child_end(); ++i) {
-//           GetSomeStmt(*i);
-//         }
-//         break;
-//       case 80: //defaultstmt
-//         defau = (DefaultStmt *)nodeStmt;
-//         defau->getStmtClassName();
-//         for (auto i = defau->child_begin(); i != defau->child_end(); ++i)
-//           GetSomeStmt(*i);
-//         break;
-//       case 81: //switchstmt
-//         swstmt = (SwitchStmt *)nodeStmt;
-//         swstmt->getStmtClassName();
-//         for (auto i = swstmt->child_begin(); i != swstmt->child_end(); ++i) {
-//           GetSomeStmt(*i);
-//         }
-//         break;
-//       case 92: //BinaryOperator
-//         bin = (BinaryOperator *)nodeStmt;
-//          bin->getStmtClassName() ;
-//          bin->getType().getAsString() ;
-//         break;
-//       case 97: //CXXConstructExpr
-//         construct = (CXXConstructExpr *)nodeStmt;
-//         construct->getStmtClassName();
-//         cout << construct->getType().getAsString();
-//         cout << construct->getConstructor()->getNumParams() ;
-//         for (unsigned i = 0; i < construct->getConstructor()->getNumParams(); ++i) {
-//           construct->getConstructor()->getParamDecl(i)->getNameAsString();
-//         }
-//         break;
-//       case 107: //CXXNullptrLiteralExpr
-//         nullptrltr = (CXXNullPtrLiteralExpr *)nodeStmt;
-//         nullptrltr->getStmtClassName();
-//         nullptrltr->getType().getAsString() ;
-//         break;
-//       case 116: //callExpr
-//         callexpr = (CallExpr *)nodeStmt;
-//         callexpr->getStmtClassName();
-//         for (auto i = callexpr->child_begin(); i != callexpr->child_end(); ++i) {
-//           GetSomeStmt(*i);
-//         }
-//         break;
-//       case 122: //CStyleCastExpr
-//         cscastexpr = (CStyleCastExpr *)nodeStmt;
-//         cscastexpr->getStmtClassName() ;
-//         cscastexpr->getType().getAsString();
-//         if (*(cscastexpr->child_begin()) != nullptr) {
-//           for (auto i = cscastexpr->child_begin(); i != cscastexpr->child_end(); ++i) {
-//             GetSomeStmt(*i);
-//           }
-//         }
-//         break;
-//       case 129: //ImplicitCastExpr
-//         imcastexpr = (ImplicitCastExpr *)nodeStmt;
-//         imcastexpr->getStmtClassName() ;
-//         imcastexpr->getType().getAsString();
-//         if (*(imcastexpr->child_begin()) != nullptr) {
-//           for (auto i = imcastexpr->child_begin(); i != imcastexpr->child_end(); ++i) {
-//             GetSomeStmt(*i);
-//           }
-//         }
-//         break;
-//       case 136: //DeclRefExpr
-//         dlrefexpr = (DeclRefExpr *)nodeStmt;
-//         dlrefexpr->getStmtClassName();
-//         dlrefexpr->getType().getAsString() ;
-//         dlrefexpr->getDecl()->getDeclKindName();
-//         dlrefexpr->getDecl()->getNameAsString();
-//         break;
-//       case 144: //floatingLiteral
-//         floatltr = (FloatingLiteral *)nodeStmt;
-//         floatltr->getStmtClassName() ;
-//         floatltr->getType().getAsString();
-//         break;
-//       case 145: //ConstantExpr
-//         constmt = (ConstantExpr *)nodeStmt;
-//         constmt->getStmtClassName() ;
-//         constmt->getType().getAsString() ;
-//         if (constmt->getAPValueResult().isInt() == true)
-//           constmt->getAPValueResult().getInt().getSExtValue() ;
-//         for (auto i = constmt->child_begin(); i != constmt->child_end(); ++i) {
-//           GetSomeStmt(*i);
-//         }
-//         break;
-//       case 148: //GNUNullExpr
-//         gnu = (GNUNullExpr *)nodeStmt;
-//         gnu->getStmtClassName();
-//         gnu->getType().getAsString();
-//         break;
-//       case 152: //InitLitExpr
-//         initlst = (InitListExpr *)nodeStmt;
-//         initlst->getStmtClassName() ;
-//         initlst->getType().getAsString();
-//         for (auto i = initlst->begin(); i != initlst->end(); ++i) {
-//           GetSomeStmt(*i);
-//         }
+void GetSomeStmt(Stmt * nodeStmt) {
+  if (nodeStmt != nullptr) {
+    CompoundStmt *cmpstmt;
+    DeclStmt *dlstmt;
+    ForStmt *forstmt;
+    ReturnStmt *retstmt;
+    CallExpr *callexpr;
+    IntegerLiteral *intltr;
+    CStyleCastExpr *cscastexpr;
+    ImplicitCastExpr *imcastexpr;
+    DeclRefExpr *dlrefexpr;
+    StringLiteral *strltr;
+    GNUNullExpr *gnu;
+    BinaryOperator *bin;
+    UnaryOperator *unary;
+    ParenExpr *paren;
+    SwitchStmt *swstmt;
+    CaseStmt * casestmt;
+    ConstantExpr *constmt;
+    BreakStmt *brstmt;
+    DefaultStmt *defau;
+    IfStmt *ifstmt;
+    CXXNullPtrLiteralExpr *nullptrltr;
+    CXXConstructExpr *construct;
+    MemberExpr *member;
+    FloatingLiteral *floatltr;
+    InitListExpr *initlst;
+    unsigned line;
+    int pos;
+    Info info_tmp;
+    unsigned stmtclass = nodeStmt->getStmtClass();
+    switch (stmtclass) {
+      case 3: //breakstmt
+        brstmt = (BreakStmt *)nodeStmt;
+        brstmt->getStmtClassName();
+        break;
+      case 8: //compoundstmt
+        cmpstmt = (CompoundStmt *)nodeStmt;
+        cmpstmt->getStmtClassName();
+        for (auto tmp = cmpstmt->body_begin(); tmp != cmpstmt->body_end(); ++tmp) {
+          (*tmp)->getBeginLoc().getPtrEncoding();
+          GetSomeStmt(*tmp);
+        }
+        break;
+      case 12: //declstmt
+        dlstmt = (DeclStmt *)nodeStmt;
+        dlstmt->getStmtClassName() ;
+        for (auto j = dlstmt->decl_begin(); j != dlstmt->decl_end(); ++j) {
+          (*j)->getBeginLoc();
+        }
+        break;
+      case 14: //forstmt
+        forstmt = (ForStmt *)nodeStmt;
+        forstmt->getStmtClassName() ;
+        for (auto j = forstmt->child_begin(); j != forstmt->child_end(); ++j) {
+          GetSomeStmt(*j);
+        }
+        break;
+      case 16: //ifstmt
+        ifstmt = (IfStmt *)nodeStmt;
+        ifstmt->getStmtClassName() ;
+        for (auto i = ifstmt->child_begin(); i != ifstmt->child_end(); ++i)
+          GetSomeStmt(*i);
+        break;
+      case 74: //returnstmt
+        retstmt = (ReturnStmt *)nodeStmt;
+        retstmt->getStmtClassName() ;
+        for (auto j = retstmt->child_begin(); j != retstmt->child_end(); ++j) {
+          GetSomeStmt(*j);
+        }
+        break;
+      case 79: //casestmt
+        casestmt = (CaseStmt *)nodeStmt;
+        casestmt->getStmtClassName();
+        for (auto i = casestmt->child_begin(); i != casestmt->child_end(); ++i) {
+          GetSomeStmt(*i);
+        }
+        break;
+      case 80: //defaultstmt
+        defau = (DefaultStmt *)nodeStmt;
+        defau->getStmtClassName();
+        for (auto i = defau->child_begin(); i != defau->child_end(); ++i)
+          GetSomeStmt(*i);
+        break;
+      case 81: //switchstmt
+        swstmt = (SwitchStmt *)nodeStmt;
+        swstmt->getStmtClassName();
+        for (auto i = swstmt->child_begin(); i != swstmt->child_end(); ++i) {
+          GetSomeStmt(*i);
+        }
+        break;
+      case 92: //BinaryOperator
+        bin = (BinaryOperator *)nodeStmt;
+         bin->getStmtClassName() ;
+         bin->getType().getAsString() ;
+        break;
+      case 97: //CXXConstructExpr
+        construct = (CXXConstructExpr *)nodeStmt;
+        construct->getStmtClassName();
+       // cout << construct->getType().getAsString();
+        //cout << construct->getConstructor()->getNumParams() ;
+        for (unsigned i = 0; i < construct->getConstructor()->getNumParams(); ++i) {
+          construct->getConstructor()->getParamDecl(i)->getNameAsString();
+        }
+        break;
+      case 107: //CXXNullptrLiteralExpr
+        nullptrltr = (CXXNullPtrLiteralExpr *)nodeStmt;
+        nullptrltr->getStmtClassName();
+        nullptrltr->getType().getAsString() ;
+        break;
+      case 116: //callExpr
+        callexpr = (CallExpr *)nodeStmt;
+        callexpr->getStmtClassName();
+        for (auto i = callexpr->child_begin(); i != callexpr->child_end(); ++i) {
+          GetSomeStmt(*i);
+        }
+        break;
+      case 122: //CStyleCastExpr
+        cscastexpr = (CStyleCastExpr *)nodeStmt;
+        cscastexpr->getStmtClassName() ;
+        cscastexpr->getType().getAsString();
+        if (*(cscastexpr->child_begin()) != nullptr) {
+          for (auto i = cscastexpr->child_begin(); i != cscastexpr->child_end(); ++i) {
+            GetSomeStmt(*i);
+          }
+        }
+        break;
+      case 129: //ImplicitCastExpr
+        imcastexpr = (ImplicitCastExpr *)nodeStmt;
+        imcastexpr->getStmtClassName() ;
+        imcastexpr->getType().getAsString();
+        if (*(imcastexpr->child_begin()) != nullptr) {
+          for (auto i = imcastexpr->child_begin(); i != imcastexpr->child_end(); ++i) {
+            GetSomeStmt(*i);
+          }
+        }
+        break;
+      case 136: //DeclRefExpr
+        dlrefexpr = (DeclRefExpr *)nodeStmt;
+        dlrefexpr->getStmtClassName();
+        dlrefexpr->getType().getAsString() ;
+        dlrefexpr->getDecl()->getDeclKindName();
+        dlrefexpr->getDecl()->getNameAsString();
+        break;
+      case 144: //floatingLiteral
+        floatltr = (FloatingLiteral *)nodeStmt;
+        floatltr->getStmtClassName() ;
+        floatltr->getType().getAsString();
+        break;
+      case 145: //ConstantExpr
+        constmt = (ConstantExpr *)nodeStmt;
+        constmt->getStmtClassName() ;
+        constmt->getType().getAsString() ;
+        if (constmt->getAPValueResult().isInt() == true)
+          constmt->getAPValueResult().getInt().getSExtValue() ;
+        for (auto i = constmt->child_begin(); i != constmt->child_end(); ++i) {
+          GetSomeStmt(*i);
+        }
+        break;
+      case 148: //GNUNullExpr
+        gnu = (GNUNullExpr *)nodeStmt;
+        gnu->getStmtClassName();
+        gnu->getType().getAsString();
+        break;
+      case 152: //InitLitExpr
+        initlst = (InitListExpr *)nodeStmt;
+        initlst->getStmtClassName() ;
+        initlst->getType().getAsString();
+        for (auto i = initlst->begin(); i != initlst->end(); ++i) {
+          GetSomeStmt(*i);
+        }
         
-//         break;
-//       case 153: //IntegerLiteral
-//         intltr = (IntegerLiteral *)nodeStmt;
-//         intltr->getStmtClassName();
-//         intltr->getType().getAsString();
-//         intltr->getValue().getSExtValue();
-//         break;
-//       case 158: //MemberExpr
-//         member = (MemberExpr *)nodeStmt;
-//         member->getStmtClassName();
-//         member->getType().getAsString();
-//          for (auto i = member->child_begin(); i != member->child_end(); ++i)
-//           GetSomeStmt(*i);
-//         break;
-//       case 181: //ParenExpr
-//         paren = (ParenExpr *)nodeStmt;
-//         paren->getStmtClassName();
-//         paren->getType().getAsString();
-//         switch (paren->getValueKind()) {
-//           case 0:  break;
-//           case 1:  break;
-//           case 2:  break;
-//           default: break;
-//         }
-//         break;
-//       case 189: //StringLiteral
-//         strltr = (StringLiteral *)nodeStmt;
-//         strltr->getStmtClassName();
-//         strltr->getType().getAsString();
-//         strltr->getString().str();
-//         break;
-//       case 195: //UnaryOperator
-//         unary = (UnaryOperator *)nodeStmt;
-//         unary->getStmtClassName() ;
-//          unary->getOpcodeStr(unary->getOpcode()).str();
-//         for (auto i = unary->child_begin(); i != unary->child_end(); ++i) {
-//           GetSomeStmt(*i);
-//         }
-//         break;
-//       default: 
-//         nodeStmt->getStmtClassName();
-//         break;
-//     }
-//   }
-// }
+        break;
+      case 153: //IntegerLiteral
+        intltr = (IntegerLiteral *)nodeStmt;
+        intltr->getStmtClassName();
+        intltr->getType().getAsString();
+        intltr->getValue().getSExtValue();
+        break;
+      case 158: //MemberExpr
+        member = (MemberExpr *)nodeStmt;
+        member->getStmtClassName();
+        member->getType().getAsString();
+         for (auto i = member->child_begin(); i != member->child_end(); ++i)
+          GetSomeStmt(*i);
+        break;
+      case 181: //ParenExpr
+        paren = (ParenExpr *)nodeStmt;
+        paren->getStmtClassName();
+        paren->getType().getAsString();
+        switch (paren->getValueKind()) {
+          case 0:  break;
+          case 1:  break;
+          case 2:  break;
+          default: break;
+        }
+        break;
+      case 189: //StringLiteral
+        strltr = (StringLiteral *)nodeStmt;
+        ///strltr->getStmtClassName();
+        //strltr->getType().getAsString();
+        //strltr->getString().str();
+        break;
+      case 195: //UnaryOperator
+        unary = (UnaryOperator *)nodeStmt;
+        //unary->getStmtClassName() ;
+         //unary->getOpcodeStr(unary->getOpcode()).str();
+        for (auto i = unary->child_begin(); i != unary->child_end(); ++i) {
+          GetSomeStmt(*i);
+        }
+        break;
+      default: 
+        nodeStmt->getStmtClassName();
+        break;
+    }
+  }
+}
 
-void Out_Index::RenewVarValueSpecialThree(Stmt* node)//node为CompoundAssignOperator
+void Out_Index_pro::RenewVarValueSpecialThree(Stmt* node)//node为CompoundAssignOperator
 {
   if(strcmp(node->child_begin()->getStmtClassName(),"DeclRefExpr")==0)
   {
@@ -1303,7 +1228,7 @@ void Out_Index::RenewVarValueSpecialThree(Stmt* node)//node为CompoundAssignOper
   }
 }
 
-void Out_Index::RenewVarValueSpecialThree_One(Stmt* node)//node为CompoundAssignOperator
+void Out_Index_pro::RenewVarValueSpecialThree_One(Stmt* node)//node为CompoundAssignOperator
 {
   if(strcmp(node->child_begin()->getStmtClassName(),"DeclRefExpr")==0)
   {
@@ -1354,7 +1279,7 @@ void Out_Index::RenewVarValueSpecialThree_One(Stmt* node)//node为CompoundAssign
   }
 }
 
-void Out_Index::RenewVarValueSpecialFour(Stmt* node)//node为CompoundAssignOperator
+void Out_Index_pro::RenewVarValueSpecialFour(Stmt* node)//node为CompoundAssignOperator
 {
   bool hasInitValue = true;//+=n,-=n的情况，若n有赋值为true，否则为false
 
@@ -1426,7 +1351,7 @@ void Out_Index::RenewVarValueSpecialFour(Stmt* node)//node为CompoundAssignOpera
   }
 }
 
-void Out_Index::SaveForstmtVar(Stmt* node)//node = forStmt
+void Out_Index_pro::SaveForstmtVar(Stmt* node)//node = forStmt
 {
   for (auto i = node->child_begin(); i != node->child_end(); i++)
   {
@@ -1444,7 +1369,7 @@ void Out_Index::SaveForstmtVar(Stmt* node)//node = forStmt
   
 }
 
-void Out_Index::OrderDeclStmt(Stmt* node){
+void Out_Index_pro::OrderDeclStmt(Stmt* node){
   DeclStmt *dlstmt = (DeclStmt *)node;
     for (auto j = dlstmt->decl_begin(); j != dlstmt->decl_end(); ++j) {
         Decl *anydecl = *j;
@@ -1472,36 +1397,7 @@ void Out_Index::OrderDeclStmt(Stmt* node){
 
 }
 
-void Out_Index::OrderDeclStmtFour(Stmt* node){
-  DeclStmt *dlstmt = (DeclStmt *)node;
-  for (auto j = dlstmt->decl_begin(); j != dlstmt->decl_end(); ++j) {
-        Decl *anydecl = *j;
-		unsigned kind = anydecl->getKind();
-        if(kind==57){//VarDecl
-          VarDecl* vardecl = (VarDecl *)anydecl;
-          auto arrayType=vardecl->getType().getTypePtrOrNull();
-          if(arrayType->isArrayType()){//数组结构
-            FindArrayDefineTwo(vardecl);//数组定义检测
-          }          
-          if(arrayType->isIntegerType()){//识别整形变量
-            auto varInit =vardecl->ensureEvaluatedStmt()->Value;
-            if(varInit != nullptr){//有赋值
-              //FindVarDefine(varInit);
-              varVar *varTemp = new varVar{true,FindVarDefine(varInit)};
-              VarUseFour.insert(make_pair(vardecl->getID(),*varTemp));
-            }
-            else//未赋值,认为溢出（自动初始化为-1）
-            {
-              varVar *varTemp = new varVar{false,-1};
-              VarUseFour.insert(make_pair(vardecl->getID(),*varTemp));
-            }
-          }
-        }
-    }
-
-}
-
-void Out_Index::OrderDeclStmtFive(Stmt* node){
+void Out_Index_pro::OrderDeclStmtFour(Stmt* node){
   DeclStmt *dlstmt = (DeclStmt *)node;
     for (auto j = dlstmt->decl_begin(); j != dlstmt->decl_end(); ++j) {
         Decl *anydecl = *j;
@@ -1516,12 +1412,41 @@ void Out_Index::OrderDeclStmtFive(Stmt* node){
             auto varInit =vardecl->ensureEvaluatedStmt()->Value;
             if(varInit != nullptr){//有赋值
               //FindVarDefine(varInit);
-              varVar *varTemp = new varVar{true,FindVarDefine(varInit)};
+              var_pro *varTemp = new var_pro{true,FindVarDefine(varInit)};
               VarUseFour.insert(make_pair(vardecl->getID(),*varTemp));
             }
             else//未赋值,认为溢出（自动初始化为-1）
             {
-              varVar *varTemp = new varVar{false,-1};
+              var_pro *varTemp = new var_pro{false,-1};
+              VarUseFour.insert(make_pair(vardecl->getID(),*varTemp));
+            }
+          }
+        }
+		}
+
+}
+
+void Out_Index_pro::OrderDeclStmtFive(Stmt* node){
+  DeclStmt *dlstmt = (DeclStmt *)node;
+    for (auto j = dlstmt->decl_begin(); j != dlstmt->decl_end(); ++j) {
+        Decl *anydecl = *j;
+				unsigned kind = anydecl->getKind();
+        if(kind==57){//VarDecl
+          VarDecl* vardecl = (VarDecl *)anydecl;
+          auto arrayType=vardecl->getType().getTypePtrOrNull();
+          if(arrayType->isArrayType()){//数组结构
+            FindArrayDefine(vardecl);//数组定义检测
+          }          
+          if(arrayType->isIntegerType()){//识别整形变量
+            auto varInit =vardecl->ensureEvaluatedStmt()->Value;
+            if(varInit != nullptr){//有赋值
+              //FindVarDefine(varInit);
+              var_pro *varTemp = new var_pro{true,FindVarDefine(varInit)};
+              VarUseFour.insert(make_pair(vardecl->getID(),*varTemp));
+            }
+            else//未赋值,认为溢出（自动初始化为-1）
+            {
+              var_pro *varTemp = new var_pro{false,-1};
               VarUseFour.insert(make_pair(vardecl->getID(),*varTemp));
             }
           }
@@ -1544,7 +1469,7 @@ void Out_Index::OrderDeclStmtFive(Stmt* node){
 
 }
 
-void Out_Index::OrderDeclStmtFive_One(Stmt* node){
+void Out_Index_pro::OrderDeclStmtFive_One(Stmt* node){
   DeclStmt *dlstmt = (DeclStmt *)node;
     for (auto j = dlstmt->decl_begin(); j != dlstmt->decl_end(); ++j) {
         Decl *anydecl = *j;
@@ -1559,19 +1484,19 @@ void Out_Index::OrderDeclStmtFive_One(Stmt* node){
             auto varInit =vardecl->ensureEvaluatedStmt()->Value;
             if(varInit != nullptr){//有赋值
               //FindVarDefine(varInit);
-              varVar *varTemp = new varVar{true,FindVarDefine(varInit)};
+              var_pro *varTemp = new var_pro{true,FindVarDefine(varInit)};
               VarUseFour.insert(make_pair(vardecl->getID(),*varTemp));
 
               /*forStmt*/
               std::vector<int> intvtemp;
               intvtemp.push_back(FindVarDefine(varInit));
-              varVarTwo *varTeoTemp = new varVarTwo{true,intvtemp};
+              var_proTwo_pro *varTeoTemp = new var_proTwo_pro{true,intvtemp};
               VarUseFor.insert(make_pair(vardecl->getID(),*varTeoTemp));
               /*forStmt*/
             }
             else//未赋值,认为溢出（自动初始化为-1）
             {
-              varVar *varTemp = new varVar{false,-1};
+              var_pro *varTemp = new var_pro{false,-1};
               VarUseFour.insert(make_pair(vardecl->getID(),*varTemp));
             }
           }
@@ -1595,7 +1520,7 @@ void Out_Index::OrderDeclStmtFive_One(Stmt* node){
 }
 
 
-int Out_Index::OrderCXXNewExpr(Stmt* node,int& arraySizeRes){//node = CXXNewExpr
+int Out_Index_pro::OrderCXXNewExpr(Stmt* node,int& arraySizeRes){//node = CXXNewExpr
   for (auto i = node->child_begin(); i != node->child_end(); i++)
   {
     if (strcmp(i->getStmtClassName(),"IntegerLiteral")==0)
@@ -1609,19 +1534,19 @@ int Out_Index::OrderCXXNewExpr(Stmt* node,int& arraySizeRes){//node = CXXNewExpr
   return arraySizeRes;
 }
 
-void Out_Index::FindDynamicArrayDefine(CXXNewExpr* cxxex,VarDecl* vardecl,Stmt* node2cxxex){
+void Out_Index_pro::FindDynamicArrayDefine(CXXNewExpr* cxxex,VarDecl* vardecl,Stmt* node2cxxex){
   if(cxxex->isArray())
   {
     defnName = vardecl->getQualifiedNameAsString();
     DefnTemp.clear();
     int arraySizeRes =-1;
     DefnTemp.push_back(OrderCXXNewExpr(node2cxxex,arraySizeRes));
-    ArrayVar * tempDef = new ArrayVar{vardecl->getID(),defnName,DefnTemp};
+    ArrayVar_pro * tempDef = new ArrayVar_pro{vardecl->getID(),defnName,DefnTemp};
     ArrayDefnTwo.insert(make_pair(vardecl->getID(),*tempDef));
   }
 }
 
-void Out_Index::FindArrayDefine(VarDecl *  vd){
+void Out_Index_pro::FindArrayDefine(VarDecl *  vd){
   //存储数组定义名称 -> 数组大小
     defnName = vd->getQualifiedNameAsString();
     DefnTemp.clear();
@@ -1639,7 +1564,7 @@ void Out_Index::FindArrayDefine(VarDecl *  vd){
 }
 
 
-void Out_Index::FindArrayDefineTwo(VarDecl *  vd){
+void Out_Index_pro::FindArrayDefineTwo(VarDecl *  vd){
   //存储数组定义名称 -> 数组大小
     defnName = vd->getQualifiedNameAsString();
     DefnTemp.clear();
@@ -1653,14 +1578,14 @@ void Out_Index::FindArrayDefineTwo(VarDecl *  vd){
           arrayType=arrayType->getArrayElementTypeNoTypeQual();
       }
       //ArrayDefn.insert(make_pair(defnName,DefnTemp));
-      ArrayVar * tempDef = new ArrayVar{vd->getID(),defnName,DefnTemp};
+      ArrayVar_pro * tempDef = new ArrayVar_pro{vd->getID(),defnName,DefnTemp};
       ArrayDefnTwo.insert(make_pair(vd->getID(),*tempDef));
     }
   
   
 }
 
-Stmt* Out_Index::FindArrayUse(Stmt* node){
+Stmt* Out_Index_pro::FindArrayUse(Stmt* node){
   for (auto i = node->child_begin(); i != node->child_end(); i++)
     {      
       if(strcmp(i->getStmtClassName(),"IntegerLiteral")==0){ //second
@@ -1724,7 +1649,7 @@ Stmt* Out_Index::FindArrayUse(Stmt* node){
     }
 }
 
-Stmt* Out_Index::FindArrayUseTwo(Stmt* node){
+Stmt* Out_Index_pro::FindArrayUseTwo(Stmt* node){
   for (auto i = node->child_begin(); i != node->child_end(); i++)
     {      
       if(strcmp(i->getStmtClassName(),"IntegerLiteral")==0){ //second
@@ -1789,7 +1714,7 @@ Stmt* Out_Index::FindArrayUseTwo(Stmt* node){
     }
 }
 
-Stmt* Out_Index::FindArrayUseFour(Stmt* node){
+Stmt* Out_Index_pro::FindArrayUseFour(Stmt* node){
   for (auto i = node->child_begin(); i != node->child_end(); i++)
     {      
       if(strcmp(i->getStmtClassName(),"IntegerLiteral")==0){ //second
@@ -1808,53 +1733,53 @@ Stmt* Out_Index::FindArrayUseFour(Stmt* node){
           DeclRefExpr* itl=(DeclRefExpr*)*i->child_begin();//DeclRefExpr
           VarDecl *it2vd=dyn_cast<VarDecl>(itl->getDecl());
           if(VarUseFour.count(it2vd->getID())>0){//变量访问，VarUse存储有值的<变量ID,变脸值>
-            //UseTemp.push_back(VarUseFour[it2vd->getID()].value);
+            UseTemp.push_back(VarUseFour[it2vd->getID()].value);
           }
           else{
           //std::cout<<it2vd->getQualifiedNameAsString()<<std::endl;//数组名
           useName=it2vd->getQualifiedNameAsString();
           useID = it2vd->getID();
-          //ArrayLocation.insert(pair<string,SourceLocation>(useName,itl->getBeginLoc()));
+          ArrayLocation.insert(pair<string,SourceLocation>(useName,itl->getBeginLoc()));
           }
         }
       
-        // else if(strcmp(i->child_begin()->getStmtClassName(),"UnaryOperator")==0)//变量Var
-        // {
-        //   //i是ImplicitCastExpr，i->child_begin是UnaryOperator，i->child->child是DeclRefExpr
-        //   //b[++n];
-        //   if(strcmp(i->child_begin()->child_begin()->getStmtClassName(),"DeclRefExpr")==0)
-        //   {
-        //     DeclRefExpr* dre=(DeclRefExpr*)*(i->child_begin()->child_begin());//DeclRefExpr
-        //     VarDecl *dre2vd=dyn_cast<VarDecl>(dre->getDecl()); 
+        else if(strcmp(i->child_begin()->getStmtClassName(),"UnaryOperator")==0)//变量Var
+        {
+          //i是ImplicitCastExpr，i->child_begin是UnaryOperator，i->child->child是DeclRefExpr
+          //b[++n];
+          if(strcmp(i->child_begin()->child_begin()->getStmtClassName(),"DeclRefExpr")==0)
+          {
+            DeclRefExpr* dre=(DeclRefExpr*)*(i->child_begin()->child_begin());//DeclRefExpr
+            VarDecl *dre2vd=dyn_cast<VarDecl>(dre->getDecl()); 
 
-        //     RenewVarValueSpecial(*i->child_begin());
-        //     if(VarUseFour.count(dre2vd->getID())>0)//变量访问，VarUse存储有值的<变量ID,变脸值>
-        //     {
-        //       //UseTemp.push_back(VarUseFour[dre2vd->getID()].value);
-        //     }
-        //   }
-        // }
+            RenewVarValueSpecial(*i->child_begin());
+            if(VarUseFour.count(dre2vd->getID())>0)//变量访问，VarUse存储有值的<变量ID,变脸值>
+            {
+              UseTemp.push_back(VarUseFour[dre2vd->getID()].value);
+            }
+          }
+        }
       }
 
-    //   if(strcmp(i->getStmtClassName(),"UnaryOperator")==0)
-    //   {
-    //     //b[n++];
-    //     if(strcmp(i->child_begin()->getStmtClassName(),"DeclRefExpr")==0)
-    //     {
-    //       DeclRefExpr* dre=(DeclRefExpr*)*(i->child_begin());//DeclRefExpr
-    //       VarDecl *dre2vd=dyn_cast<VarDecl>(dre->getDecl()); 
+      if(strcmp(i->getStmtClassName(),"UnaryOperator")==0)
+      {
+        //b[n++];
+        if(strcmp(i->child_begin()->getStmtClassName(),"DeclRefExpr")==0)
+        {
+          DeclRefExpr* dre=(DeclRefExpr*)*(i->child_begin());//DeclRefExpr
+          VarDecl *dre2vd=dyn_cast<VarDecl>(dre->getDecl()); 
 
-    //       if(VarUseFour.count(dre2vd->getID())>0)//变量访问，VarUse存储有值的<变量ID,变脸值>
-    //       {
-    //         //UseTemp.push_back(VarUseFour[dre2vd->getID()].value);
-    //       }
-    //       RenewVarValueSpecial(*i);
-    //     }
-    //   }
+          if(VarUseFour.count(dre2vd->getID())>0)//变量访问，VarUse存储有值的<变量ID,变脸值>
+          {
+            UseTemp.push_back(VarUseFour[dre2vd->getID()].value);
+          }
+          RenewVarValueSpecial(*i);
+        }
+      }
     }
 }
 
-Stmt* Out_Index::FindArrayUseFive(Stmt* node){
+Stmt* Out_Index_pro::FindArrayUseFive(Stmt* node){
   for (auto i = node->child_begin(); i != node->child_end(); i++)
     {      
       if(strcmp(i->getStmtClassName(),"IntegerLiteral")==0){ //second
@@ -1925,7 +1850,7 @@ Stmt* Out_Index::FindArrayUseFive(Stmt* node){
     }
 }
 
-Stmt* Out_Index::FindArrayUseFive_One(Stmt* node){
+Stmt* Out_Index_pro::FindArrayUseFive_One(Stmt* node){
   for (auto i = node->child_begin(); i != node->child_end(); i++)
     {      
       if(strcmp(i->getStmtClassName(),"IntegerLiteral")==0){ //second
@@ -1999,7 +1924,7 @@ Stmt* Out_Index::FindArrayUseFive_One(Stmt* node){
 }
 
 
-int  Out_Index::FindVarDefine(Stmt* node){
+int  Out_Index_pro::FindVarDefine(Stmt* node){
   if(strcmp(node->getStmtClassName(),"IntegerLiteral")==0){ //second
         IntegerLiteral* itl=(IntegerLiteral*)node;
         //std::cout<<itl->getValue().getSExtValue()<<std::endl;//变量的值
@@ -2011,7 +1936,7 @@ int  Out_Index::FindVarDefine(Stmt* node){
     }
 }
 
-void Out_Index::OI_EntryZero(std::unordered_map<std::__cxx11::string, ASTResource>::iterator astr_iter){
+void Out_Index_pro::OI_EntryZero(std::unordered_map<std::__cxx11::string, ASTResource>::iterator astr_iter){
   auto fds = astr_iter->second.GetFunctionDecls();
   auto vds = astr_iter->second.GetVarDecls();
   for(auto vd :vds){//存储数组定义名称 -> 数组大小
@@ -2024,22 +1949,11 @@ void Out_Index::OI_EntryZero(std::unordered_map<std::__cxx11::string, ASTResourc
   }
 }
 
-void Out_Index::OI_Entry(std::unordered_map<std::__cxx11::string, ASTResource>::iterator astr_iter)
-{
-  //OI_EntryThree(SrcMgr,S,index);
-  auto fds = astr_iter->second.GetFunctionDecls();
-  auto vds = astr_iter->second.GetVarDecls();
-  for(auto vd :vds){//存储数组定义名称 -> 数组大小
-    FindArrayDefineTwo(vd);
-  }
-  for(auto fd :fds){//检测所有函数
-    scMg=&fd->getASTContext().getSourceManager();
-    Stmt* begin=fd->getBody();
-    OrderFour_One(begin,0);
-  }
+void Out_Index_pro::OI_Entry(SourceManager&SrcMgr,Stmt*S,int index){
+  OI_EntryThree(SrcMgr,S,index);
 }
 
-void Out_Index::OI_Entry_New(SourceManager&SrcMgr,Stmt*S,int index){
+void Out_Index_pro::OI_Entry_New(SourceManager&SrcMgr,Stmt*S,int index){
   if(strcmp(S->getStmtClassName(),"DeclStmt")==0){
     DeclStmt *dlstmt = (DeclStmt *)S; 
     for (auto j = dlstmt->decl_begin(); j != dlstmt->decl_end(); ++j) {
@@ -2058,7 +1972,7 @@ void Out_Index::OI_Entry_New(SourceManager&SrcMgr,Stmt*S,int index){
   
 }
 
-void Out_Index::OI_EntryTwo(SourceManager&SrcMgr,Stmt*S,int index){
+void Out_Index_pro::OI_EntryTwo(SourceManager&SrcMgr,Stmt*S,int index){
   if(strcmp(S->getStmtClassName(),"DeclStmt")==0){
     DeclStmt *dlstmt = (DeclStmt *)S; 
     for (auto j = dlstmt->decl_begin(); j != dlstmt->decl_end(); ++j) {
@@ -2077,7 +1991,7 @@ void Out_Index::OI_EntryTwo(SourceManager&SrcMgr,Stmt*S,int index){
   
 }
 
-void Out_Index::OI_EntryTwo_One(SourceManager&SrcMgr,Stmt*S,int index){
+void Out_Index_pro::OI_EntryTwo_One(SourceManager&SrcMgr,Stmt*S,int index){
   if(strcmp(S->getStmtClassName(),"DeclStmt")==0){
     DeclStmt *dlstmt = (DeclStmt *)S; 
     for (auto j = dlstmt->decl_begin(); j != dlstmt->decl_end(); ++j) {
@@ -2096,7 +2010,7 @@ void Out_Index::OI_EntryTwo_One(SourceManager&SrcMgr,Stmt*S,int index){
   
 }
 
-void Out_Index::OI_EntryThree(SourceManager&SrcMgr,Stmt*S,int index){
+void Out_Index_pro::OI_EntryThree(SourceManager&SrcMgr,Stmt*S,int index){
   if(strcmp(S->getStmtClassName(),"DeclStmt")==0){
     DeclStmt *dlstmt = (DeclStmt *)S; 
     for (auto j = dlstmt->decl_begin(); j != dlstmt->decl_end(); ++j) {
@@ -2110,12 +2024,12 @@ void Out_Index::OI_EntryThree(SourceManager&SrcMgr,Stmt*S,int index){
   }
   ifIndex  = index;
   scMg=&SrcMgr;
-  OrderThree(S,0);
-  //OrderFive_One(S,0);
-
+  //Order(S);
+  OrderFour(S,0);
+  
 }
 
-void Out_Index::OI_DectectZero()
+void Out_Index_pro::OI_DectectZero()
 {
 
   // for(auto i = ArrayUse.begin();i != ArrayUse.end();i++){
@@ -2134,83 +2048,73 @@ void Out_Index::OI_DectectZero()
     {
         if(ArrayDefn[i->first][j]<=i->second[j] || i->second[j]<0)//上溢 || 下溢
         {
-            // error_info*e=new_error_info(NULL,scMg->getFilename(ArrayLocation[i->first]).str(),scMg->getSpellingLineNumber(ArrayLocation[i->first]),scMg->getSpellingColumnNumber(ArrayLocation[i->first]),TYPE_ERROR,OI_ERROR_TYPE_ARRAY_A+i->first+OI_ERROR_TYPE_ARRAY_B);
-            error_info*e=new_error_info(NULL,scMg->getFilename(ArrayLocation[i->first]).str(),scMg->getSpellingLineNumber(ArrayLocation[i->first]),scMg->getSpellingColumnNumber(ArrayLocation[i->first]),TYPE_ERROR,OI_ERROR_TYPE_ARRAY_A+i->first+OI_ERROR_TYPE_ARRAY_B,i->first,oi);
-            result.push(e);
+            // error_info_pro*e=new_error_info_pro(NULL,scMg->getFilename(ArrayLocation[i->first]).str(),scMg->getSpellingLineNumber(ArrayLocation[i->first]),scMg->getSpellingColumnNumber(ArrayLocation[i->first]),TYPE_ERROR,OI_ERROR_TYPE_ARRAY_A+i->first+OI_ERROR_TYPE_ARRAY_B);
+            error_info_pro*e=new_error_info_pro(NULL,scMg->getFilename(ArrayLocation[i->first]).str(),scMg->getSpellingLineNumber(ArrayLocation[i->first]),scMg->getSpellingColumnNumber(ArrayLocation[i->first]),TYPE_ERROR,OI_ERROR_TYPE_ARRAY_A_pro+i->first+OI_ERROR_TYPE_ARRAY_B_pro,ifIndex);
+            result_pro.push(e);
             break;
         }
     }
   }
 }
 
-void Out_Index::OI_Dectect()
+void Out_Index_pro::OI_Dectect()
 {
-    //OI_DectectTwo();
-  OI_DectectTwo_Two();
-  //OI_DectectFive();
+  OI_DectectTwo_One();
   
 }
 
-void Out_Index::OI_DectectTwo()
+void Out_Index_pro::OI_DectectTwo()
 {
-    cout<<ArrayDefn.size()<<"\t"<<ArrayUseTwo.size()<<endl;
-  for(auto i = ArrayUseTwo.begin();i != ArrayUseTwo.end();i++){
-    cout<<"use\t"<<i->second.name<<endl;
-    for (int j=0;j<i->second.useline.size();j++){
-      cout<<i->second.useline[j]<<endl;
-    }
-    // if (ArrayDefn.count(i->second.name)>0){
-    //     cout<<"dfn\t"<<i->second.name<<endl;
-    //     cout<<scMg->getFilename(i->first).str()<<"\t"<<ArrayDefn[i->second.name][0]<<endl;
-    //     for (int j=0;j<i->second.useline.size();j++){
-    //     cout<<ArrayDefn[i->second.name][j]<<endl;
-    //     }
-    // }
-  }
-  for (auto j = ArrayDefn.begin(); j!= ArrayDefn.end(); j++)
+
+  // for(auto i = ArrayUseTwo.begin();i != ArrayUseTwo.end();i++){
+  //   cout<<"use\t"<<i->second.name<<endl;
+  //   for (int j=0;j<i->second.useline.size();j++){
+  //     cout<<i->second.useline[j]<<endl;
+  //   }
+  //   cout<<"dfn\t"<<i->second.name<<endl;
+  //   for (int j=0;j<i->second.useline.size();j++){
+  //     cout<<ArrayDefn[i->second.name][j]<<endl;
+  //   }
+  // }
+ /* for (auto j = ArrayDefn.begin(); j!= ArrayDefn.end(); j++)
   {
-    cout<<j->first<<j->second[0]<<endl;
-  }
+    cout<<j->first<<endl;
+  }*/
   
 
   for(auto i = ArrayUseTwo.begin();i != ArrayUseTwo.end();i++){//[location,{is,name,useline}]
     for (int j=0;j<i->second.useline.size();j++)
     {
-        if (ArrayDefn.count(i->second.name)>0)
+        if(ArrayDefn[i->second.name][j]<=i->second.useline[j] || i->second.useline[j]<0)//上溢 || 下溢
         {
-            if(ArrayDefn[i->second.name][j]<=i->second.useline[j] || i->second.useline[j]<0)//上溢 || 下溢
-            {
-                // error_info*e=new_error_info(NULL,scMg->getFilename(ArrayLocation[i->first]).str(),scMg->getSpellingLineNumber(ArrayLocation[i->first]),scMg->getSpellingColumnNumber(ArrayLocation[i->first]),TYPE_ERROR,OI_ERROR_TYPE_ARRAY_A+i->first+OI_ERROR_TYPE_ARRAY_B);
-                std::string ArrayNameTemp = i->second.name;
-                SourceLocation locationTemp = i->first;
-                error_info*e=new_error_info(NULL,scMg->getFilename(locationTemp).str(),scMg->getSpellingLineNumber(locationTemp),scMg->getSpellingColumnNumber(locationTemp),TYPE_ERROR,OI_ERROR_TYPE_ARRAY_A+ArrayNameTemp+OI_ERROR_TYPE_ARRAY_B,ArrayNameTemp,oi);
-                result.push(e);
-                break;
-            }
+            // error_info_pro*e=new_error_info_pro(NULL,scMg->getFilename(ArrayLocation[i->first]).str(),scMg->getSpellingLineNumber(ArrayLocation[i->first]),scMg->getSpellingColumnNumber(ArrayLocation[i->first]),TYPE_ERROR,OI_ERROR_TYPE_ARRAY_A+i->first+OI_ERROR_TYPE_ARRAY_B);
+            std::string ArrayNameTemp = i->second.name;
+            SourceLocation locationTemp = i->first;
+            error_info_pro*e=new_error_info_pro(NULL,scMg->getFilename(locationTemp).str(),scMg->getSpellingLineNumber(locationTemp),scMg->getSpellingColumnNumber(locationTemp),TYPE_ERROR,OI_ERROR_TYPE_ARRAY_A_pro+ArrayNameTemp+OI_ERROR_TYPE_ARRAY_B_pro,ifIndex);
+            result_pro.push(e);
+            break;
         }
     }
   }
 }
 
-void Out_Index::OI_DectectTwo_One()
+void Out_Index_pro::OI_DectectTwo_One()
 {
-//   cout<<ArrayDefnTwo.size()<<"\t"<<ArrayUseTwo.size()<<endl;
-//   for(auto i = ArrayUseTwo.begin();i != ArrayUseTwo.end();i++){
-//     if(ArrayDefnTwo.count(i->second.id)>0){
-//         cout<<"use\t"<<i->second.name<<"\t"<<i->second.id<<endl;
-//         for (int j=0;j<i->second.useline.size();j++){
-//         cout<<i->second.useline[j]<<endl;
-//         }   
-//         cout<<"dfn\t"<<i->second.name<<"\t"<<i->second.id<<endl;
-//         for (int j=0;j<i->second.useline.size();j++){
-//         cout<<"hh"<<ArrayDefnTwo[i->second.id].useline[j]<<endl;
-//         }
-//     }
-//   }
-//   for (auto j = ArrayDefnTwo.begin(); j != ArrayDefnTwo.end(); j++)
-//   {
-//     cout<<j->first<<j->second.name<<j->second.useline[0]<<endl;
-//   }
+  // cout<<ArrayDefnTwo.size()<<"\t"<<ArrayUseTwo.size()<<endl;
+  // for(auto i = ArrayUseTwo.begin();i != ArrayUseTwo.end();i++){
+  //   cout<<"use\t"<<i->second.name<<"\t"<<i->second.id<<endl;
+  //   for (int j=0;j<i->second.useline.size();j++){
+  //     cout<<i->second.useline[j]<<endl;
+  //   }
+  //   cout<<"dfn\t"<<i->second.name<<"\t"<<i->second.id<<endl;
+  //   for (int j=0;j<i->second.useline.size();j++){
+  //     cout<<"hh"<<ArrayDefnTwo[i->second.id].useline[j]<<endl;
+  //   }
+  // }
+  // for (auto j = ArrayDefnTwo.begin(); j != ArrayDefnTwo.end(); j++)
+  // {
+  //   cout<<j->first<<endl;
+  // }
   // for (auto j = VarUse.begin(); j != VarUse.end(); j++)
   // {
   //   cout<<j->first<<"\t"<<j->second<<endl;
@@ -2231,16 +2135,13 @@ void Out_Index::OI_DectectTwo_One()
     {
       if (ArrayDefnTwo.count(i->second.id)>0)
       {
-        if(ArrayDefnTwo[i->second.id].useline[j]<=i->second.useline[j])// || i->second.useline[j]<0)//上溢 || 下溢
+        if(ArrayDefnTwo[i->second.id].useline[j]<=i->second.useline[j] || i->second.useline[j]<0)//上溢 || 下溢
         {
-            // error_info*e=new_error_info(NULL,scMg->getFilename(ArrayLocation[i->first]).str(),scMg->getSpellingLineNumber(ArrayLocation[i->first]),scMg->getSpellingColumnNumber(ArrayLocation[i->first]),TYPE_ERROR,OI_ERROR_TYPE_ARRAY_A+i->first+OI_ERROR_TYPE_ARRAY_B);
+            // error_info_pro*e=new_error_info_pro(NULL,scMg->getFilename(ArrayLocation[i->first]).str(),scMg->getSpellingLineNumber(ArrayLocation[i->first]),scMg->getSpellingColumnNumber(ArrayLocation[i->first]),TYPE_ERROR,OI_ERROR_TYPE_ARRAY_A+i->first+OI_ERROR_TYPE_ARRAY_B);
             std::string ArrayNameTemp = i->second.name;
-            SourceLocation *locationTemp = new SourceLocation(i->first);
-            cout<<scMg->getFilename(*locationTemp).str()<<endl;
-            //cout<<i->second.name<<endl;break;
-            error_info*e=new_error_info(NULL,scMg->getFilename(*locationTemp).str(),scMg->getSpellingLineNumber(*locationTemp),scMg->getSpellingColumnNumber(*locationTemp),TYPE_ERROR,OI_ERROR_TYPE_ARRAY_A+ArrayNameTemp+OI_ERROR_TYPE_ARRAY_B,ArrayNameTemp,oi);
-            // error_info*e=new_error_info(NULL,"aa",scMg->getSpellingLineNumber(locationTemp),scMg->getSpellingColumnNumber(locationTemp),TYPE_ERROR,OI_ERROR_TYPE_ARRAY_A+ArrayNameTemp+OI_ERROR_TYPE_ARRAY_B);
-            result.push(e);
+            SourceLocation locationTemp = i->first;
+            error_info_pro*e=new_error_info_pro(NULL,scMg->getFilename(locationTemp).str(),scMg->getSpellingLineNumber(locationTemp),scMg->getSpellingColumnNumber(locationTemp),TYPE_ERROR,OI_ERROR_TYPE_ARRAY_A_pro+ArrayNameTemp+OI_ERROR_TYPE_ARRAY_B_pro,ifIndex);
+            result_pro.push(e);
             break;
         }
       }
@@ -2248,78 +2149,7 @@ void Out_Index::OI_DectectTwo_One()
   }
 }
 
-void Out_Index::OI_DectectTwo_Two()
-{
-//   cout<<ArrayDefnTwo.size()<<"\t"<<ArrayUseFour.size()<<endl;
-//   for(auto i = ArrayUseFour.begin();i != ArrayUseFour.end();i++){
-//     if(ArrayDefnTwo.count(i->second.second.id)>0){
-//         cout<<"use\t"<<i->second.second.name<<"\t";
-//         for (int j=0;j<i->second.second.useline.size();j++){
-//         cout<<i->second.second.useline[j]<<endl;
-//         }   
-//         cout<<"dfn\t"<<i->second.second.name<<"\t";
-//         for (int j=0;j<i->second.second.useline.size();j++){
-//         cout<<"hh"<<ArrayDefnTwo[i->second.second.id].useline[j]<<"\t";
-//         cout<<((ArrayDefnTwo[i->second.second.id].useline[j]<=i->second.second.useline[j])==1)<<endl;
-//         }
-        
-//     }
-//   }
-//   for (auto j = ArrayDefnTwo.begin(); j != ArrayDefnTwo.end(); j++)
-//   {
-//     cout<<j->first<<j->second.name<<j->second.useline[0]<<endl;
-//   }
-  // for (auto j = VarUse.begin(); j != VarUse.end(); j++)
-  // {
-  //   cout<<j->first<<"\t"<<j->second<<endl;
-  // }
-  // for (auto i = VarUseFor.begin(); i != VarUseFor.end(); i++)
-  // {
-  //   cout<<"for"<<i->first<<endl;
-  //   for (auto j = i->second.value.begin(); j != i->second.value.end(); j++)
-  //   {
-  //     cout<<*j<<"\t";
-  //   }
-  //   cout<<endl;
-  // }
-  map<std::string,int> tempSet;
-
-  for(auto i = ArrayUseFour.begin();i != ArrayUseFour.end();i++){//[location,{is,name,useline}]
-    for (int j=0;j<i->second.second.useline.size();j++)
-    {
-      if (ArrayDefnTwo.count(i->second.second.id)>0)
-      {
-        if(ArrayDefnTwo[i->second.second.id].useline[0]<=i->second.second.useline[0])// || i->second.useline[j]<0)//上溢 || 下溢
-        {
-            // error_info*e=new_error_info(NULL,scMg->getFilename(ArrayLocation[i->first]).str(),scMg->getSpellingLineNumber(ArrayLocation[i->first]),scMg->getSpellingColumnNumber(ArrayLocation[i->first]),TYPE_ERROR,OI_ERROR_TYPE_ARRAY_A+i->first+OI_ERROR_TYPE_ARRAY_B);
-            std::string ArrayNameTemp = i->second.second.name;
-
-            //出错信息
-            std::string filenameTemp = i->second.first.filename;
-            int colTemp = i->second.first.col;
-            int lineTemp = i->second.first.line;
-            //出错信息
-            if(tempSet.count(filenameTemp)>0 ){//&& tempSet[filenameTemp] == lineTemp ){
-                break;
-            }
-            else {
-                //cout<<i->second.name<<endl;break;
-                error_info*e=new_error_info(NULL,filenameTemp,lineTemp,colTemp,TYPE_ERROR,OI_ERROR_TYPE_ARRAY_A+ArrayNameTemp+OI_ERROR_TYPE_ARRAY_B,ArrayNameTemp,oi);
-                // error_info*e=new_error_info(NULL,"aa",scMg->getSpellingLineNumber(locationTemp),scMg->getSpellingColumnNumber(locationTemp),TYPE_ERROR,OI_ERROR_TYPE_ARRAY_A+ArrayNameTemp+OI_ERROR_TYPE_ARRAY_B);
-                result.push(e);
-                tempSet.insert(make_pair(filenameTemp,lineTemp));
-                break;
-            }
-        }
-        break;
-      }
-    }
-  }
-}
-
-
-
-void Out_Index::OI_DectectFive()
+void Out_Index_pro::OI_DectectFive()
 {
   // cout<<ArrayDefnTwo.size()<<"\t"<<ArrayUseTwo.size()<<endl;
   // for(auto i = ArrayUseTwoFor.begin();i != ArrayUseTwoFor.end();i++){
@@ -2358,11 +2188,11 @@ void Out_Index::OI_DectectFive()
       {
         if(ArrayDefnTwo[i->second.id].useline[j]<=i->second.useline[j] || i->second.useline[j]<0)//上溢 || 下溢
         {
-            // error_info*e=new_error_info(NULL,scMg->getFilename(ArrayLocation[i->first]).str(),scMg->getSpellingLineNumber(ArrayLocation[i->first]),scMg->getSpellingColumnNumber(ArrayLocation[i->first]),TYPE_ERROR,OI_ERROR_TYPE_ARRAY_A+i->first+OI_ERROR_TYPE_ARRAY_B);
+            // error_info_pro*e=new_error_info_pro(NULL,scMg->getFilename(ArrayLocation[i->first]).str(),scMg->getSpellingLineNumber(ArrayLocation[i->first]),scMg->getSpellingColumnNumber(ArrayLocation[i->first]),TYPE_ERROR,OI_ERROR_TYPE_ARRAY_A+i->first+OI_ERROR_TYPE_ARRAY_B);
             std::string ArrayNameTemp = i->second.name;
             SourceLocation locationTemp = i->first;
-            error_info*e=new_error_info(NULL,scMg->getFilename(locationTemp).str(),scMg->getSpellingLineNumber(locationTemp),scMg->getSpellingColumnNumber(locationTemp),TYPE_ERROR,OI_ERROR_TYPE_ARRAY_A+ArrayNameTemp+OI_ERROR_TYPE_ARRAY_B,ArrayNameTemp,oi);
-            result.push(e);
+            error_info_pro*e=new_error_info_pro(NULL,scMg->getFilename(locationTemp).str(),scMg->getSpellingLineNumber(locationTemp),scMg->getSpellingColumnNumber(locationTemp),TYPE_ERROR,OI_ERROR_TYPE_ARRAY_A_pro+ArrayNameTemp+OI_ERROR_TYPE_ARRAY_B_pro,ifIndex);
+            result_pro.push(e);
             break;
         }
       }
@@ -2377,11 +2207,11 @@ void Out_Index::OI_DectectFive()
       {
         if(ArrayDefnTwo[i->second.id].useline[0]<=i->second.useline[j] || i->second.useline[j]<0)//上溢 || 下溢
         {
-            // error_info*e=new_error_info(NULL,scMg->getFilename(ArrayLocation[i->first]).str(),scMg->getSpellingLineNumber(ArrayLocation[i->first]),scMg->getSpellingColumnNumber(ArrayLocation[i->first]),TYPE_ERROR,OI_ERROR_TYPE_ARRAY_A+i->first+OI_ERROR_TYPE_ARRAY_B);
+            // error_info_pro*e=new_error_info_pro(NULL,scMg->getFilename(ArrayLocation[i->first]).str(),scMg->getSpellingLineNumber(ArrayLocation[i->first]),scMg->getSpellingColumnNumber(ArrayLocation[i->first]),TYPE_ERROR,OI_ERROR_TYPE_ARRAY_A+i->first+OI_ERROR_TYPE_ARRAY_B);
             std::string ArrayNameTemp = i->second.name;
             SourceLocation locationTemp = i->first;
-            error_info*e=new_error_info(NULL,scMg->getFilename(locationTemp).str(),scMg->getSpellingLineNumber(locationTemp),scMg->getSpellingColumnNumber(locationTemp),TYPE_ERROR,OI_ERROR_TYPE_ARRAY_A+ArrayNameTemp+OI_ERROR_TYPE_ARRAY_B,ArrayNameTemp,oi);
-            result.push(e);
+            error_info_pro*e=new_error_info_pro(NULL,scMg->getFilename(locationTemp).str(),scMg->getSpellingLineNumber(locationTemp),scMg->getSpellingColumnNumber(locationTemp),TYPE_ERROR,OI_ERROR_TYPE_ARRAY_A_pro+ArrayNameTemp+OI_ERROR_TYPE_ARRAY_B_pro,ifIndex);
+            result_pro.push(e);
             break;
         }
       }
@@ -2391,6 +2221,4 @@ void Out_Index::OI_DectectFive()
 }
 
 #endif
-
-
 

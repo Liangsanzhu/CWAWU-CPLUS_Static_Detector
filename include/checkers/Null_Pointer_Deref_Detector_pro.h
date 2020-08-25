@@ -1,8 +1,8 @@
-#ifndef N_P_D_H
-#define N_P_D_H
-#include"Detector.h"
+#ifndef N_P_D_P_H
+#define N_P_D_P_H
+#include"Detector_pro.h"
 #include "assert.h"
-class Null_Pointer_Detector{
+class Null_Pointer_Detector_pro{
 private:
 
 struct savePointer{
@@ -339,14 +339,14 @@ void NPD_Detect(std::vector<int>ifBlock){
                     may =  may ||(find(ifBlock.begin(),ifBlock.end(),recordPointer[j].block)!=ifBlock.end());
                     //cout<<"derefer"<<" "<<line<<" "<<may<<endl;
                     if (may){
-                        error_info* loc_set_null=new_error_info(NULL,file0,line0,col0,TYPE_NOTE,NPD_ERROR_TYPE_SET_NULL,route);
-                        error_info* loc_dereference=new_error_info(loc_set_null,file,line,col,TYPE_ERROR,NPD_ERROR_TYPE_DEREFERENCE, route);
-                        result.push(loc_dereference);
+                        error_info_pro* loc_set_null=new_error_info_pro(NULL,file0,line0,col0,TYPE_NOTE,NPD_ERROR_TYPE_SET_NULL_pro,route);
+                        error_info_pro* loc_dereference=new_error_info_pro(loc_set_null,file,line,col,TYPE_ERROR,NPD_ERROR_TYPE_DEREFERENCE_pro, route);
+                        result_pro.push(loc_dereference);
                     }
                     else{
-                        error_info* loc_set_null=new_error_info(NULL,file0,line0,col0,TYPE_NOTE,NPD_ERROR_TYPE_SET_NULL, route);
-                        error_info* loc_dereference=new_error_info(loc_set_null,file,line,col,TYPE_ERROR,NPD_ERROR_TYPE_DEREFERENCE, route);
-                        result.push(loc_dereference);
+                        error_info_pro* loc_set_null=new_error_info_pro(NULL,file0,line0,col0,TYPE_NOTE,NPD_ERROR_TYPE_SET_NULL_pro, route);
+                        error_info_pro* loc_dereference=new_error_info_pro(loc_set_null,file,line,col,TYPE_ERROR,NPD_ERROR_TYPE_DEREFERENCE_pro, route);
+                        result_pro.push(loc_dereference);
                     }
                     npd = true;
                     may = false;
