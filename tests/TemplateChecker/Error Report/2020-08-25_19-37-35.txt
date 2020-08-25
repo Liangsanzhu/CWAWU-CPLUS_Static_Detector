@@ -1,0 +1,35 @@
+[Memory Leak]
+---------------------------------------------
+1:/home/ergo/rose/SE-Experiment-master/tests/TemplateChecker/example.cpp:33:5: error: Miss memory realese
+  p=new int;
+    ^
+---------------------------------------------
+2:/home/ergo/rose/SE-Experiment-master/tests/TemplateChecker/example.cpp:44:3: error: Miss memory realese
+  new int;
+  ^
+---------------------------------------------
+3:/home/ergo/rose/SE-Experiment-master/tests/TemplateChecker/example.cpp:45:9: error: Miss memory realese
+  int*m=new int[n];
+        ^
+---------------------------------------------
+4:/home/ergo/rose/SE-Experiment-master/tests/TemplateChecker/example.cpp:46:3: error: Realese doesn't match allocation
+  delete m;
+  ^
+/home/ergo/rose/SE-Experiment-master/tests/TemplateChecker/example.cpp:45:9: note: Miss memory realese
+  int*m=new int[n];
+        ^
+---------------------------------------------
+4 errors generated.
+
+
+[Array Out Of Index]
+---------------------------------------------
+1:/home/ergo/rose/SE-Experiment-master/tests/TemplateChecker/example.cpp:8:5: error: Array 'str2' is out of range
+    str2[3]=str1[2];
+    ^
+---------------------------------------------
+1 error generated.
+
+
+[TOTAL ERROR]
+5 errors generated.
