@@ -97,7 +97,7 @@ void MainWindow::txtbrowser_click_t1(QMouseEvent *event){
    // qDebug()<<errorReportInfo[lineno_cur]<<endl;
     QTextBlock block;
     tabWidget->tabBar->setCurrentIndex(1);
-    qDebug()<<t2->document()->blockCount()<<endl;
+  //  qDebug()<<t2->document()->blockCount()<<endl;
     if(errorReportInfo[lineno_cur]+20>=t2->document()->blockCount())
     {
          block = t2->document()->findBlockByLineNumber(errorReportInfo[lineno_cur]);
@@ -135,7 +135,7 @@ void MainWindow::msecSleep(int msec)
 }
 void MainWindow::txtbrowser_click_t2(QMouseEvent *event){
  int lineno_cur=t2->textCursor().blockNumber()+1;
- qDebug()<<"lineno_cur t2"<<lineno_cur<<endl;
+// qDebug()<<"lineno_cur t2"<<lineno_cur<<endl;
 
  //t1->
 }

@@ -22,7 +22,7 @@ using namespace std;
 #define YELLOW printf("\033[33m");//黄色字体
 #define BLUE printf("\033[34m");//蓝色字体*/
 string error_result_pro="error_result.txt";
-string ecout_result_lineno_pro="ecout_lineno_pro.txt";
+string ecout_result_lineno_pro="ecout_lineno.txt";
 string source_code_pro="source_code.txt";
 
 

@@ -130,9 +130,7 @@ public:
         menuBar->addAction(menu_4->menuAction());
         menu->addAction(action_alter);
         menu_2->addAction(action_code);
-        menu_2->addAction(action_error);
         menu_3->addAction(action_Checker);
-        menu_4->addAction(action_help);
         menu_4->addAction(action_about);
 
         retranslateUi(MainWindow);
@@ -151,7 +149,7 @@ public:
         action_Checker->setText(QApplication::translate("MainWindow", "\347\274\226\350\257\221Checker", Q_NULLPTR));
         action_help->setText(QApplication::translate("MainWindow", "\350\216\267\345\217\226\345\270\256\345\212\251", Q_NULLPTR));
         action_about->setText(QApplication::translate("MainWindow", "\345\205\263\344\272\216", Q_NULLPTR));
-        action_code->setText(QApplication::translate("MainWindow", "\346\230\276\347\244\272\346\272\220\347\240\201", Q_NULLPTR));
+        action_code->setText(QApplication::translate("MainWindow", "\351\207\215\347\275\256\350\247\206\345\233\276", Q_NULLPTR));
         action_error->setText(QApplication::translate("MainWindow", "\351\224\231\350\257\257\346\212\245\345\221\212", Q_NULLPTR));
         label->setText(QApplication::translate("MainWindow", "TextLabel", Q_NULLPTR));
         pushButton_2->setText(QApplication::translate("MainWindow", "\345\274\200\345\247\213\346\243\200\346\265\213", Q_NULLPTR));
@@ -161,7 +159,7 @@ public:
         menu->setTitle(QApplication::translate("MainWindow", "\350\256\276\347\275\256", Q_NULLPTR));
         menu_2->setTitle(QApplication::translate("MainWindow", "\350\247\206\345\233\276", Q_NULLPTR));
         menu_3->setTitle(QApplication::translate("MainWindow", "\347\274\226\350\257\221", Q_NULLPTR));
-        menu_4->setTitle(QApplication::translate("MainWindow", "\345\270\256\345\212\251", Q_NULLPTR));
+        menu_4->setTitle(QApplication::translate("MainWindow", "\345\205\263\344\272\216", Q_NULLPTR));
     } // retranslateUi
 
 };

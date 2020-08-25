@@ -1,39 +1,165 @@
 --------------------------------------
-example.cpp:16:6: error: Find Null Pointer Dereference Fault
-  *a = 5;
-     ^
-example.cpp:14:5: note: Set Null or Delete here
-  a = NULL;
-    ^
+example.cpp:25:9: error: Unintialized Varirbale 'nameis declared here
+  node *ptr;
+        ^
+example.cpp:29:35: note: Used here
+  printf("%d %s %f.\n", ptr->age, ptr->name, ptr->score);
+                                  ^
 --------------------------------------
-example.cpp:33:3: error: Miss memory realese
-  p=new int;
-  ^
-example.cpp:33:5: note: Miss memory realese
-  p=new int;
-    ^
+example.cpp:30:8: error: Unintialized Varirbale 'nameis declared here
+  node temp;
+       ^
+example.cpp:33:37: note: Used here
+    printf("%d %s %f.\n", temp.age, temp.name, temp.score);
+                                    ^
 --------------------------------------
-example.cpp:44:3: error: Miss memory realese
+example.cpp:30:8: error: Unintialized Varirbale 'ageis declared here
+  node temp;
+       ^
+example.cpp:33:27: note: Used here
+    printf("%d %s %f.\n", temp.age, temp.name, temp.score);
+                          ^
+--------------------------------------
+example.cpp:41:3: error: Miss memory realese
   new int;
   ^
 --------------------------------------
-example.cpp:45:3: error: Miss memory realese
-  int*m=new int[n];
+example.cpp:42:3: error: Miss memory realese
+  int*p=new int;
   ^
-example.cpp:45:9: note: Miss memory realese
-  int*m=new int[n];
+example.cpp:42:9: note: Miss memory realese
+  int*p=new int;
         ^
 --------------------------------------
-example.cpp:46:3: error: Realese doesn't match allocation
-  delete m;
-  ^
-example.cpp:45:9: note: Miss memory realese
-  int*m=new int[n];
+example.cpp:48:7: error: Miss memory realese
+    p=new int;
+      ^
+--------------------------------------
+example.cpp:52:5: error: Miss memory realese
+    int*q=(int*)malloc(sizeof(int)*n);
+    ^
+example.cpp:52:17: note: Miss memory realese
+    int*q=(int*)malloc(sizeof(int)*n);
+                ^
+--------------------------------------
+example.cpp:56:5: error: Miss memory realese
+    int*u=new int[n];
+    ^
+example.cpp:56:11: note: Miss memory realese
+    int*u=new int[n];
+          ^
+--------------------------------------
+example.cpp:57:5: error: Realese doesn't match allocation
+    delete u;
+    ^
+example.cpp:56:11: note: Miss memory realese
+    int*u=new int[n];
+          ^
+--------------------------------------
+example.cpp:62:9: error: Unintialized Varirbale 'qqis declared here
+    int qq;
+        ^
+example.cpp:63:8: note: Used here
+    if(qq >0)
+       ^
+--------------------------------------
+example.cpp:67:7: error: Array 'str' is out of range
+      str[3][0][0]='o';
+      ^
+--------------------------------------
+example.cpp:75:5: error: Miss memory realese
+    int *b = new int;
+    ^
+example.cpp:75:14: note: Miss memory realese
+    int *b = new int;
+             ^
+--------------------------------------
+example.cpp:76:5: error: Miss memory realese
+    int *c =(int *)malloc(sizeof(int));
+    ^
+example.cpp:76:20: note: Miss memory realese
+    int *c =(int *)malloc(sizeof(int));
+                   ^
+--------------------------------------
+example.cpp:87:8: error: Find Null Pointer Dereference Fault
+    *b = 3;
+       ^
+example.cpp:80:13: note: Set Null or Delete here
+            delete b;
+            ^
+--------------------------------------
+example.cpp:88:8: error: Find Null Pointer Dereference Fault
+    *c = 3;
+       ^
+example.cpp:85:9: note: Set Null or Delete here
+        free(c);
         ^
 --------------------------------------
-example.cpp:56:9: error: Unintialized Varirbale 'nameis declared here
-  char *name;
+example.cpp:96:9: error: Find Null Pointer Dereference Fault
+    *str="chick";
         ^
-example.cpp:59:21: note: Used here
-  printf("%s %d\n", name, age);
-                    ^
+example.cpp:95:5: note: Set Null or Delete here
+    free(str);
+    ^
+--------------------------------------
+example.cpp:101:5: error: Miss memory realese
+    int *n = new int;
+    ^
+example.cpp:101:14: note: Miss memory realese
+    int *n = new int;
+             ^
+--------------------------------------
+example.cpp:107:8: error: Find Null Pointer Dereference Fault
+    *n = 2;
+       ^
+example.cpp:106:9: note: Set Null or Delete here
+        delete n;
+        ^
+--------------------------------------
+example.cpp:109:8: error: Find Null Pointer Dereference Fault
+    *c ="hahaha";
+       ^
+example.cpp:108:5: note: Set Null or Delete here
+    delete c;
+    ^
+--------------------------------------
+example.cpp:117:6: error: Find Null Pointer Dereference Fault
+  *a = 5;
+     ^
+example.cpp:115:5: note: Set Null or Delete here
+  a = NULL;
+    ^
+--------------------------------------
+example.cpp:128:8: error: Find Null Pointer Dereference Fault
+    *c = 2.33;    
+       ^
+example.cpp:127:11: note: Set Null or Delete here
+        c = NULL;   
+          ^
+--------------------------------------
+example.cpp:145:2: error: buffer overflow caused by use bcopy to copy data
+	bcopy(argv, sample, n);
+ ^
+--------------------------------------
+example.cpp:151:7: error: Unintialized Varirbale 'bufferis declared here
+	char buffer[10];
+      ^
+example.cpp:155:10: note: Used here
+	sprintf(buffer,"%-8d%8d",123,4567);
+         ^
+--------------------------------------
+example.cpp:154:6: error: buffer overflow caused by use sprintf to format data
+	num=sprintf(buffer, "%s", argv);
+     ^
+--------------------------------------
+example.cpp:155:2: error: buffer overflow caused by use sprintf to format data
+	sprintf(buffer,"%-8d%8d",123,4567);
+ ^
+--------------------------------------
+example.cpp:156:2: error: buffer overflow caused by use sprintf to format data
+	sprintf(buffer,"%-8d%8d",s,4567);
+ ^
+--------------------------------------
+example.cpp:157:2: error: buffer overflow caused by use sprintf to format data
+	sprintf(buffer,"%d%8d",s,4567);
+ ^
